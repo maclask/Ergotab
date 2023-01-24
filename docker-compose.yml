@@ -41,7 +41,7 @@ services:
       - DOCKER_REDIS=1
       - USING_NGINX=1
     ports:
-      - "8000:80"
+      - "80:8000"
     volumes:
       - ./tabbycat/settings:/tcd/tabbycat/settings
     working_dir: /tcd
