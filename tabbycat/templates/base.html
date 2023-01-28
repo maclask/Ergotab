@@ -27,6 +27,7 @@
   <link rel="icon" type="image/png" href="{% static 'logo-16x16.png' %}" sizes="16x16" />
   <link rel="mask-icon" href="{% static 'safari-tab.svg' %}" color="rgb(102, 61, 160)">
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}" />
   {% block extra-css %}{% endblock %}
   {% block extra-head %}{% endblock %}
 
@@ -57,7 +58,7 @@
   {% endif %}
 </head>
 
-<body class="{% block body-class %}{% endblock %}">
+<body class="{% block body-class %}{% endblock %} {% if tournament %}{{ tournament.slug }}{% else %}{% endif %}">
 
   {% block nav %}
     {% if user_role != "admin" %}

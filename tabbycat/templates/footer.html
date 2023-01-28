@@ -11,14 +11,17 @@
       <div class="col-lg-6 col-md-5">
         <h6 class="d-inline-block">
           {% if tournament and tabbycat_codename %}
-            {% blocktrans trimmed %}{{ tournament }} runs on Tabbycat {{ tabbycat_version }} ({{ tabbycat_codename }}) {% endblocktrans %}
+            {% blocktrans trimmed %}{{ tournament }} runs on Ergotab based on Tabbycat {{ tabbycat_version }} ({{ tabbycat_codename }}) {% endblocktrans %}
           {% else %}
-            {% blocktrans trimmed %}This site runs on Tabbycat {{ tabbycat_version }} ({{ tabbycat_codename }}) {% endblocktrans %}
+            {% blocktrans trimmed %}This site runs on Ergotab based on Tabbycat {{ tabbycat_version }} ({{ tabbycat_codename }}) {% endblocktrans %}
           {% endif %}
         </h6>
         <p class="text-muted">
           {% blocktrans trimmed %}
-            Tabbycat is a source-available project developed by volunteers, and is free to use for tabbing non-profit, non-fundraising tournaments.
+			This version is modified for purposes of Fundacja Ergo organization. Author: Maciej Laskowski. All right to modification is reserved, excluding unmodified parts.
+           {% endblocktrans %}
+		   {% blocktrans trimmed %} 
+			Tabbycat is a source-available project developed by volunteers, and is free to use for tabbing non-profit, non-fundraising tournaments.
           {% endblocktrans %}
           {% if tournament and tournament.billable_teams > 0 %}
             {% blocktrans trimmed with amount=tournament.billable_teams %}
