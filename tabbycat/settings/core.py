@@ -64,7 +64,6 @@ LANG_INFO = dict(django.conf.locale.LANG_INFO, **EXTRA_LANG_INFO)
 django.conf.locale.LANG_INFO = LANG_INFO
 
 LANGUAGES = [
-    ('pl', _('Polish')),
 	('ar', _('Arabic')),
     ('bn', _('Bengali')),
     ('en', _('English')),
