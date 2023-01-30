@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap');
+body.gdansk-novice-2023{
+	font-family: 'Hind', sans-serif !important;
+	background-color: #fff7ff !important;
+}
+.gdansk-novice-2023 h1, .gdansk-novice-2023 h2, .gdansk-novice-2023 h3, .gdansk-novice-2023 h4, .gdansk-novice-2023 h5, .gdansk-novice-2023 h6, .gdansk-novice-2023 .h1, .gdansk-novice-2023 .h2, .gdansk-novice-2023 .h3, .gdansk-novice-2023 .h4, .gdansk-novice-2023 .h5, .gdansk-novice-2023 .h6 {
+	font-family: 'Hind', sans-serif !important;
+	color: #431b6e !important;
+}
+.gdansk-novice-2023 .navbar-light, .gdansk-novice-2023 .card-header{
+	background: rgb(121,95,173) !important;
+	background: linear-gradient(148deg, rgba(182, 146, 255, 0.51) 14%, rgba(205, 109, 209, 0.58) 92%) !important;
+}
+.gdansk-novice-2023 .text-muted {
+	color: #8d5b9c !important;
+}
+.gdansk-novice-2023 .bg-secondary {
+	background-color: #bac8ff !important;
+}
+.gdansk-novice-2023 #tournamentdrop svg{
+	filter: drop-shadow(2px 1px 2px rgba(0, 0, 0, 0.48));
+}
