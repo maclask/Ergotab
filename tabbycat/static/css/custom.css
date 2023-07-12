@@ -20,3 +20,31 @@ body.gdansk-novice-2023{
 .gdansk-novice-2023 #tournamentdrop svg{
 	filter: drop-shadow(2px 1px 2px rgba(0, 0, 0, 0.48));
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap');
+body.pldgdansk23{
+	font-family: 'Hind', sans-serif !important;
+	background-color: #cdd8ff !important;
+}
+.pldgdansk23 h1, .pldgdansk23 h2, .pldgdansk23 h3, .pldgdansk23 h4, .pldgdansk23 h5, .pldgdansk23 h6, .pldgdansk23 .h1, .pldgdansk23 .h2, .pldgdansk23 .h3, .pldgdansk23 .h4, .pldgdansk23 .h5, .pldgdansk23 .h6 {
+	font-family: 'Hind', sans-serif !important;
+	color: #0509cf  !important;
+}
+.pldgdansk23 .navbar-light, .pldgdansk23 .card-header{
+	background: rgb(100, 56, 255) !important;
+	background: linear-gradient(148deg, rgba(100, 56, 255, 0.51) 14%, rgba(0, 64, 255, 0.58) 92%) !important; !important;
+}
+.pldgdansk23 .text-muted {
+	color: #352b7f !important;
+}
+.pldgdansk23 .bg-secondary {
+	background-color: #bac8ff !important;
+}
+.pldgdansk23 #tournamentdrop svg{
+	filter: drop-shadow(2px 1px 2px rgba(0, 0, 0, 0.48));
+}
+.pldgdansk23 .btn-primary {
+	color: #fff;
+	background-color: #0509cf;
+	border-color: #0509cf;
+}
