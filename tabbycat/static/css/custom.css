@@ -48,3 +48,39 @@ body.pldgdansk23{
 	background-color: #0509cf;
 	border-color: #0509cf;
 }
+body.gdansk-novice-2024{
+	background-color: #F9D87D !important;
+}
+.gdansk-novice-2024 h1, .gdansk-novice-2024 h2, .gdansk-novice-2024 h3, .gdansk-novice-2024 h4, .gdansk-novice-2024 h5, .gdansk-novice-2024 h6, .gdansk-novice-2024 .h1, .gdansk-novice-2024 .h2, .gdansk-novice-2024 .h3, .gdansk-novice-2024 .h4, .gdansk-novice-2024 .h5, .gdansk-novice-2024 .h6 {
+	color: #500000 !important;
+}
+.gdansk-novice-2024 .navbar-light, .gdansk-novice-2024 .card-header{
+	background: repeating-linear-gradient( 4deg, #E2464F, #BC121C ) !important;
+}
+.gdansk-novice-2024 .navbar-light a {
+	color: #000 !important;
+}
+.gdansk-novice-2024 .text-muted {
+	color: #500000 !important;
+}
+.gdansk-novice-2024 .text-primary {
+	color: #63060b !important;
+}
+.gdansk-novice-2024 .bg-secondary {
+	background-color: #ffeaba !important;
+}
+.gdansk-novice-2024 .btn-primary {
+	color: #fff;
+	background-color: #fff;
+	border-color: #c9232d;
+}
+.gdansk-novice-2024 a {
+	color: #96383e !important;
+}
+.gdansk-novice-2024 .list-group-item-secondary {
+	color: #464a4e !important;
+	background-color: #fff !important;
+}
+.gdansk-novice-2024 #tournamentdrop svg{
+	filter: drop-shadow(2px 1px 2px rgba(0, 0, 0, 0.48));
+}
