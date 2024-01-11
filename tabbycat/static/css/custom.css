@@ -51,10 +51,10 @@ body.pldgdansk23{
 body.gdansk-novice-2024{
 	background-color: #F9D87D !important;
 }
-.gdansk-novice-2024 h1, .gdansk-novice-2024 h2, .gdansk-novice-2024 h3, .gdansk-novice-2024 h4, .gdansk-novice-2024 h5, .gdansk-novice-2024 h6, .gdansk-novice-2024 .h1, .gdansk-novice-2024 .h2, .gdansk-novice-2024 .h3, .gdansk-novice-2024 .h4, .gdansk-novice-2024 .h5, .gdansk-novice-2024 .h6 {
+.gdansk-novice-2024 h1, .gdansk-novice-2024 h2, .gdansk-novice-2024 h3, .gdansk-novice-2024 h4, .gdansk-novice-2024 h5,  .gdansk-novice-2024 .h1, .gdansk-novice-2024 .h2, .gdansk-novice-2024 .h3, .gdansk-novice-2024 .h4, .gdansk-novice-2024 .h5, {
 	color: #500000 !important;
 }
-.gdansk-novice-2024 .h6 {
+.gdansk-novice-2024 .h6, .gdansk-novice-2024 h6 {
 	color: #fff !important;
 }
 .gdansk-novice-2024 .navbar-light, .gdansk-novice-2024 .card-header{
@@ -67,7 +67,7 @@ body.gdansk-novice-2024{
 	color: rgba(246, 246, 246, 0.9);
 }
 .gdansk-novice-2024 .text-muted {
-	color: #500000 !important;
+	color: #fff !important;
 }
 .gdansk-novice-2024 .text-primary {
 	color: #63060b !important;
@@ -80,7 +80,7 @@ body.gdansk-novice-2024{
 	background-color: #fff;
 	border-color: #c9232d;
 }
-.gdansk-novice-2024 a {
+.gdansk-novice-2024 a, .gdansk-novice-2024 .dropdown-item a{
 	color: #96383e !important;
 }
 .gdansk-novice-2024 .list-group-item-secondary {
