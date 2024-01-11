@@ -54,11 +54,17 @@ body.gdansk-novice-2024{
 .gdansk-novice-2024 h1, .gdansk-novice-2024 h2, .gdansk-novice-2024 h3, .gdansk-novice-2024 h4, .gdansk-novice-2024 h5, .gdansk-novice-2024 h6, .gdansk-novice-2024 .h1, .gdansk-novice-2024 .h2, .gdansk-novice-2024 .h3, .gdansk-novice-2024 .h4, .gdansk-novice-2024 .h5, .gdansk-novice-2024 .h6 {
 	color: #500000 !important;
 }
+.gdansk-novice-2024 .h6 {
+	color: #fff !important;
+}
 .gdansk-novice-2024 .navbar-light, .gdansk-novice-2024 .card-header{
 	background: repeating-linear-gradient( 4deg, #E2464F, #BC121C ) !important;
 }
 .gdansk-novice-2024 .navbar-light a {
-	color: #000 !important;
+	color: #fff !important;
+}
+.gdansk-novice-2024 .navbar-light .navbar-brand {
+	color: rgba(246, 246, 246, 0.9);
 }
 .gdansk-novice-2024 .text-muted {
 	color: #500000 !important;
