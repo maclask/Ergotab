@@ -64,10 +64,10 @@ body.gdansk-novice-2024{
 	color: #fff !important;
 }
 .gdansk-novice-2024 .navbar-light .navbar-brand {
-	color: rgba(246, 246, 246, 0.9);
+	color: rgba(0, 0, 0, 0.9);
 }
 .gdansk-novice-2024 .text-muted {
-	color: #fff !important;
+	color: #5f0000 !important;
 }
 .gdansk-novice-2024 .text-primary {
 	color: #63060b !important;
@@ -79,9 +79,6 @@ body.gdansk-novice-2024{
 	color: #fff;
 	background-color: #fff;
 	border-color: #c9232d;
-}
-.gdansk-novice-2024 a, .gdansk-novice-2024 .dropdown-item a{
-	color: #96383e !important;
 }
 .gdansk-novice-2024 .list-group-item-secondary {
 	color: #464a4e !important;
