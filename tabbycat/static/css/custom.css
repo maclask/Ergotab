@@ -55,13 +55,13 @@ body.gdansk-novice-2024{
 	color: #500000 !important;
 }
 .gdansk-novice-2024 .h6, .gdansk-novice-2024 h6 {
-	color: #fff !important;
+	color: #000 !important;
 }
 .gdansk-novice-2024 .navbar-light, .gdansk-novice-2024 .card-header{
 	background: repeating-linear-gradient( 4deg, #E2464F, #BC121C ) !important;
 }
 .gdansk-novice-2024 .navbar-light a {
-	color: #fff !important;
+	color: #000 !important;
 }
 .gdansk-novice-2024 .navbar-light .navbar-brand {
 	color: rgba(0, 0, 0, 0.9);
@@ -76,7 +76,7 @@ body.gdansk-novice-2024{
 	background-color: #ffeaba !important;
 }
 .gdansk-novice-2024 .btn-primary {
-	color: #fff;
+	color: #000;
 	background-color: #fff;
 	border-color: #c9232d;
 }
