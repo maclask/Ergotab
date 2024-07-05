@@ -90,12 +90,16 @@ body.gdansk-novice-2024{
 
 
 	body.pldgdansk24{
-		background-color: #143cdb;
+	  background: url('https://i.imgur.com/fUCxzc1.png');
+	  background-position: 0 49px;
+	  background-repeat: no-repeat;
+	  background-size: 100%;
+	  margin-bottom: 0;
 	}
 	.pldgdansk24 nav.navbar-light{
 	  background: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/new_pattern.png");
-	  border-bottom: 1px solid #e9ecef;
-	  border-top: 1px solid #e9ecef;
+	  border-bottom: 0px solid #e9ecef;
+	  border-top: 0px solid #e9ecef;
 	  height: 49px;
 	}
 	.pldgdansk24 .footer {
@@ -110,6 +114,7 @@ body.gdansk-novice-2024{
 		background-image: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/footer-desktop.png");
 		background-repeat: no-repeat;
 		background-size: cover;
+		margin-top:50px;
 	}
 	.pldgdansk24 nav.navbar-light .navbar-nav .nav-link {
 	  color: rgb(255, 255, 255) !important;
@@ -132,7 +137,13 @@ body.gdansk-novice-2024{
 	border-top: 0;
 	}
 	.pldgdansk24 #pageTitle {
-		color: white;
+		color: black;
+		margin-top: 92px;
+	}
+	.pldgdansk24 #pageTitle>div {
+	  background: #fff;
+	  padding: 20px;
+	  border-radius: 20px;
 	}
 	.pldgdansk24 .card:has(.intro){
 		background: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/audio-bg.png");
@@ -140,11 +151,12 @@ body.gdansk-novice-2024{
 		background-position: bottom;
 		background-size: 100%;
 		padding-bottom: 15% !important;
-		background-color: #143cdb;
+		background-color: #1b36c5;
 		color: white;
 		-webkit-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
 		-moz-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
 		box-shadow: -2px 3px 27px 0px rgb(0, 40, 83);
+		padding: 40px;
 	}
 	.pldgdansk24 .card:has(.intro) table{
 		background-color: #ffffffd1;
