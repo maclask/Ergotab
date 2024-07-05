@@ -90,7 +90,7 @@ body.gdansk-novice-2024{
 
 
 	body.pldgdansk24{
-		background-color: #1b36c5;
+		background-color: #143cdb;
 	}
 	.pldgdansk24 nav.navbar-light{
 	  background: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/new_pattern.png");
@@ -119,12 +119,17 @@ body.gdansk-novice-2024{
 	}
 	.pldgdansk24 .btn-primary {
 		color: #fff;
-		background-color: #1b36c5;
+		background-color: #143cdb;
 		border-color: #fff;
 	}
 	.pldgdansk24 .footer a {
 		border-bottom: 1px solid #868e96;
 		color: #fff;
+	}
+	.pldgdansk24 .footer .navbar-light {
+	background: transparent;
+	border-bottom: 0;
+	border-top: 0;
 	}
 	.pldgdansk24 #pageTitle {
 		color: white;
@@ -135,7 +140,7 @@ body.gdansk-novice-2024{
 		background-position: bottom;
 		background-size: 100%;
 		padding-bottom: 15% !important;
-		background-color: #1b36c5;
+		background-color: #143cdb;
 		color: white;
 		-webkit-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
 		-moz-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
