@@ -87,3 +87,63 @@ body.gdansk-novice-2024{
 .gdansk-novice-2024 #tournamentdrop svg{
 	filter: drop-shadow(2px 1px 2px rgba(0, 0, 0, 0.48));
 }
+
+
+	body.pldgdansk24{
+		background-color: #1b36c5;
+	}
+	.pldgdansk24 nav.navbar-light{
+	  background: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/new_pattern.png");
+	  border-bottom: 1px solid #e9ecef;
+	  border-top: 1px solid #e9ecef;
+	  height: 49px;
+	}
+	.pldgdansk24 .footer {
+		position: relative;
+		bottom: 0;
+		width: 100%;
+		background: ;
+		color: white;
+		padding: 3% 26%;
+		height: 1052px !important;
+		background-color: rgb(20, 60, 219);
+		background-image: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/footer-desktop.png");
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+	.pldgdansk24 nav.navbar-light .navbar-nav .nav-link {
+	  color: rgb(255, 255, 255) !important;
+	} 
+	.pldgdansk24 nav.navbar-light button {
+		color: rgb(255, 255, 255) !important;
+	}
+	.pldgdansk24 .btn-primary {
+		color: #fff;
+		background-color: #1b36c5;
+		border-color: #fff;
+	}
+	.pldgdansk24 .footer a {
+		border-bottom: 1px solid #868e96;
+		color: #fff;
+	}
+	.pldgdansk24 #pageTitle {
+		color: white;
+	}
+	.pldgdansk24 .card:has(.intro){
+		background: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/audio-bg.png");
+		background-repeat: no-repeat;
+		background-position: bottom;
+		background-size: 100%;
+		padding-bottom: 15% !important;
+		background-color: #1b36c5;
+		color: white;
+		-webkit-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
+		-moz-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
+		box-shadow: -2px 3px 27px 0px rgb(0, 40, 83);
+	}
+	.pldgdansk24 .card:has(.intro) table{
+		background-color: #ffffffd1;
+		margin-bottom: 46px;
+		color: black;
+		border-color: #080808;
+	}
