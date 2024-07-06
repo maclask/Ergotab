@@ -100,8 +100,10 @@ def add_feedback(debate, submitter_type, user, probability=1.0, discarded=False,
 
     if debate.round.tournament.pref('feedback_from_teams') == 'all-adjs':
         sources_and_subjects = [(team, adj) for team in debate.teams for adj in debate.adjudicators.all()]
-    else:
+    elif debate.round.tournament.pref('feedback_from_teams') == 'orallist':
         sources_and_subjects = [(team, debate.adjudicators.chair) for team in debate.teams]
+    else:
+        sources_and_subjects = []
 
     sources_and_subjects.extend(itertools.permutations(
         (adj for adj, position in debate.adjudicators.with_debateadj_types()), 2))
@@ -115,7 +117,7 @@ def add_feedback(debate, submitter_type, user, probability=1.0, discarded=False,
             continue
 
         fb = fm.AdjudicatorFeedback(submitter_type=submitter_type)
-        if submitter_type == fm.AdjudicatorFeedback.SUBMITTER_TABROOM:
+        if submitter_type == fm.AdjudicatorFeedback.Submitter.TABROOM:
             fb.submitter = user
 
         fb.adjudicator = adj

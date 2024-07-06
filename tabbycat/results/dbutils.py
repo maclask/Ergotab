@@ -90,7 +90,7 @@ def add_result(debate, submitter_type, user, discarded=False, confirmed=False, r
 
     # Create a new BallotSubmission
     bsub = BallotSubmission(submitter_type=submitter_type, debate=debate)
-    if submitter_type == BallotSubmission.SUBMITTER_TABROOM:
+    if submitter_type == BallotSubmission.Submitter.TABROOM:
         bsub.submitter = user
     bsub.save()
 
@@ -147,13 +147,13 @@ def add_result(debate, submitter_type, user, discarded=False, confirmed=False, r
         debate.result_status = Debate.STATUS_DRAFT
     debate.save()
 
-    if t.pref('teams_in_debate') == 'two':
+    if t.pref('teams_in_debate') == 2:
         logger.info("%(debate)s won by %(team)s on %(motion)s", {
             'debate': debate.matchup,
             'team': result.winning_side(),
             'motion': bsub.motion and bsub.motion.reference or "<No motion>",
         })
-    elif t.pref('teams_in_debate') == 'bp':
+    elif t.pref('teams_in_debate') == 4:
         if result.uses_declared_winners:
             logger.info("%(debate)s: %(advancing)s on %(motion)s", {
                 'debate': debate.matchup,

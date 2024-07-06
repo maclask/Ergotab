@@ -1,7 +1,7 @@
 from django.utils.translation import gettext as _
 
 from .common import BaseBPDrawGenerator, DrawFatalError, DrawUserError, EliminationDrawMixin
-from .pairing import BPPairing
+from .pairing import PolyPairing
 from .utils import ispow2
 
 
@@ -20,7 +20,7 @@ class BaseBPEliminationDrawGenerator(EliminationDrawMixin, BaseBPDrawGenerator):
         pools = (teams[0:n], teams[n:2*n][::-1], teams[2*n:3*n], teams[3*n:4*n][::-1])  # Reverse 1 & 3
         pairings = list()
         for i, ts in enumerate(zip(*pools), start=start_rank+1):
-            pairing = BPPairing(ts, bracket=0, room_rank=i)
+            pairing = PolyPairing(ts, bracket=0, room_rank=i, num_sides=self.TEAMS_IN_DEBATE)
             pairings.append(pairing)
         return pairings
 
@@ -71,7 +71,7 @@ class AfterPartialBPEliminationDrawGenerator(BaseBPEliminationDrawGenerator):
         ndebates = nbypassing // 2
         if len(self.results) != ndebates:
             raise DrawUserError(_("The room ranks of the partial elimination round indicate "
-                "that %(nbypassing)d teams bypassed it, but %(advancing)d teams advanced from "
+                "that %(nbypassing)d teams bypassed it, but %(nadvancing)d teams advanced from "
                 "it." % {'nbypassing': nbypassing, 'nadvancing': ndebates * 2}))
 
         # Fold the bypassing teams two-way
@@ -90,7 +90,7 @@ class AfterPartialBPEliminationDrawGenerator(BaseBPEliminationDrawGenerator):
         pairings = list()
         for i, (team1, team2, adv) in enumerate(zip(bypassing_top, bypassing_bottom, advancing), start=1):
             teams = [team1, team2] + adv
-            pairing = BPPairing(teams, bracket=0, room_rank=i)
+            pairing = PolyPairing(teams, bracket=0, room_rank=i, num_sides=self.TEAMS_IN_DEBATE)
             pairings.append(pairing)
         return pairings
 
@@ -127,6 +127,6 @@ class SubsequentBPEliminationDrawGenerator(BaseBPEliminationDrawGenerator):
         pairings = list()
         for i, (teams1, teams2) in enumerate(zip(top, bottom), start=1):
             teams = teams1 + teams2  # join lists
-            pairing = BPPairing(teams, bracket=0, room_rank=i)
+            pairing = PolyPairing(teams, bracket=0, room_rank=i, num_sides=self.TEAMS_IN_DEBATE)
             pairings.append(pairing)
         return pairings

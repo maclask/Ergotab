@@ -17,7 +17,7 @@
     </drag-and-drop-actions>
 
     <template slot="debates">
-      <drag-and-drop-debate v-for="debate in sortedDebatesOrPanels" :key="debate.id" :debateOrPanel="debate">
+      <drag-and-drop-debate v-for="debate in sortedDebatesOrPanels" :key="debate.id" :debateOrPanel="debate" :maxTeams="maxTeams">
         <droppable-item slot="venue" :handle-drop="moveVenue" :drop-context="{ 'assignment': debate.id }"
                         class="flex-12 flex-truncate border-right d-flex flex-wrap">
           <draggable-venue v-if="debate.venue" :item="allVenues[debate.venue]" class="flex-fill"
@@ -69,6 +69,9 @@ export default {
     allVenues () {
       return this.$store.getters.allocatableItems
     },
+    maxTeams: function () {
+      return Math.max(...this.sortedDebatesOrPanels.map(d => d.teams.length))
+    },
   },
   methods: {
     getDebate: function (debateID) {
@@ -100,7 +103,7 @@ export default {
         venueChanges.push({ id: toDebate.id, venue: toDebate.venue })
       }
       this.$store.dispatch('updateDebatesOrPanelsAttribute', { venues: venueChanges })
-      this.$store.dispatch('updateAllocableItemModified', [dragData.item])
+      this.$store.dispatch('updateAllocatableItemModified', [dragData.item])
     },
     getUnallocatedItemFromDebateOrPanel (debateOrPanel) {
       // Return the ID of the venue in this debate

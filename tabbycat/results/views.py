@@ -6,7 +6,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db import ProgrammingError
-from django.db.models import Count, Q
+from django.db.models import Count, Max, Q, Window
+from django.db.models.functions import Rank
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import timezone
@@ -20,7 +21,8 @@ from actionlog.models import ActionLogEntry
 from adjallocation.models import DebateAdjudicator
 from draw.models import Debate
 from draw.prefetch import populate_opponents
-from motions.models import RoundMotion
+from draw.types import DebateSide
+from motions.models import DebateTeamMotionPreference, RoundMotion
 from motions.utils import merge_motion_vetos, merge_motions
 from notifications.models import BulkNotification
 from options.utils import use_team_code_names, use_team_code_names_data_entry
@@ -30,17 +32,18 @@ from tournaments.mixins import (CurrentRoundMixin, PersonalizablePublicTournamen
                                 RoundMixin, SingleObjectByRandomisedUrlMixin, SingleObjectFromTournamentMixin,
                                 TournamentMixin)
 from tournaments.models import Round
+from users.permissions import Permission
 from utils.misc import get_ip_address, reverse_round, reverse_tournament
 from utils.mixins import AdministratorMixin, AssistantMixin
 from utils.tables import TabbycatTableBuilder
 from utils.views import PostOnlyRedirectView, VueTableTemplateView
 
 from .consumers import BallotStatusConsumer
-from .forms import (PerAdjudicatorBallotSetForm, PerAdjudicatorEliminationBallotSetForm, SingleBallotSetForm,
-                    SingleEliminationBallotSetForm)
-from .models import BallotSubmission, TeamScore
+from .forms import (broadcast_results, PerAdjudicatorBallotSetForm, PerAdjudicatorEliminationBallotSetForm,
+                    SingleBallotSetForm, SingleEliminationBallotSetForm)
+from .models import BallotSubmission, ScoreCriterion, TeamScore
 from .prefetch import populate_confirmed_ballots, populate_results
-from .result import DebateResult, get_class_name, ResultError
+from .result import DebateResult, get_class_name
 from .tables import ResultsTableBuilder
 from .utils import get_status_meta, populate_identical_ballotsub_lists
 
@@ -68,7 +71,7 @@ class BaseResultsEntryForRoundView(RoundMixin, VueTableTemplateView):
     def _get_draw(self):
         if not hasattr(self, '_draw'):
             self._draw = self.round.debate_set_with_prefetches(
-                    ordering=('room_rank',), results=True, wins=True, check_ins=True, iron=True)
+                filter_args=[~Q(debateteam__side=DebateSide.BYE)], ordering=('room_rank',), results=True, wins=True, check_ins=True, iron=True)
         return self._draw
 
     def get_table(self):
@@ -80,7 +83,7 @@ class BaseResultsEntryForRoundView(RoundMixin, VueTableTemplateView):
         if self.tournament.pref('enable_postponements'):
             table.add_debate_postponement_column(draw)
         table.add_debate_venue_columns(draw, for_admin=True)
-        table.add_debate_results_columns(draw, iron=True)
+        table.add_debate_results_columns(draw, iron=True, n_cols=self._get_draw().aggregate(n=Max('debateteam__side'))['n']+1)
         table.add_debate_adjudicators_column(draw, show_splits=True, for_admin=True)
         return table
 
@@ -88,8 +91,7 @@ class BaseResultsEntryForRoundView(RoundMixin, VueTableTemplateView):
         iron_speeches = []
         use_code_names = use_team_code_names_data_entry(self.tournament, True)
         for d in self._get_draw():
-            for side in self.tournament.sides:
-                debateteam = d.get_dt(side)
+            for debateteam in d.debateteams:
                 if debateteam.iron > 0 or debateteam.iron_prev:
                     iron_speeches.append({
                         'venue': d.venue.display_name if d.venue else None,
@@ -112,6 +114,7 @@ class AssistantResultsEntryView(AssistantMixin, CurrentRoundMixin, BaseResultsEn
 
 class AdminResultsEntryForRoundView(AdministratorMixin, BaseResultsEntryForRoundView):
     template_name = 'admin_results.html'
+    view_permission = Permission.VIEW_RESULTS
 
     def get_context_data(self, **kwargs):
         # Stopgap to warn user about potential database inconsistency, when
@@ -176,8 +179,8 @@ class PublicResultsForRoundView(RoundMixin, PublicTournamentPageMixin, VueTableT
 
         table = TabbycatTableBuilder(view=self, sort_key="venue")
         table.add_debate_venue_columns(debates)
-        table.add_debate_results_columns(debates)
-        if not (self.tournament.pref('teams_in_debate') == 'bp' and self.round.is_break_round):
+        table.add_debate_results_columns(debates, n_cols=debates.aggregate(n=Max('debateteam__side'))['n']+1)
+        if not (self.tournament.pref('teams_in_debate') == 4 and self.round.is_break_round):
             table.add_debate_ballot_link_column(debates)
         table.add_debate_adjudicators_column(debates, show_splits=True)
 
@@ -199,7 +202,7 @@ class PublicResultsForRoundView(RoundMixin, PublicTournamentPageMixin, VueTableT
             'debate_team__debate__round')
         debates = [ts.debate_team.debate for ts in teamscores]
 
-        if self.tournament.pref('teams_in_debate') == 'two':
+        if self.tournament.pref('teams_in_debate') == 2:
             populate_opponents([ts.debate_team for ts in teamscores])
         populate_confirmed_ballots(debates, motions=True,
             results=self.round.ballots_per_debate == 'per-adj')
@@ -208,7 +211,7 @@ class PublicResultsForRoundView(RoundMixin, PublicTournamentPageMixin, VueTableT
         table.add_team_columns([ts.debate_team.team for ts in teamscores])
         table.add_debate_result_by_team_column(teamscores)
         table.add_debate_side_by_team_column(teamscores, self.tournament)
-        if not (self.tournament.pref('teams_in_debate') == 'bp' and self.round.is_break_round):
+        if not (self.tournament.pref('teams_in_debate') == 4 and self.round.is_break_round):
             table.add_debate_ballot_link_column(debates)
         table.add_debate_adjudicators_column(debates, show_splits=True)
 
@@ -266,23 +269,30 @@ class BaseBallotSetView(LogActionMixin, TournamentMixin, FormView):
         use_team_code_names = use_team_code_names_data_entry(self.tournament, self.tabroom)
         kwargs['use_team_code_names'] = use_team_code_names
 
-        sides = self.tournament.sides
         if use_team_code_names == 'off':
-            kwargs['debate_name'] = _(" vs ").join(self.debate.get_team(side).short_name for side in sides)
+            kwargs['debate_name'] = _(" vs ").join(team.short_name for team in self.debate.teams)
         else:
-            kwargs['debate_name'] = _(" vs ").join(self.debate.get_team(side).code_name for side in sides)
+            kwargs['debate_name'] = _(" vs ").join(team.code_name for team in self.debate.teams)
         kwargs['page_subtitle'] = _("%(matchup)s: %(round)s @ %(room)s") % {
             'round': self.debate.round.name,
             'room': getattr(self.debate.venue, 'display_name', _("N/A")),
             'matchup': kwargs['debate_name'],
         }
 
-        kwargs['iron'] = self.debate.debateteam_set.annotate(iron=Count('team__debateteam__speakerscore',
-            filter=Q(team__debateteam__debate__round=self.debate.round.prev) & Q(team__debateteam__speakerscore__ghost=True),
-            distinct=True)).filter(iron__gt=0)
-        kwargs['current_iron'] = self.debate.debateteam_set.annotate(iron=Count('team__debateteam__speakerscore',
-            filter=Q(team__debateteam__debate__round=self.debate.round) & Q(team__debateteam__speakerscore__ghost=True),
-            distinct=True)).filter(iron__gt=0)
+        kwargs['iron'] = self.debate.debateteam_set.annotate(iron=Count('team__debateteam__teamscore',
+            filter=Q(team__debateteam__debate__round=self.debate.round.prev,
+                team__debateteam__teamscore__has_ghost=True,
+                team__debateteam__teamscore__ballot_submission__confirmed=True)),
+        ).filter(iron__gt=0)
+        if self.ballotsub.id is None:
+            kwargs['current_iron'] = 0
+        else:
+            kwargs['current_iron'] = self.debate.debateteam_set.annotate(iron=Count('team__debateteam__teamscore',
+                filter=Q(
+                    team__debateteam__debate__round=self.debate.round,
+                    team__debateteam__teamscore__has_ghost=True,
+                    team__debateteam__teamscore__ballot_submission=self.ballotsub)),
+            ).filter(iron__gt=0).count()
 
         return super().get_context_data(**kwargs)
 
@@ -304,6 +314,7 @@ class BaseBallotSetView(LogActionMixin, TournamentMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['ballotsub'] = self.ballotsub
+        kwargs['tabroom'] = self.tabroom
         return kwargs
 
     def add_success_message(self):
@@ -311,8 +322,11 @@ class BaseBallotSetView(LogActionMixin, TournamentMixin, FormView):
         pass
 
     def should_send_email_receipts(self):
-        return self.tournament.pref('enable_ballot_receipts') and not (self.debate.round.stage == Round.STAGE_ELIMINATION and
-            self.tournament.pref('teams_in_debate') == 'bp')
+        return self.tournament.pref('enable_ballot_receipts') and not (self.debate.round.stage == Round.Stage.ELIMINATION and
+            self.tournament.pref('teams_in_debate') == 4)
+
+    def postprocess_result(self):
+        pass
 
     def matchup_description(self):
         """This is primarily shown in messages, some of which are public. This
@@ -335,7 +349,7 @@ class BaseBallotSetView(LogActionMixin, TournamentMixin, FormView):
             if self.should_send_email_receipts():
                 async_to_sync(get_channel_layer().send)("notifications", {
                     "type": "email",
-                    "message": BulkNotification.EVENT_TYPE_BALLOT_CONFIRMED,
+                    "message": BulkNotification.EventType.BALLOTS_CONFIRMED,
                     "extra": {"debate_id": self.debate.id},
                     "subject": self.tournament.pref("ballot_email_subject"),
                     "body": self.tournament.pref("ballot_email_message"),
@@ -344,6 +358,8 @@ class BaseBallotSetView(LogActionMixin, TournamentMixin, FormView):
 
         self.add_success_message()
         self.round = form.debate.round  # for LogActionMixin
+
+        self.postprocess_result()
 
         return super().form_valid(form)
 
@@ -369,6 +385,8 @@ class BaseBallotSetView(LogActionMixin, TournamentMixin, FormView):
 
 class AdministratorBallotSetMixin(AdministratorMixin):
     template_name = 'ballot_entry.html'
+    view_permission = Permission.VIEW_BALLOTSUBMISSIONS
+    edit_permission = Permission.ADD_BALLOTSUBMISSIONS
     tabroom = True
 
     def get_success_url(self):
@@ -377,6 +395,8 @@ class AdministratorBallotSetMixin(AdministratorMixin):
 
 class OldAdministratorBallotSetMixin(AdministratorMixin):
     template_name = 'enter_results.html'
+    view_permission = Permission.VIEW_BALLOTSUBMISSIONS
+    edit_permission = Permission.ADD_BALLOTSUBMISSIONS
     tabroom = True
 
     def get_success_url(self):
@@ -404,7 +424,7 @@ class BaseNewBallotSetView(SingleObjectFromTournamentMixin, BaseBallotSetView):
     model = Debate
     tournament_field_name = 'round__tournament'
     relates_to_new_ballotsub = True
-    action_log_type = ActionLogEntry.ACTION_TYPE_BALLOT_CREATE
+    action_log_type = ActionLogEntry.ActionType.BALLOT_CREATE
     pk_url_kwarg = 'debate_id'
     page_title = gettext_lazy("New Ballot Set")
 
@@ -417,10 +437,13 @@ class BaseNewBallotSetView(SingleObjectFromTournamentMixin, BaseBallotSetView):
     def get_error_url(self):
         return self.get_success_url()
 
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related('debateteam_set__team__speaker_set').exclude(debateteam__side=DebateSide.BYE)
+
     def populate_objects(self, prefill=True):
         self.debate = self.object = self.get_object()
         self.ballotsub = BallotSubmission(debate=self.debate, submitter=self.request.user,
-            submitter_type=BallotSubmission.SUBMITTER_TABROOM,
+            submitter_type=BallotSubmission.Submitter.TABROOM,
             ip_address=get_ip_address(self.request))
 
         if self.debate.round.ballots_per_debate == 'per-adj' and \
@@ -430,7 +453,7 @@ class BaseNewBallotSetView(SingleObjectFromTournamentMixin, BaseBallotSetView):
             return HttpResponseRedirect(self.get_error_url())
 
         if not (self.tournament.pref('draw_side_allocations') == 'manual-ballot' and
-                self.tournament.pref('teams_in_debate') == 'two') and not self.debate.sides_confirmed:
+                self.tournament.pref('teams_in_debate') == 2) and not self.debate.sides_confirmed:
             messages.error(self.request, _("Whoops! The debate %(debate)s doesn't have its "
                 "sides confirmed, so you can't enter results for it.") % {'debate': self.matchup_description()})
             return HttpResponseRedirect(self.get_error_url())
@@ -461,13 +484,16 @@ class BaseEditBallotSetView(SingleObjectFromTournamentMixin, BaseBallotSetView):
 
     def get_action_log_type(self):
         if self.ballotsub.discarded:
-            return ActionLogEntry.ACTION_TYPE_BALLOT_DISCARD
+            return ActionLogEntry.ActionType.BALLOT_DISCARD
         elif self.ballotsub.confirmed:
-            return ActionLogEntry.ACTION_TYPE_BALLOT_CONFIRM
-        return ActionLogEntry.ACTION_TYPE_BALLOT_EDIT
+            return ActionLogEntry.ActionType.BALLOT_CONFIRM
+        return ActionLogEntry.ActionType.BALLOT_EDIT
 
     def get_success_url(self):
         return reverse_round('results-round-list', self.ballotsub.debate.round)
+
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related('debate__debateteam_set__team__speaker_set').exclude(debate__debateteam__side=DebateSide.BYE)
 
     def add_success_message(self):
         if self.ballotsub.discarded:
@@ -510,7 +536,7 @@ class BasePublicNewBallotSetView(PersonalizablePublicTournamentPageMixin, RoundM
 
     template_name = 'public_enter_results.html'
     relates_to_new_ballotsub = True
-    action_log_type = ActionLogEntry.ACTION_TYPE_BALLOT_SUBMIT
+    action_log_type = ActionLogEntry.ActionType.BALLOT_SUBMIT
     page_title = gettext_lazy("Enter Results")
 
     def get_context_data(self, **kwargs):
@@ -523,6 +549,7 @@ class BasePublicNewBallotSetView(PersonalizablePublicTournamentPageMixin, RoundM
         kwargs['password'] = True
         kwargs['result'] = self.result
         kwargs['vetos'] = self.vetos
+        kwargs['filled'] = self.prefilled
         return kwargs
 
     def add_success_message(self):
@@ -532,7 +559,7 @@ class BasePublicNewBallotSetView(PersonalizablePublicTournamentPageMixin, RoundM
     def populate_objects(self, prefill=True):
         self.object = self.get_object() # must be populated before self.error_page() called
 
-        if self.round.draw_status != Round.STATUS_RELEASED:
+        if self.round.draw_status != Round.Status.RELEASED:
             return self.error_page(_("The draw for this round hasn't been released yet."))
 
         if (self.tournament.pref('enable_motions') or self.tournament.pref('motion_vetoes_enabled')) \
@@ -540,7 +567,7 @@ class BasePublicNewBallotSetView(PersonalizablePublicTournamentPageMixin, RoundM
             return self.error_page(_("The motions for this round haven't been released yet."))
 
         try:
-            self.debateadj = DebateAdjudicator.objects.get(adjudicator=self.object, debate__round=self.round)
+            self.debateadj = DebateAdjudicator.objects.prefetch_related('debate__debateteam_set__team__speaker_set').get(adjudicator=self.object, debate__round=self.round)
         except DebateAdjudicator.DoesNotExist:
             return self.error_page(_("It looks like you don't have a debate this round."))
         except DebateAdjudicator.MultipleObjectsReturned:
@@ -549,14 +576,15 @@ class BasePublicNewBallotSetView(PersonalizablePublicTournamentPageMixin, RoundM
 
         self.debate = self.debateadj.debate
         self.ballotsub = BallotSubmission(debate=self.debate, ip_address=get_ip_address(self.request),
-            submitter_type=BallotSubmission.SUBMITTER_PUBLIC, single_adj=self.tournament.pref('individual_ballots'),
+            submitter_type=BallotSubmission.Submitter.PUBLIC, single_adj=self.tournament.pref('individual_ballots'),
             private_url=self.private_url, participant_submitter=self.object)
 
         self.round_motions = {}
         for rm in RoundMotion.objects.filter(round_id=self.debate.round_id):
             self.round_motions[rm.motion_id] = rm
 
-        self.result = DebateResult(self.ballotsub, round=self.round, tournament=self.tournament)
+        criteria = ScoreCriterion.objects.filter(tournament=self.tournament)
+        self.result = DebateResult(self.ballotsub, round=self.round, tournament=self.tournament, criteria=criteria)
 
         self.vetos = None
         self.prefilled = False
@@ -576,15 +604,15 @@ class BasePublicNewBallotSetView(PersonalizablePublicTournamentPageMixin, RoundM
                     "Please contact a tab room official."))
 
         if not (self.tournament.pref('draw_side_allocations') == 'manual-ballot' and
-                self.tournament.pref('teams_in_debate') == 'two') and not self.debate.sides_confirmed:
+                self.tournament.pref('teams_in_debate') == 2) and not self.debate.sides_confirmed:
             return self.error_page(_("It looks like the sides for this debate haven't yet been confirmed, "
                     "so you can't enter results for it. Please contact a tab room official."))
 
     def set_speakers(self, former_ballot):
-        if former_ballot.speakerscore_set.exists():
-            for ss in former_ballot.speakerscore_set.all():
-                self.result.set_speaker(ss.debate_team.side, ss.position, ss.speaker)
-                self.result.set_ghost(ss.debate_team.side, ss.position, ss.ghost)
+        for ss in former_ballot.speakerscore_set.all():
+            self.result.set_speaker(ss.debate_team.side, ss.position, ss.speaker)
+            self.result.set_ghost(ss.debate_team.side, ss.position, ss.ghost)
+        else:
             self.prefilled = True
 
     def set_motions(self, former_ballot):
@@ -593,7 +621,7 @@ class BasePublicNewBallotSetView(PersonalizablePublicTournamentPageMixin, RoundM
             self.prefilled = True
         if self.tournament.pref('motion_vetoes_enabled'):
             self.vetos = {}
-            for dtmp in former_ballot.debateteammotionpreference_set.all():
+            for dtmp in former_ballot.debateteammotionpreference_set.filter(preference=3):
                 self.vetos[dtmp.debate_team.side] = dtmp
                 self.vetos[dtmp.debate_team.side]._roundmotion = self.round_motions[dtmp.motion_id]
             self.prefilled = True
@@ -615,6 +643,52 @@ class BasePublicNewBallotSetView(PersonalizablePublicTournamentPageMixin, RoundM
         if self.ballotsub.single_adj:
             return q.filter(participant_submitter=self.ballotsub.participant_submitter)
         return q
+
+    def postprocess_result(self):
+        if self.ballotsub.single_adj and self.tournament.pref('disable_ballot_confirms'):
+            merged_bs = BallotSubmission(
+                debate=self.debate,
+                submitter=None,
+                submitter_type=BallotSubmission.Submitter.AUTOMATION,
+                ip_address=get_ip_address(self.request),
+                confirmed=True,
+                confirm_timestamp=timezone.now(),
+            )
+            bses = BallotSubmission.objects.filter(
+                debate=self.debate, participant_submitter__isnull=False, discarded=False, single_adj=True,
+            ).select_related('participant_submitter').annotate(ordering=Window(Rank(), partition_by="participant_submitter", order_by="-version")).filter(ordering=1)
+            if len(bses) != DebateAdjudicator.objects.filter(debate=self.debate).exclude(type=DebateAdjudicator.TYPE_TRAINEE).count():
+                return
+            populate_results(bses, self.tournament)
+
+            # Handle result conflicts
+            criteria = ScoreCriterion.objects.filter(tournament=self.tournament)
+            merged_result = DebateResult(merged_bs, tournament=self.tournament, criteria=criteria)
+            errors = merged_result.populate_from_merge(*[b.result for b in bses])
+
+            if len(errors) == 0:
+                has_errors = False
+                merged_bs.save()
+                merged_result.save()
+
+                bs_motions = BallotSubmission.objects.filter(
+                    id__in=[b.id for b in bses], motion__isnull=False,
+                ).prefetch_related('debateteammotionpreference_set__debate_team')
+                try:
+                    merge_motions(merged_bs, bs_motions)
+                    merged_bs.save()
+                except ValidationError:
+                    has_errors = True
+
+                try:
+                    vetos = merge_motion_vetos(merged_bs, bs_motions)
+                    DebateTeamMotionPreference.objects.bulk_create(list(vetos.values()))
+                except ValidationError:
+                    has_errors = True
+
+                self.debate.result_status = Debate.STATUS_POSTPONED if has_errors else Debate.STATUS_CONFIRMED
+                self.debate.save()
+                broadcast_results(merged_bs, self.debate)
 
 
 class OldPublicNewBallotSetByIdUrlView(SingleObjectFromTournamentMixin, BasePublicNewBallotSetView):
@@ -670,9 +744,9 @@ class BasePublicBallotScoresheetsView(PublicTournamentPageMixin, SingleObjectFro
             return self.object.matchup
 
     def get_queryset(self):
-        return self.model.objects.select_related(
+        return super().get_queryset().exclude(debateteam__side=DebateSide.BYE).select_related(
             'round',
-        ).prefetch_related('debateteam_set__team')
+        ).prefetch_related('debateteam_set__team__speaker_set')
 
     def response_error(self, error):
         status, message = error
@@ -706,17 +780,17 @@ class PublicBallotScoresheetsView(BasePublicBallotScoresheetsView):
         round = debate.round
         if round.silent and not round.tournament.pref('all_results_released'):
             logger.warning("Refused public view of ballots for %s: %s is silent", debate, round.name)
-            return (403, _("This debate is in %s, which is a silent round.") % round.name)
+            return 403, _("This debate is in %s, which is a silent round.") % round.name
         if not round.completed and not round.tournament.pref('all_results_released'):
             logger.warning("Refused public view of ballots for %s: %s is not completed", debate, round.name)
-            return (403, _("This debate is in %s, the results for which aren't available yet.") % round.name)
+            return 403, _("This debate is in %s, the results for which aren't available yet.") % round.name
 
         if debate.result_status != Debate.STATUS_CONFIRMED:
             logger.warning("Refused public view of ballots for %s: not confirmed", debate)
-            return (404, _("The result for debate %s is not confirmed.") % self.matchup_description())
+            return 404, _("The result for debate %s is not confirmed.") % self.matchup_description()
         if debate.confirmed_ballot is None:
             logger.warning("Refused public view of ballots for %s: no confirmed ballot", debate)
-            return (404, _("The debate %s does not have a confirmed ballot.") % self.matchup_description())
+            return 404, _("The debate %s does not have a confirmed ballot.") % self.matchup_description()
 
     def get_context_data(self, **kwargs):
         kwargs['motion'] = self.object.confirmed_ballot.motion or self.object.round.motion_set.first()
@@ -738,7 +812,7 @@ class AdjudicatorPrivateUrlBallotScoresheetView(RoundMixin, SingleObjectByRandom
     def check_permissions(self):
         if not self.object.ballotsubmission_set.filter(discarded=False).exists():
             logger.warning("Refused public view of ballots for %s: no ballot", self.object)
-            return (404, _("There is no result yet for debate %s.") % self.matchup_description())
+            return 404, _("There is no result yet for debate %s.") % self.matchup_description()
 
     def get_context_data(self, **kwargs):
         ballot = self.object.ballotsubmission_set.filter(discarded=False).order_by('version').last()
@@ -781,7 +855,7 @@ class PublicBallotSubmissionIndexView(PublicTournamentPageMixin, RoundMixin, Vue
         return tournament.pref('participant_ballots') == 'public'
 
     def is_draw_released(self):
-        return self.round.draw_status == Round.STATUS_RELEASED and self.round.motions_good_for_public
+        return self.round.draw_status == Round.Status.RELEASED and self.round.motions_good_for_public
 
     def get_template_names(self):
         if self.is_draw_released():
@@ -854,36 +928,38 @@ class BaseMergeLatestBallotsView(BaseNewBallotSetView):
         kwargs['filled'] = True
         return kwargs
 
+    def get_form(self):
+        form = super().get_form()
+        for error in self.errors:
+            msg, t, side, pos = error.args
+            if t == 'speaker':
+                field = form._fieldname_speaker(side, pos)
+            elif t == 'ghost':
+                field = form._fieldname_ghost(side, pos)
+            elif t == 'winners':
+                field = form._fieldname_declared_winner()
+            elif t == 'scores':
+                field = form._fieldname_score(side, pos)
+            elif t == 'speaker_ranks':
+                field = form._fieldname_srank(side, pos)
+            form.cleaned_data = {}
+            form.add_error(field, ValidationError(msg))
+        return form
+
     def populate_objects(self, prefill=True):
         super().populate_objects()
-        use_code_names = use_team_code_names_data_entry(self.tournament, True)
         self.round = self.debate.round
 
         bses = BallotSubmission.objects.filter(
             debate=self.debate, participant_submitter__isnull=False, discarded=False, single_adj=True,
-        ).distinct('participant_submitter').select_related('participant_submitter').order_by('participant_submitter', '-version')
+        ).annotate(ordering=Window(Rank(), partition_by="participant_submitter", order_by="-version")).filter(ordering=1).select_related('participant_submitter')
         populate_results(bses, self.tournament)
         self.merged_ballots = bses
 
         # Handle result conflicts
-        self.result = DebateResult(self.ballotsub, tournament=self.tournament)
-        try:
-            self.result.populate_from_merge(*[b.result for b in bses])
-        except ResultError as e:
-            msg, t, adj, bs, side, speaker = e.args
-            args = {
-                'ballot_url': reverse_tournament(self.edit_ballot_url, self.tournament, kwargs={'pk': bs.id}),
-                'adjudicator': adj.name,
-                'speaker': speaker.name,
-                'team': team_name_for_data_entry(self.debate.get_team(side), use_code_names),
-            }
-            if t == 'speaker':
-                msg = _("The speaking order in the ballots is inconsistent, so could not be merged.")
-            elif t == 'ghost':
-                msg = _("Duplicate speeches are marked inconsistently, so could not be merged.")
-            msg += _(" This error was caught in <a href='%(ballot_url)s'>%(adjudicator)s's ballot</a> for %(speaker)s (%(team)s).")
-            messages.error(self.request, msg % args)
-            return HttpResponseRedirect(self.get_list_url())
+        criteria = ScoreCriterion.objects.filter(tournament=self.tournament)
+        self.result = DebateResult(self.ballotsub, tournament=self.tournament, criteria=criteria)
+        self.errors = self.result.populate_from_merge(*[b.result for b in bses])
 
         # Handle motion conflicts
         bs_motions = BallotSubmission.objects.filter(
@@ -894,14 +970,12 @@ class BaseMergeLatestBallotsView(BaseNewBallotSetView):
                 merge_motions(self.ballotsub, bs_motions)
             except ValidationError as e:
                 messages.error(self.request, e)
-                return HttpResponseRedirect(self.get_list_url())
 
         # Vetos
         try:
             self.vetos = merge_motion_vetos(self.ballotsub, bs_motions)
         except ValidationError as e:
             messages.error(self.request, e)
-            return HttpResponseRedirect(self.get_list_url())
 
     def get_all_ballotsubs(self):
         q = super().get_all_ballotsubs()

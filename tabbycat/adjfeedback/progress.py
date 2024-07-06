@@ -257,6 +257,7 @@ class FeedbackProgressForTeam(BaseFeedbackProgress):
             tournament = team.tournament
         self.enforce_orallist = (tournament.pref("show_splitting_adjudicators") and
                                  tournament.pref("ballots_per_debate_prelim") == 'per-adj')
+        self.expect_orallists = tournament.pref("feedback_from_teams") in ['orallist', 'all-adjs']
         self.expect_all_adjs = tournament.pref("feedback_from_teams") == 'all-adjs'
         super().__init__(tournament)
 
@@ -264,7 +265,7 @@ class FeedbackProgressForTeam(BaseFeedbackProgress):
     def _submitted_feedback_queryset_operations(queryset):
         # this is also used by get_feedback_progress
         return queryset.filter(confirmed=True,
-            source_team__debate__round__stage=Round.STAGE_PRELIMINARY).select_related(
+            source_team__debate__round__stage=Round.Stage.PRELIMINARY).select_related(
             'adjudicator', 'adjudicator__institution', 'source_team__debate__round')
 
     def get_submitted_feedback(self):
@@ -277,7 +278,7 @@ class FeedbackProgressForTeam(BaseFeedbackProgress):
         debateteams = queryset.filter(
             debate__ballotsubmission__confirmed=True,
             debate__round__silent=False,
-            debate__round__stage=Round.STAGE_PRELIMINARY,
+            debate__round__stage=Round.Stage.PRELIMINARY,
         ).select_related('debate', 'debate__round').prefetch_related(
             'debate__debateadjudicator_set__adjudicator')
         populate_confirmed_ballots([dt.debate for dt in debateteams], results=True)
@@ -301,7 +302,7 @@ class FeedbackProgressForTeam(BaseFeedbackProgress):
                     attrgetter('source', 'target'),
                     attrgetter('source_team', 'adjudicator'))
 
-        else:
+        elif self.expect_orallists:
             # If teams submit only on orallists, there is one tracker for each
             # debate for which there is a confirmed ballot, and the round is not
             # silent.
@@ -309,6 +310,8 @@ class FeedbackProgressForTeam(BaseFeedbackProgress):
                         for dt in debateteams]
             self._prefetch_tracker_acceptable_submissions(trackers,
                         attrgetter('source'), attrgetter('source_team'))
+        else:
+            trackers = []
 
         return trackers
 
@@ -330,7 +333,7 @@ class FeedbackProgressForAdjudicator(BaseFeedbackProgress):
     def _submitted_feedback_queryset_operations(queryset):
         # this is also used by get_feedback_progress
         return queryset.filter(confirmed=True,
-            source_adjudicator__debate__round__stage=Round.STAGE_PRELIMINARY).select_related(
+            source_adjudicator__debate__round__stage=Round.Stage.PRELIMINARY).select_related(
             'adjudicator', 'adjudicator__institution', 'source_adjudicator__debate__round')
 
     def get_submitted_feedback(self):
@@ -342,7 +345,7 @@ class FeedbackProgressForAdjudicator(BaseFeedbackProgress):
         # this is also used by get_feedback_progress
         return queryset.filter(
             debate__ballotsubmission__confirmed=True,
-            debate__round__stage=Round.STAGE_PRELIMINARY,
+            debate__round__stage=Round.Stage.PRELIMINARY,
         ).select_related('debate', 'debate__round').prefetch_related(
             'debate__debateadjudicator_set__adjudicator')
 

@@ -22,7 +22,7 @@ class VueDraggableItemMixin(serializers.Serializer):
     available = serializers.SerializerMethodField(read_only=True)
 
     def get_available(self, debate_or_panel_adj):
-        """ Requires the queryset to be annotate with availabilities """
+        """ Requires the queryset to be annotated with availabilities """
         return debate_or_panel_adj.available
 
     def get_vue_last_modified(self, object):
@@ -79,7 +79,7 @@ class DebateSerializerMixin(serializers.ModelSerializer):
         sides = {side: None for (side) in self.context['sides']}
         for debate_team in obj.debateteam_set.all():
             sides[debate_team.side] = self.team_representation(debate_team)
-        return sides
+        return [sides[side] for side in self.context['sides']]
 
     def get_sort_index(self, obj):
         return 1 # Set on front-end; just need the attr set at load time for reactivity triggers

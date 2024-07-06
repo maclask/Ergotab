@@ -1,5 +1,5 @@
 {% extends "tables/base_vue_table.html" %}
-{% load i18n debate_tags %}
+{% load i18n static debate_tags %}
 
 {% block page-title %}{% trans "Private URL" %}{% endblock %}
 {% block head-title %}{% trans "Private URL" %}{% endblock %}
@@ -37,11 +37,12 @@
           {% blocktrans trimmed with check_time=event.time asvar text %}
             Revoke check-in from {{ check_time }}
           {% endblocktrans %}
+          {% include "components/item-action.html" with id="triggerCheckInForm" url="" child=True type="warning" %}
         {% else %}
           <input type="hidden" name="action" value="checkin" />
           {% trans "Check in" as text %}
+          {% include "components/item-action.html" with id="triggerCheckInForm" url="" child=True %}
         {% endif %}
-        {% include "components/item-action.html" with id="triggerCheckInForm" url="" child=True %}
       </form>
     {% elif checkins_used %}
       {% if event %}
@@ -49,32 +50,36 @@
         {% blocktrans trimmed with check_time=event.time asvar text %}
           You have been checked in at {{ check_time }}
         {% endblocktrans %}
-        {% include "components/item-info.html" with type='success' %}
+        {% include "components/item-info.html" with type='success' nopad=True %}
       {% else %}
         {% trans "You are not currently checked in." as text %}
-        {% include "components/item-info.html" with type='warning' %}
+        {% include "components/item-info.html" with type='warning' nopad=True %}
       {% endif %}
     {% endif %}
 
+    {% if checkins_used %}
+      {% trans "Show barcode for check-in" as text %}
+      {% include "components/item-action.html" with id="openBarcode" url="" icon="grid" child=False %}
+    {% endif %}
+
     {% if object.adjudicator and pref.participant_ballots == 'private-urls' %}
-      {% for round in tournament.current_rounds %}
-        {% roundurl 'results-public-ballotset-new-randomised' round url_key as url %}
-        {% blocktrans trimmed with round=round.name asvar text %}Submit Ballot for {{ round }}{% endblocktrans %}
-        {% include "components/item-action.html" %}
-      {% empty %}
-        {% trans "There are no current rounds" as text %}
-        {% include "components/item-info.html" with type='info' %}
+      {% for dadj in debateadjudications %}
+          {% roundurl 'results-public-ballotset-new-randomised' dadj.debate.round url_key as url %}
+          {% blocktrans trimmed with round=dadj.debate.round.name asvar text %}Submit Ballot for {{ round }}{% endblocktrans %}
+          {% include "components/item-action.html" %}
       {% endfor %}
     {% endif %}
 
     {% if pref.participant_feedback == 'private-urls' %}
-      {% trans "Submit Feedback" as text %}
-      {% if object.adjudicator %}
-        {% tournamenturl 'adjfeedback-public-add-from-adjudicator-randomised' url_key as url %}
-      {% else %}
-        {% tournamenturl 'adjfeedback-public-add-from-team-randomised' url_key as url %}
+        {% if not object.adjudicator and pref.feedback_from_teams != 'no-one' or object.adjudicator and pref.feedback_paths != 'no-adjs' %}
+          {% trans "Submit Feedback" as text %}
+          {% if object.adjudicator %}
+            {% tournamenturl 'adjfeedback-public-add-from-adjudicator-randomised' url_key as url %}
+          {% else %}
+            {% tournamenturl 'adjfeedback-public-add-from-team-randomised' url_key as url %}
+          {% endif %}
+          {% include "components/item-action.html" %}
       {% endif %}
-      {% include "components/item-action.html" %}
     {% endif %}
   </div>
 
@@ -95,17 +100,46 @@
     {{ block.super }} {# this is the Vue table, which is populated with previous results #}
   </div>
 
+<div class="modal fade" id="barcodeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <svg id="{{ identifier.barcode }}" title="{{ identifier.owner }}"
+                               class="barcode-placeholder w-100 h-auto" jsbarcode-value="{{ identifier.barcode }}"
+                               jsbarcode-text="{{ identifier.barcode }} {{ identifier.owner.name|abbreviatename }}"
+                               jsbarcode-width="7" jsbarcode-height="150">
+            </div>
+        </div>
+    </div>
+</div>
+
+
 {% endblock %}
 
 
 {% block js %}
   {{ block.super }}
   <script>
-    $(document).ready( function() { // Use the fake submit buttons as real submissoin
+    $(document).ready( function() { // Use the fake submit buttons as real submission
       $("#triggerCheckInForm").click( function() {
         $("#checkInForm").submit();
         return false;
       });
     });
   </script>
+  {% if checkins_used %}
+    <script src="{% static 'js/vendor/JsBarcode.all.min.js' %}"></script>
+    <script>
+      JsBarcode(".barcode-placeholder").init();
+      $("#openBarcode").click( function() {
+        $("#barcodeModal").modal('show');
+        return false;
+      });
+    </script>
+  {% endif %}
 {% endblock js %}

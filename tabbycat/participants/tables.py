@@ -1,8 +1,10 @@
-from django.db.models import Prefetch
+from django.db.models import Max, Prefetch
+from django.db.models.functions import Coalesce
 from django.utils.html import escape
 from django.utils.translation import gettext as _
 
 from adjallocation.models import DebateAdjudicator
+from draw.models import Debate
 from draw.prefetch import populate_opponents
 from results.models import SpeakerScore, TeamScore
 from results.prefetch import populate_confirmed_ballots, populate_wins
@@ -19,13 +21,13 @@ class TeamResultTableBuilder(TabbycatTableBuilder):
         cumul = 0
         data = []
         for teamscore in teamscores:
-            if teamscore.debate_team.debate.round.is_break_round:
+            if teamscore.points is None:
                 data.append("—")
             else:
-                cumul += teamscore.points * teamscore.debate_team.debate.round.weight
+                cumul += (teamscore.points or 0) * teamscore.debate_team.debate.round.weight
                 data.append(cumul)
 
-        if self.tournament.pref('teams_in_debate') == 'bp':
+        if self.tournament.pref('teams_in_debate') == 4:
             tooltip = _("Points after this debate")
         else:
             tooltip = _("Wins after this debate")
@@ -60,19 +62,19 @@ class AdjudicatorDebateTable:
         )
         if not table.admin and not view.tournament.pref('all_results_released') and not table.private_url:
             debateadjs = debateadjs.filter(
-                debate__round__draw_status=Round.STATUS_RELEASED,
+                debate__round__draw_status=Round.Status.RELEASED,
                 debate__round__silent=False,
                 debate__round__completed=True,
             )
         elif table.private_url:
-            debateadjs = debateadjs.filter(debate__round__draw_status=Round.STATUS_RELEASED)
+            debateadjs = debateadjs.filter(debate__round__draw_status=Round.Status.RELEASED)
 
         debates = [da.debate for da in debateadjs]
         populate_wins(debates)
         populate_confirmed_ballots(debates, motions=True, results=True)
 
         table.add_round_column([debate.round for debate in debates])
-        table.add_debate_results_columns(debates)
+        table.add_debate_results_columns(debates, n_cols=Debate.objects.filter(id__in=[d.id for d in debates]).aggregate(n=Coalesce(Max('debateteam__side'), len(view.tournament.sides)-1))['n']+1)
         table.add_debate_adjudicators_column(debates, show_splits=True, highlight_adj=participant)
 
         if table.admin or view.tournament.pref('public_motions'):
@@ -107,7 +109,7 @@ class TeamDebateTable:
 
         if not table.admin and not tournament.pref('all_results_released'):
             teamscores = teamscores.filter(
-                debate_team__debate__round__draw_status=Round.STATUS_RELEASED,
+                debate_team__debate__round__draw_status=Round.Status.RELEASED,
                 debate_team__debate__round__silent=False,
                 debate_team__debate__round__completed=True,
             )

@@ -34,7 +34,7 @@ R = args.rounds
 T = args.teams
 K = args.insts
 
-assert(T % 2 == 0)
+assert T % 2 == 0
 
 teams = list()
 for i in range(1, T+1):
@@ -48,7 +48,7 @@ for i in range(R):
     brackets.clear()
     for wins in wins_set:
         brackets[wins] = [t for t in teams if t.points == wins]
-    ppdg = DrawGenerator("two", "power_paired", teams)
+    ppdg = DrawGenerator(2, "power_paired", teams)
     ppdg._pullup_top(brackets)
 
     for wins, bracket_teams in brackets.items():

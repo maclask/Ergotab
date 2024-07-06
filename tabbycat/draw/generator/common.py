@@ -46,10 +46,12 @@ class BaseDrawGenerator:
         self.results = results
         self.rrseq = rrseq
 
+        kwargs.pop('teams_in_debate', None)
+
         if self.requires_even_teams:
-            if not len(self.teams) % self.TEAMS_PER_DEBATE == 0:
+            if not len(self.teams) % self.TEAMS_IN_DEBATE == 0:
                 raise DrawUserError(_("The number of teams presented for the draw was not "
-                        "a multiple of %(num)d.") % {'num': self.TEAMS_PER_DEBATE})
+                        "a multiple of %(num)d.") % {'num': self.TEAMS_IN_DEBATE})
             if not self.teams:
                 raise DrawUserError(_("There were no teams for the draw."))
 
@@ -155,17 +157,22 @@ class BasePairDrawGenerator(BaseDrawGenerator):
         "history_penalty" -
         "avoid_institution" - if True, draw tries to avoid pairing teams that
             are from the same institution.
+        "side_penalty" - A penalty to apply when optimizing with side balance
         """
 
     BASE_DEFAULT_OPTIONS = {
-        "side_allocations"   : "balance",
-        "avoid_history"      : True,
-        "avoid_institution"  : True,
-        "history_penalty"    : 1e3,
-        "institution_penalty": 1,
+        "side_allocations"      : "balance",
+        "avoid_history"         : True,
+        "avoid_institution"     : True,
+        "history_penalty"       : 1e3,
+        "institution_penalty"   : 1,
+        "side_penalty"          : 0,
+        "pullup_debates_penalty": 0,
+        "pairing_penalty"       : 0,
+        "avoid_conflicts"       : "off",
     }
 
-    TEAMS_PER_DEBATE = 2
+    TEAMS_IN_DEBATE = 2
 
     requires_even_teams = True
     requires_prev_results = False
@@ -196,7 +203,7 @@ class BasePairDrawGenerator(BaseDrawGenerator):
 
 class BaseBPDrawGenerator(BaseDrawGenerator):
     BASE_DEFAULT_OPTIONS = {}
-    TEAMS_PER_DEBATE = 4
+    TEAMS_IN_DEBATE = 4
 
 
 class EliminationDrawMixin:

@@ -9,7 +9,7 @@ import munkres
 from django.utils.translation import gettext as _
 
 from .common import BaseBPDrawGenerator, DrawUserError
-from .pairing import BPPairing
+from .pairing import PolyPairing
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ class BPHungarianDrawGenerator(BaseBPDrawGenerator):
                          empirical distribution associated with the position
                          history of the team, H_α(p) is the Rényi entropy of
                          order α thereof, and n is the number of rounds the team
-                         has competed in). See the "renyi_order" option below.
+                         has competed in. See the "renyi_order" option below.
 
             "variance" - The population variance of multiplicities in the
                          history.
@@ -280,7 +280,7 @@ class BPHungarianDrawGenerator(BaseBPDrawGenerator):
     # Make pairings
 
     def make_pairings(self, rooms, indices):
-        """Creates the BPPairing objects. Also flags pull-up rooms."""
+        """Creates the PolyPairing objects. Also flags pull-up rooms."""
         teams_in_room = [[None, None, None, None] for i in range(len(indices) // 4)]
         for t, r in indices:
             teams_in_room[r // 4][r % 4] = self.teams[t]
@@ -290,7 +290,7 @@ class BPHungarianDrawGenerator(BaseBPDrawGenerator):
             points_in_room = set(team.points for team in teams)
             if not all([x in allowed for x in points_in_room]):
                 logger.error("Teams with points %s in room that should only have %s", allowed, points_in_room)
-            pairing = BPPairing(teams=teams, bracket=level, room_rank=i)
+            pairing = PolyPairing(teams=teams, bracket=level, room_rank=i, num_sides=4)
             pairings.append(pairing)
 
             for team in teams:

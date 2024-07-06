@@ -4,9 +4,10 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count, Prefetch, Q
+from django.db.models import Count, Max, Prefetch, Q
+from django.db.models.functions import Coalesce
 from django.forms import HiddenInput
-from django.http import JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.utils.html import escape
 from django.utils.translation import gettext as _, gettext_lazy, ngettext
 from django.views.generic.base import View
@@ -21,6 +22,7 @@ from options.utils import use_team_code_names
 from tournaments.mixins import (PublicTournamentPageMixin,
                                 SingleObjectFromTournamentMixin, TournamentMixin)
 from tournaments.models import Round
+from users.permissions import Permission
 from utils.misc import redirect_tournament, reverse_tournament
 from utils.mixins import AdministratorMixin, AssistantMixin
 from utils.tables import TabbycatTableBuilder
@@ -49,7 +51,7 @@ class BaseParticipantsListView(TournamentMixin, VueTableTemplateView):
 
         speakers = Speaker.objects.filter(team__tournament=self.tournament).select_related(
                 'team', 'team__institution').prefetch_related('team__speaker_set', 'categories')
-        if use_team_code_names(self.tournament, self.admin):
+        if use_team_code_names(self.tournament, self.admin, user=self.request.user):
             speakers = speakers.order_by('team__code_name')
         else:
             speakers = speakers.order_by('team__short_name')
@@ -63,11 +65,12 @@ class BaseParticipantsListView(TournamentMixin, VueTableTemplateView):
     def get_context_data(self, **kwargs):
         # These are used to choose the nav display
         kwargs['email_sent'] = BulkNotification.objects.filter(
-            tournament=self.tournament, event=BulkNotification.EVENT_TYPE_TEAM_REG).exists()
+            tournament=self.tournament, event=BulkNotification.EventType.TEAM_REG).exists()
         return super().get_context_data(**kwargs)
 
 
 class AdminParticipantsListView(AdministratorMixin, BaseParticipantsListView):
+    view_permission = Permission.VIEW_PARTICIPANTS
     template_name = 'participants_list.html'
     admin = True
 
@@ -117,6 +120,7 @@ class BaseInstitutionsListView(TournamentMixin, VueTableTemplateView):
 
 
 class AdminInstitutionsListView(AdministratorMixin, BaseInstitutionsListView):
+    view_permission = Permission.VIEW_INSTITUTIONS
     template_name = 'participants_list.html'
     admin = True
 
@@ -150,6 +154,7 @@ class BaseCodeNamesListView(TournamentMixin, VueTableTemplateView):
 
 class AdminCodeNamesListView(AdministratorMixin, BaseCodeNamesListView):
     template_name = 'participants_list.html'
+    view_permission = Permission.VIEW_DECODED_TEAMS
 
 
 class AssistantCodeNamesListView(AssistantMixin, BaseCodeNamesListView):
@@ -163,7 +168,7 @@ class AssistantCodeNamesListView(AssistantMixin, BaseCodeNamesListView):
 class EmailTeamRegistrationView(TournamentTemplateEmailCreateView):
     page_subtitle = _("Team Registration")
 
-    event = BulkNotification.EVENT_TYPE_TEAM_REG
+    event = BulkNotification.EventType.TEAM_REG
     subject_template = 'team_email_subject'
     message_template = 'team_email_message'
 
@@ -191,7 +196,7 @@ class BaseRecordView(SingleObjectFromTournamentMixin, VueTableTemplateView):
         return super().get_queryset().select_related('institution__region')
 
     def use_team_code_names(self):
-        return use_team_code_names(self.tournament, self.admin)
+        return use_team_code_names(self.tournament, self.admin, user=self.request.user)
 
     @staticmethod
     def allocations_set(obj, admin, tournament):
@@ -203,7 +208,7 @@ class BaseRecordView(SingleObjectFromTournamentMixin, VueTableTemplateView):
                 qs = qs.prefetch_related(Prefetch('debate__round__roundmotion_set',
                     queryset=RoundMotion.objects.select_related('motion')))
             else:
-                qs = qs.filter(debate__round__draw_status=Round.STATUS_RELEASED).prefetch_related(
+                qs = qs.filter(debate__round__draw_status=Round.Status.RELEASED).prefetch_related(
                     Prefetch('debate__round__roundmotion_set',
                         queryset=RoundMotion.objects.filter(round__motions_released=True).select_related('motion')))
             return qs
@@ -212,7 +217,7 @@ class BaseRecordView(SingleObjectFromTournamentMixin, VueTableTemplateView):
 
     def get_context_data(self, **kwargs):
         kwargs['admin_page'] = self.admin
-        kwargs['draw_released'] = self.tournament.current_round.draw_status == Round.STATUS_RELEASED
+        kwargs['draw_released'] = self.tournament.current_round.draw_status == Round.Status.RELEASED
         kwargs['use_code_names'] = self.use_team_code_names()
         kwargs[self.model_kwarg] = self.allocations_set(self.object, self.admin, self.tournament)
 
@@ -283,6 +288,7 @@ class BaseAdjudicatorRecordView(BaseRecordView):
 
 class TeamRecordView(AdministratorMixin, BaseTeamRecordView):
     admin = True
+    view_permission = Permission.VIEW_TEAMS
 
     def get_queryset(self):
         return super().get_queryset().prefetch_related(
@@ -294,6 +300,7 @@ class TeamRecordView(AdministratorMixin, BaseTeamRecordView):
 
 class AdjudicatorRecordView(AdministratorMixin, BaseAdjudicatorRecordView):
     admin = True
+    view_permission = Permission.VIEW_ADJUDICATORS
 
     def get_queryset(self):
         return super().get_queryset().prefetch_related(
@@ -322,17 +329,17 @@ class EditSpeakerCategoriesView(LogActionMixin, AdministratorMixin, TournamentMi
     # uniqueness checks will work. Since this is a superuser form, they can
     # access all tournaments anyway, so tournament forgery wouldn't be a
     # security risk.
-
+    view_permission = Permission.VIEW_SPEAKER_CATEGORIES
     template_name = 'speaker_categories_edit.html'
     formset_model = SpeakerCategory
-    action_log_type = ActionLogEntry.ACTION_TYPE_SPEAKER_CATEGORIES_EDIT
+    action_log_type = ActionLogEntry.ActionType.SPEAKER_CATEGORIES_EDIT
 
     url_name = 'participants-speaker-categories-edit'
     success_url = 'participants-list'
 
     def get_formset_factory_kwargs(self):
         return {
-            'fields': ('name', 'tournament', 'slug', 'seq', 'limit', 'public'),
+            'fields': ('name', 'tournament', 'slug', 'limit', 'public'),
             'extra': 2,
             'widgets': {
                 'tournament': HiddenInput,
@@ -347,19 +354,33 @@ class EditSpeakerCategoriesView(LogActionMixin, AdministratorMixin, TournamentMi
             'initial': [{'tournament': self.tournament}] * 2,
         }
 
+    def prepare_related(self, cat):
+        pass
+
     def formset_valid(self, formset):
-        result = super().formset_valid(formset)
-        if self.instances:
+        cats = formset.save(commit=False)
+
+        for cat, fields in formset.changed_objects:
+            cat.save()
+
+        for i, cat in enumerate(formset.new_objects, start=self.get_formset_queryset().aggregate(m=Coalesce(Max('seq'), 0) + 1)['m']):
+            cat.seq = i
+            cat.tournament = self.tournament  # Even with the tournament in the form, avoid it being changed
+            cat.save()
+
+            self.prepare_related(cat)
+
+        if cats:
             message = ngettext("Saved category: %(list)s",
                 "Saved categories: %(list)s",
-                len(self.instances),
-            ) % {'list': ", ".join(category.name for category in self.instances)}
+                len(cats),
+            ) % {'list': ", ".join(category.name for category in cats)}
             messages.success(self.request, message)
         else:
             messages.success(self.request, _("No changes were made to the categories."))
         if "add_more" in self.request.POST:
             return redirect_tournament(self.url_name, self.tournament)
-        return result
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self, *args, **kwargs):
         return reverse_tournament(self.success_url, self.tournament)
@@ -371,6 +392,7 @@ class EditSpeakerCategoryEligibilityView(AdministratorMixin, TournamentMixin, Vu
     template_name = 'edit_speaker_eligibility.html'
     page_title = _("Speaker Category Eligibility")
     page_emoji = '🍯'
+    edit_permission = Permission.EDIT_SPEAKER_CATEGORIES
 
     def get_table(self):
         table = TabbycatTableBuilder(view=self, sort_key='team')
@@ -399,7 +421,7 @@ class EditSpeakerCategoryEligibilityView(AdministratorMixin, TournamentMixin, Vu
 
 
 class UpdateEligibilityEditView(LogActionMixin, AdministratorMixin, TournamentMixin, View):
-    action_log_type = ActionLogEntry.ACTION_TYPE_SPEAKER_ELIGIBILITY_EDIT
+    action_log_type = ActionLogEntry.ActionType.SPEAKER_ELIGIBILITY_EDIT
     participant_model = Speaker
     many_to_many_field = 'categories'
 

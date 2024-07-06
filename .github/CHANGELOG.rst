@@ -2,6 +2,92 @@
 Change Log
 ==========
 
+2.9.0 (Ragdoll)
+---------
+*Release date: 1 July 2024*
+
+- Added a setting to expect no feedback from teams or adjudicators. Thanks Daan Koning!
+- Allowed scores to be given in any increments.
+- Actions taken through the API are now logged.
+- Participants' private URLs now show their barcode for checkin. Thank you to Miha Frangež!
+  - Private URLs include the info-slide for the current round if available and public.
+  - The API includes participants' barcode numbers on participant endpoints.
+- Debates can be configured to have an arbitrary number of teams, for public speaking tournaments.
+  - Per-adjudicator ballots for more than 2-team formats can be enabled, disabling team win and ranking metrics if the "Margins includes dissenters" setting is activated.
+  - Speakers in single-speaker teams are pre-selected in ballots.
+  - A preset has been added with default settings for public speaking.
+  - API: Side attributes for pairings and ballots should now be implied by sequence.
+- Implemented basic user permissions:
+  - Users can be invited to create an account with access to specific tournaments.
+  - Users can be assigned to specific groups and permissions with accesses within tournaments. Thanks to Valerie Pang for cataloging the permissions!
+  - Default groups are created for "Tabulation," "Adjudication Core," and "Equity" in each tournament.
+  - API: New endpoints for groups and users are added.
+- Custom scoring criteria can be added through "Edit Database" to be shown on ballots. The assigned speaker score becomes the weighted sum of the given scores on the criteria. Thanks to Trần Trang Linh for this new feature!
+  - Criteria can be added through the Edit Database.
+- Ballot merging is made more stable and revamped, with the help of Trần Trang Linh:
+  - The specific fields are now marked as failing, rather than all related ones.
+  - Ballots can be automatically merged when all eligible ballots received, on enabling a setting.
+- Debate start times can now include the date, and can be set automatically on motion release. Thanks Trudeau Okech for the automation!
+- Installation methods are improved:
+  - Docker installations are more rapid and responsive to code changes.
+  - The "deploy to Heroku" script is updated for the new URL scheme and plans.
+- Plenty of new team emojis, thanks to Peta Hillier!
+- Bug fixes!
+  - Fixed access to the "Edit Database" views for Speaker scores and by adjudicator.
+- Upgraded to Python 3.11 and Django 5.
+
+
+2.8.1
+-----
+*Release date: 27 January 2024*
+
+- Fixed failing draw generation with byes (BACKEND-BWA)
+- Avoided showing points in private URL table for uncredited rounds (BACKEND-BVY)
+- Corrected ordering of ballots in private URL tables (#2369)
+- Fixed draw strength metrics counting unconfirmed ballots
+- API: Re-added ``seq`` for motions in Round endpoint
+- Hid real names from ballot forms if code names used
+- Fixed break category form showing general error
+
+
+2.8.0 (Quokka)
+---------
+*Release date: 28 November 2023*
+
+- The term "iron person" is now used throughout the platform for consistency and inclusivity. Thanks to @dcorks for the pull request!
+    - The number of times a team has had an iron-speaker is now tracked as a team metric.
+- Added new emoji from Unicode 12 and 13. Thank you to Daan Koning for the pull request! (`#2143 <https://github.com/TabbycatDebate/tabbycat/issues/2143>`_)
+- Info Slides can now use rich-text formatting (e.g. bold, links, etc). Thanks to Trần Trang Linh for adding this feature!
+- Speaker and break category forms have better validation and fewer fields.
+- Tournaments can be created specifying private URL use directly. Thanks to Sébastien Dunne Fulmer!
+- Implemented support for APDA-style tournaments with:
+    - Avoidance for a team to repeatedly meet pulled-up teams,
+    - A new two-team draw generator to minimize penalties globally within brackets,
+    - Team seeding for the first round,
+    - The ability to give ranks to speeches in addition to speaker scores, and
+    - A preset to enable these options.
+- API Updates:
+    - Documentation is now automatically generated and available under the ``/api/schema/redoc/`` path on all sites.
+    - Preformed panels are now accessible using the API.
+    - Team and speaker scores by round has a new endpoint. Thanks to Ido Wolf for the feature!
+    - The site's timezone is shown in the root endpoint. Thanks to Daan Koning!
+- \+ so many more little improvements and fixes!
+
+
+2.7.8
+-----
+*Release date: 13 August 2023*
+
+- Fixed some issues with Docker-based deployments.
+
+
+2.7.7
+-----
+*Release date: 23 April 2023*
+
+- Removed expired ad campaign
+
+
 2.7.6
 -----
 *Release date: 25 February 2023*

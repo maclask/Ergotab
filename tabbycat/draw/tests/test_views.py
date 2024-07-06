@@ -1,6 +1,5 @@
 from django.test import TestCase
 
-from draw.models import DebateTeam
 from tournaments.models import Round
 from utils.tests import AdminTournamentViewSimpleLoadTestMixin, CompletedTournamentTestMixin, ConditionalTableViewTestsMixin, TableViewTestsMixin
 
@@ -30,7 +29,7 @@ class PublicDrawForCurrentRoundViewPermissionTest(ConditionalTableViewTestsMixin
         self.tournament.round_set.filter(seq__lt=seq).update(completed=True)
         self.tournament.round_set.filter(seq__gte=seq).update(completed=False)
         self.round = self.tournament.round_set.get(seq=seq)
-        self.round.draw_status = Round.STATUS_RELEASED
+        self.round.draw_status = Round.Status.RELEASED
         self.round.save()
 
     def expected_row_counts(self):
@@ -47,7 +46,7 @@ class PublicDrawSpecificRoundTest(CompletedTournamentTestMixin, TableViewTestsMi
         self.tournament.preferences['public_features__public_draw'] = 'all-released'
 
     def test_unreleased(self):
-        self.round.draw_status = Round.STATUS_CONFIRMED
+        self.round.draw_status = Round.Status.CONFIRMED
         self.round.save()
 
         response = self.get_response('draw-public-for-round')
@@ -55,7 +54,7 @@ class PublicDrawSpecificRoundTest(CompletedTournamentTestMixin, TableViewTestsMi
         self.assertNoTables(response)
 
     def test_released(self):
-        self.round.draw_status = Round.STATUS_RELEASED
+        self.round.draw_status = Round.Status.RELEASED
         self.round.save()
 
         response = self.get_response('draw-public-for-round')
@@ -74,11 +73,11 @@ class PublicDrawPreliminaryCurrentRoundTest(CompletedTournamentTestMixin, TableV
         self.tournament.round_set.filter(seq__lt=seq).update(completed=True)
         self.tournament.round_set.filter(seq__gte=seq).update(completed=False)
         self.round = self.tournament.round_set.get(seq=seq)
-        self.round.draw_status = Round.STATUS_RELEASED
+        self.round.draw_status = Round.Status.RELEASED
         self.round.save()
 
     def test_unreleased(self):
-        self.round.draw_status = Round.STATUS_CONFIRMED
+        self.round.draw_status = Round.Status.CONFIRMED
         self.round.save()
 
         response = self.get_response('draw-public-current-rounds')
@@ -86,7 +85,7 @@ class PublicDrawPreliminaryCurrentRoundTest(CompletedTournamentTestMixin, TableV
         self.assertNoTables(response)
 
     def test_released(self):
-        self.round.draw_status = Round.STATUS_RELEASED
+        self.round.draw_status = Round.Status.RELEASED
         self.round.save()
 
         response = self.get_response('draw-public-current-rounds')
@@ -100,8 +99,8 @@ class PublicDrawPreliminaryCurrentRoundTest(CompletedTournamentTestMixin, TableV
 
         keys = [c['key'] for c in table['head']]
         venue_column_index = keys.index('venue')
-        aff_column_index = keys.index('aff')
-        neg_column_index = keys.index('neg')
+        aff_column_index = keys.index('0')
+        neg_column_index = keys.index('1')
 
         venues = [c[venue_column_index]['text'] for c in table['data']]
         pairings = [
@@ -133,9 +132,9 @@ class PublicDrawEliminationCurrentRoundTest(CompletedTournamentTestMixin, TableV
         self.ngf = self.tournament.round_set.get(abbreviation='NGF')
 
     def test_unreleased(self):
-        self.oqf.draw_status = Round.STATUS_CONFIRMED
+        self.oqf.draw_status = Round.Status.CONFIRMED
         self.oqf.save()
-        self.ssf.draw_status = Round.STATUS_CONFIRMED
+        self.ssf.draw_status = Round.Status.CONFIRMED
         self.ssf.save()
 
         response = self.get_response('draw-public-current-rounds')
@@ -143,37 +142,37 @@ class PublicDrawEliminationCurrentRoundTest(CompletedTournamentTestMixin, TableV
         self.assertNoTables(response)
 
     def test_one_released(self):
-        self.oqf.draw_status = Round.STATUS_RELEASED
+        self.oqf.draw_status = Round.Status.RELEASED
         self.oqf.save()
-        self.ssf.draw_status = Round.STATUS_CONFIRMED
+        self.ssf.draw_status = Round.Status.CONFIRMED
         self.ssf.save()
 
         response = self.get_response('draw-public-current-rounds')
         self.assertResponseTableRowCountsEqual(response, [4, 0], allow_vacuous=True)
 
     def test_both_released(self):
-        self.oqf.draw_status = Round.STATUS_RELEASED
+        self.oqf.draw_status = Round.Status.RELEASED
         self.oqf.save()
-        self.ssf.draw_status = Round.STATUS_RELEASED
+        self.ssf.draw_status = Round.Status.RELEASED
         self.ssf.save()
 
         response = self.get_response('draw-public-current-rounds')
         self.assertResponseTableRowCountsEqual(response, [4, 2])
 
     def test_all_three_released(self):
-        self.oqf.draw_status = Round.STATUS_RELEASED
+        self.oqf.draw_status = Round.Status.RELEASED
         self.oqf.save()
-        self.ssf.draw_status = Round.STATUS_RELEASED
+        self.ssf.draw_status = Round.Status.RELEASED
         self.ssf.save()
-        self.ngf.draw_status = Round.STATUS_RELEASED
+        self.ngf.draw_status = Round.Status.RELEASED
         self.ngf.save()
 
         # Create a Novice Grand Final to check that the table will appear
         ngf_debate = self.ngf.debate_set.create()
         aff = self.tournament.team_set.get(id=4)
         neg = self.tournament.team_set.get(id=6)
-        ngf_debate.debateteam_set.create(team=aff, side=DebateTeam.SIDE_AFF)
-        ngf_debate.debateteam_set.create(team=neg, side=DebateTeam.SIDE_NEG)
+        ngf_debate.debateteam_set.create(team=aff, side=0)
+        ngf_debate.debateteam_set.create(team=neg, side=1)
 
         response = self.get_response('draw-public-current-rounds')
         self.assertResponseTableRowCountsEqual(response, [4, 2, 1])

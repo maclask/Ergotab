@@ -1,10 +1,10 @@
 import logging
-from unittest import expectedFailure
 
 from django.test import TestCase
 
 from adjallocation.models import DebateAdjudicator
 from draw.models import Debate, DebateTeam
+from draw.types import DebateSide
 from participants.models import Adjudicator, Institution, Speaker, Team
 from results.models import BallotSubmission, SpeakerScore, TeamScore
 from tournaments.models import Round, Tournament
@@ -29,9 +29,9 @@ class TestTrivialStandings(TestCase):
         adj = Adjudicator.objects.create(tournament=self.tournament, name="Adjudicator")
         for i in [1, 2]:
             rd = Round.objects.create(tournament=self.tournament, seq=i)
-            debate = Debate.objects.create(round=rd)
-            dt1 = DebateTeam.objects.create(debate=debate, team=self.team1, side=DebateTeam.SIDE_AFF)
-            dt2 = DebateTeam.objects.create(debate=debate, team=self.team2, side=DebateTeam.SIDE_NEG)
+            debate = Debate.objects.create(round=rd, flags=['pullup'])
+            dt1 = DebateTeam.objects.create(debate=debate, team=self.team1, side=DebateSide.AFF, flags=['pullup'])
+            dt2 = DebateTeam.objects.create(debate=debate, team=self.team2, side=DebateSide.NEG)
             DebateAdjudicator.objects.create(debate=debate, adjudicator=adj, type=DebateAdjudicator.TYPE_CHAIR)
             ballotsub = BallotSubmission.objects.create(debate=debate, confirmed=True)
             TeamScore.objects.create(debate_team=dt1, ballot_submission=ballotsub,
@@ -138,12 +138,18 @@ class TestTrivialStandings(TestCase):
         self._base_metric_test({'wbw': {'wbw1': [2, 0]}})
 
     def test_wbw_tied(self):
-        # npullups should be 0 for both teams, so is a tied first metric,
-        # allowing wbw to be tested as a second metric (the normal use case)
-        self._base_metric_test({'npullups': [0, 0], 'wbw': {'wbw1': [2, 0]}})
+        # firsts should be 0 for both teams as only applicable in BP, so is a tied
+        # first metric, allowing wbw to be tested as a second metric (the normal use case)
+        self._base_metric_test({'firsts': [0, 0], 'wbw': {'wbw1': [2, 0]}})
 
     def test_npullups(self):
-        self._base_metric_test({'npullups': [0, 0]})
+        self._base_metric_test({'npullups': [2, 0]})
+
+    def test_pullup_debates(self):
+        self._base_metric_test({'pullup_debates': [2, 2]})
+
+    def test_pullup_debates_combinable(self):
+        self._base_metric_test({'points': [2, 0], 'npullups': [2, 0], 'pullup_debates': [2, 2]})
 
     def test_points_ranked(self):
         generator = TeamStandingsGenerator(('points',), ('rank',))
@@ -207,8 +213,8 @@ class IgnorableDebateMixin:
         adj = Adjudicator.objects.get()
         rd = Round.objects.create(tournament=self.tournament, seq=3)
         debate = Debate.objects.create(round=rd)
-        dt1 = DebateTeam.objects.create(debate=debate, team=self.team1, side=DebateTeam.SIDE_AFF)
-        dt2 = DebateTeam.objects.create(debate=debate, team=self.team2, side=DebateTeam.SIDE_NEG)
+        dt1 = DebateTeam.objects.create(debate=debate, team=self.team1, side=DebateSide.AFF)
+        dt2 = DebateTeam.objects.create(debate=debate, team=self.team2, side=DebateSide.NEG)
         DebateAdjudicator.objects.create(debate=debate, adjudicator=adj, type=DebateAdjudicator.TYPE_CHAIR)
         ballotsub = BallotSubmission.objects.create(debate=debate, confirmed=True)
         TeamScore.objects.create(debate_team=dt1, ballot_submission=ballotsub,
@@ -236,7 +242,7 @@ class TestStandingsWithEliminationRound(IgnorableDebateMixin, TestTrivialStandin
     def setUp(self):
         super().setUp()
         debate = self.set_up_ignorable_debate()
-        debate.round.stage = Round.STAGE_ELIMINATION
+        debate.round.stage = Round.Stage.ELIMINATION
         debate.round.save()
 
 
@@ -247,13 +253,15 @@ class TestStandingsWithUnconfirmedBallotSubmission(IgnorableDebateMixin, TestTri
         debate = self.set_up_ignorable_debate()
         debate.ballotsubmission_set.update(confirmed=False)
 
-    @expectedFailure
     def test_draw_strength(self):
-        super().test_draw_strength()
+        # The ignorable debate still counts as an opponent (because they definitely faced each
+        # other) but does not count as a win (because it's unconfirmed). So the losing team has
+        # faced the winning team 3 times (including ignorable debate), and the winning team has 2
+        # wins (excluding ignorable debate), for a losing team draw strength of 3 * 2 = 6.
+        self._base_metric_test({'draw_strength': [0, 6]})
 
-    @expectedFailure
     def test_draw_strength_speaks(self):
-        super().test_draw_strength_speaks()
+        self._base_metric_test({'draw_strength_speaks': [591, 609]})
 
 
 class TestBasicStandings(TestCase):
@@ -313,7 +321,7 @@ class TestBasicStandings(TestCase):
             Venue.objects.create(name="Venue {:d}".format(i), priority=10)
         adjs = list(Adjudicator.objects.all())
         venues = list(Venue.objects.all())
-        sides = [DebateTeam.SIDE_AFF, DebateTeam.SIDE_NEG]
+        sides = [DebateSide.AFF, DebateSide.NEG]
 
         for r, debatedict in enumerate(testdata["teamscores"]):
             rd = Round.objects.create(tournament=tournament, seq=r, abbreviation="R{:d}".format(r))

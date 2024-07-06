@@ -2,7 +2,10 @@ import itertools
 import logging
 import random
 
+from django.db.models import Q
+
 from draw.models import Debate
+from draw.types import DebateSide
 
 from .models import VenueConstraint
 
@@ -27,7 +30,7 @@ class VenueAllocator:
 
     def allocate(self, round, debates=None):
         if debates is None:
-            debates = round.debate_set_with_prefetches(speakers=False, institutions=True)
+            debates = round.debate_set_with_prefetches(speakers=False, institutions=True, filter_args=[~Q(debateteam__side=DebateSide.BYE)])
         self._all_venues = list(round.active_venues.order_by('-priority'))
         self._preferred_venues = self._all_venues[:len(debates)]
 
@@ -57,7 +60,7 @@ class VenueAllocator:
         from the dict, so each list of constraints is guaranteed not to be
         empty.
 
-        The constraints for each debate are just all of the venue constraints
+        The constraints for each debate are just all the venue constraints
         relating to the teams, adjudicators, and institutions of the debate."""
 
         all_constraints = {}

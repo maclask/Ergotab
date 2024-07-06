@@ -1,4 +1,5 @@
 from django.urls import include, path
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
 from rest_framework.routers import SimpleRouter
 
 from . import views
@@ -14,6 +15,11 @@ urlpatterns = [
     path('',
         views.APIRootView.as_view(),
         name='api-root'),
+
+    path('/schema', include([
+        path('.yml', SpectacularAPIView.as_view(), name='api-schema'),
+        path('/redoc/', SpectacularRedocView.as_view(url_name='api-schema'), name='redoc'),
+    ])),
 
     path('/v1', include([
         path('',
@@ -59,6 +65,15 @@ urlpatterns = [
                         name='api-feedback-detail'),
                 ])),
 
+                path('/score-criteria', include([
+                    path('',
+                        views.ScoreCriterionViewSet.as_view(list_methods),
+                        name='api-score-criteria-list'),
+                    path('/<int:pk>',
+                        views.ScoreCriterionViewSet.as_view(detail_methods),
+                        name='api-score-criteria-detail'),
+                ])),
+
                 path('/rounds', include([
                     path('',
                         views.RoundViewSet.as_view(list_methods),
@@ -91,6 +106,15 @@ urlpatterns = [
                                         name='api-ballot-detail'),
                                 ])),
                             ])),
+                        ])),
+
+                        path('/preformed-panels', include([
+                            path('',
+                                views.PreformedPanelViewSet.as_view({'get': 'list', 'post': 'create', 'delete': 'delete_all', 'put': 'add_blank'}),
+                                name='api-preformedpanel-list'),
+                            path('/<int:debate_pk>',
+                                views.PreformedPanelViewSet.as_view(detail_methods),
+                                name='api-preformedpanel-detail'),
                         ])),
                     ])),
                 ])),
@@ -142,9 +166,14 @@ urlpatterns = [
                     path('/<int:pk>',
                          views.TeamViewSet.as_view(detail_methods),
                          name='api-team-detail'),
-                    path('/standings',
-                         views.TeamStandingsView.as_view(),
-                         name='api-team-standings'),
+                    path('/standings', include([
+                        path('',
+                            views.TeamStandingsView.as_view(),
+                             name='api-team-standings'),
+                        path('/rounds',
+                            views.TeamRoundStandingsRoundsView.as_view({'get': 'list'}),
+                            name='api-team-round-standings'),
+                    ])),
                 ])),
                 path('/adjudicators', include([
                     path('',
@@ -178,6 +207,9 @@ urlpatterns = [
                         path('/replies',
                             views.ReplySpeakerStandingsView.as_view(),
                             name='api-reply-speaker-standings'),
+                        path('/rounds',
+                            views.SpeakerRoundStandingsRoundsView.as_view({'get': 'list'}),
+                            name='api-speaker-round-standings'),
                     ])),
                 ])),
                 path('/venues', include([
@@ -202,10 +234,17 @@ urlpatterns = [
                         name='api-venuecategory-detail'),
                 ])),
 
+                path('/user-groups', include([
+                    path('',
+                        views.GroupViewSet.as_view(list_methods),
+                        name='api-group-list'),
+                    path('/<int:pk>',
+                        views.GroupViewSet.as_view(detail_methods),
+                        name='api-group-detail'),
+                ])),
+
                 path('/', include(pref_router.urls)),  # Preferences
             ])),
-
-
         ])),
         path('/institutions', include([
             path('',
@@ -214,6 +253,15 @@ urlpatterns = [
             path('/<int:pk>',
                  views.GlobalInstitutionViewSet.as_view(detail_methods),
                  name='api-global-institution-detail'),
+        ])),
+
+        path('/users', include([
+            path('',
+                views.UserViewSet.as_view(list_methods),
+                name='api-user-list'),
+            path('/<int:pk>',
+                views.UserViewSet.as_view(detail_methods),
+                name='api-user-detail'),
         ])),
     ])),
 ]

@@ -1,9 +1,11 @@
 from django.conf import settings
 from django.contrib import messages
 from django.db.models import OuterRef, Prefetch, Q, Subquery
+from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy, ngettext
 from django.views.generic.base import TemplateView
+from django_summernote.widgets import SummernoteWidget
 
 from actionlog.mixins import LogActionMixin
 from actionlog.models import ActionLogEntry
@@ -13,6 +15,7 @@ from participants.models import Speaker
 from tournaments.mixins import (CurrentRoundMixin, OptionalAssistantTournamentPageMixin,
                                 PublicTournamentPageMixin, RoundMixin, TournamentMixin)
 from tournaments.models import Round
+from users.permissions import Permission
 from utils.misc import redirect_round
 from utils.mixins import AdministratorMixin
 from utils.views import ModelFormSetView, PostOnlyRedirectView
@@ -42,9 +45,10 @@ class PublicMotionsView(PublicTournamentPageMixin, TemplateView):
 class EditMotionsView(AdministratorMixin, LogActionMixin, RoundMixin, ModelFormSetView):
     # Django doesn't have a class-based view for formsets, so this implements
     # the form processing analogously to FormView, with less decomposition.
-
+    view_permission = Permission.VIEW_MOTION
+    edit_permission = Permission.EDIT_MOTION
     template_name = 'motions_edit.html'
-    action_log_type = ActionLogEntry.ACTION_TYPE_MOTION_EDIT
+    action_log_type = ActionLogEntry.ActionType.MOTION_EDIT
     formset_model = Motion
 
     def get_formset_factory_kwargs(self):
@@ -59,7 +63,7 @@ class EditMotionsView(AdministratorMixin, LogActionMixin, RoundMixin, ModelFormS
             extra = max(1 - nexisting, 0)
             delete = nexisting > 1  # if there's more than one, allow deletion
 
-        return {'can_delete': delete, 'exclude': excludes, 'extra': extra}
+        return {'can_delete': delete, 'exclude': excludes, 'extra': extra, 'widgets': {'info_slide': SummernoteWidget(attrs={'height': 150, 'class': 'form-summernote'})}}
 
     def get_formset_kwargs(self):
         nexisting = self.get_formset_queryset().count()
@@ -128,10 +132,14 @@ class CopyMotionsView(EditMotionsView):
 
 class CopyPreviousMotionsView(AdministratorMixin, LogActionMixin, RoundMixin, PostOnlyRedirectView):
     round_redirect_pattern_name = 'draw-display'
-    action_log_type = ActionLogEntry.ACTION_TYPE_MOTION_EDIT
+    action_log_type = ActionLogEntry.ActionType.MOTION_EDIT
 
     def post(self, request, *args, **kwargs):
         self.round.roundmotion_set.all().delete()
+        if self.round.prev is None:
+            messages.error(self.request, _("Motions cannot be copied to the first round."))
+            return super().post(request, *args, **kwargs)
+
         motions = self.round.prev.roundmotion_set.select_related('motion')
         new_motions = []
 
@@ -162,17 +170,33 @@ class BaseReleaseMotionsView(AdministratorMixin, LogActionMixin, RoundMixin, Pos
 
 
 class ReleaseMotionsView(BaseReleaseMotionsView):
+    edit_permission = Permission.RELEASE_MOTION
 
-    action_log_type = ActionLogEntry.ACTION_TYPE_MOTIONS_RELEASE
+    action_log_type = ActionLogEntry.ActionType.MOTIONS_RELEASE
     motions_released = True
-    message_text = _("Released the motion(s).")
+
+    @property
+    def message_text(self):
+        return ngettext("Released the motion.", "Released the motions.", self.round.motion_set.count())
+
+    def post(self, request, *args, **kwargs):
+        preparation_time = self.tournament.pref('preparation_time')
+
+        if preparation_time > -1:
+            self.round.starts_at = timezone.now() + timezone.timedelta(minutes=preparation_time)
+            self.round.save()
+
+        return super().post(request, *args, **kwargs)
 
 
 class UnreleaseMotionsView(BaseReleaseMotionsView):
 
-    action_log_type = ActionLogEntry.ACTION_TYPE_MOTIONS_UNRELEASE
+    action_log_type = ActionLogEntry.ActionType.MOTIONS_UNRELEASE
     motions_released = False
-    message_text = _("Unreleased the motion(s).")
+
+    @property
+    def message_text(self):
+        return ngettext("Unreleased the motion.", "Unreleased the motions.", self.round.motion_set.count())
 
 
 class BaseDisplayMotionsView(RoundMixin, TemplateView):
@@ -188,7 +212,7 @@ class BaseDisplayMotionsView(RoundMixin, TemplateView):
 
 
 class AdminDisplayMotionsView(AdministratorMixin, BaseDisplayMotionsView):
-    pass
+    view_permission = Permission.DISPLAY_MOTION
 
 
 class AssistantDisplayMotionsView(CurrentRoundMixin, OptionalAssistantTournamentPageMixin, BaseDisplayMotionsView):
@@ -198,7 +222,7 @@ class AssistantDisplayMotionsView(CurrentRoundMixin, OptionalAssistantTournament
 class EmailMotionReleaseView(RoleColumnMixin, RoundTemplateEmailCreateView):
     page_subtitle = _("Round Motions")
 
-    event = BulkNotification.EVENT_TYPE_MOTIONS
+    event = BulkNotification.EventType.MOTIONS
     subject_template = 'motion_email_subject'
     message_template = 'motion_email_message'
 
@@ -219,13 +243,13 @@ class BaseMotionStatisticsView(TournamentMixin, TemplateView):
         kwargs['statistics'] = self.get_statistics()
         kwargs['type'] = self.stats_type
         kwargs['for_public'] = self.for_public
-        kwargs['stage'] = {'PRELIM': Round.STAGE_PRELIMINARY, 'ELIM': Round.STAGE_ELIMINATION}
+        kwargs['stage'] = {'PRELIM': Round.Stage.PRELIMINARY, 'ELIM': Round.Stage.ELIMINATION}
         return super().get_context_data(**kwargs)
 
     def get_statistics(self, *args, **kwargs):
-        if self.tournament.pref('teams_in_debate') == 'two':
+        if self.tournament.pref('teams_in_debate') == 2:
             return self.two_team_statistics_generator(self.tournament, *args, **kwargs)
-        else:
+        elif self.tournament.pref('teams_in_debate') == 4 and not self.tournament.pref('margin_includes_dissenters'):
             return self.bp_statistics_generator(self.tournament, *args, **kwargs)
 
 
@@ -251,11 +275,11 @@ class BasePublicMotionStatisticsView(PublicTournamentPageMixin):
 
 
 class AdminRoundMotionStatisticsView(AdministratorMixin, RoundMotionStatisticsView):
-    pass
+    view_permission = Permission.VIEW_MOTIONSTAB
 
 
 class AdminGlobalMotionStatisticsView(AdministratorMixin, GlobalMotionStatisticsView):
-    pass
+    view_permission = Permission.VIEW_MOTIONSTAB
 
 
 class PublicRoundMotionStatisticsView(BasePublicMotionStatisticsView, RoundMotionStatisticsView):

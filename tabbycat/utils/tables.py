@@ -1,6 +1,7 @@
 import logging
 import warnings
 
+from django.contrib.auth.models import AnonymousUser
 from django.contrib.humanize.templatetags.humanize import ordinal
 from django.db.models import Exists, OuterRef, Prefetch
 from django.template.loader import render_to_string
@@ -18,6 +19,7 @@ from results.result import get_result_class
 from standings.templatetags.standingsformat import metricformat, rankingformat
 from tournaments.mixins import SingleObjectByRandomisedUrlMixin
 from tournaments.utils import get_side_name
+from users.permissions import has_permission, Permission
 from utils.misc import reverse_round, reverse_tournament
 
 from .mixins import AdministratorMixin
@@ -82,7 +84,7 @@ class BaseTableBuilder:
           not the first column, then there must be as many elements in `data` as
           there are in the existing columns.
         """
-        if len(self.data) > 0 and len(data) != len(self.data):
+        if 0 < len(self.data) != len(data):
             raise ValueError("data contains {new:d} rows, existing table has {existing:d}".format(
                 new=len(data), existing=len(self.data)))
 
@@ -123,7 +125,7 @@ class BaseTableBuilder:
           in the table, then there must be as many inner lists as there are
           existing columns.
         """
-        if len(self.data) > 0 and len(data) != len(self.data):
+        if 0 < len(self.data) != len(data):
             raise ValueError("data contains {new:d} rows, existing table has {existing:d}".format(
                 new=len(data), existing=len(self.data)))
 
@@ -149,6 +151,10 @@ class BaseTableBuilder:
             'sort_key': self.sort_key,
             'sort_order': self.sort_order,
         }
+
+
+class FakeRequest(object):
+    user = AnonymousUser()
 
 
 class TabbycatTableBuilder(BaseTableBuilder):
@@ -189,13 +195,15 @@ class TabbycatTableBuilder(BaseTableBuilder):
         else:
             self.admin = kwargs.get('admin', False)
 
+        self.user = kwargs.get('user', getattr(view, 'request', FakeRequest()).user)
+
         if isinstance(view, SingleObjectByRandomisedUrlMixin):
             self.private_url = True
             self.private_url_key = view.kwargs.get('url_key')
         else:
             self.private_url = kwargs.get('private_url', False)
 
-        if self.tournament.pref('teams_in_debate') == 'bp':
+        if self.tournament.pref('teams_in_debate') > 2:
             self._result_cell = self._result_cell_bp
         else:
             self._result_cell = self._result_cell_two
@@ -212,7 +220,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
 
     @property
     def _use_team_code_names(self):
-        return use_team_code_names(self.tournament, self.admin)
+        return use_team_code_names(self.tournament, self.admin, user=self.user)
 
     def _team_short_name(self, team):
         """Returns the appropriate short name for the team, accounting for team code name preference."""
@@ -262,7 +270,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
     def _team_cell(self, team, show_emoji=False, subtext=None, highlight=False):
         cell = {
             'text': self._team_short_name(team),
-            'emoji': escape(team.emoji) if show_emoji and self.tournament.pref('show_emoji') else None,
+            'emoji': escape(team.emoji) if team.emoji and show_emoji and self.tournament.pref('show_emoji') else None,
             'sort': self._team_short_name(team),
             'class': 'team-name no-wrap' if len(self._team_short_name(team)) < 18 else 'team-name',
             'popover': {'title': self._team_long_name(team), 'content': []},
@@ -280,7 +288,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
             cell['popover']['content'].append({'text': _("Real name: <strong>%(name)s</strong>") % {'name': escape(team.short_name)}})
 
         if self._show_speakers_in_draw:
-            if self.admin:
+            if self.admin and has_permission(self.user, Permission.VIEW_ANONYMOUS, self.tournament):
                 speakers = ["<span class='admin-redacted'>%s</span>" % escape(s.name) if s.anonymous else escape(s.name) for s in team.speakers]
             else:
                 speakers = [self.REDACTED_CELL['text'] if s.anonymous else escape(s.get_public_name(self.tournament)) for s in team.speakers]
@@ -315,7 +323,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
     BP_POINT_ICONS = ("chevrons-down", "chevron-down", "chevron-up", "chevrons-up")
     BP_POINT_ICONCLASSES = ("text-danger result-icon", "text-warning result-icon", "text-info result-icon", "text-success result-icon")
 
-    def _result_cell_class_four(self, points, cell):
+    def _result_cell_class_four(self, points, cell, n_teams):
         team_name = cell['popover']['title']
 
         if points is None:
@@ -324,9 +332,10 @@ class TabbycatTableBuilder(BaseTableBuilder):
             cell['sort'] = 0
             return cell
 
-        cell['popover']['title'] = _("%(team)s placed %(place)s") % {'team': team_name, 'place': ordinal(4 - points)}
-        cell['icon'] = self.BP_POINT_ICONS[points]
-        cell['iconClass'] = self.BP_POINT_ICONCLASSES[points]
+        cell['popover']['title'] = _("%(team)s placed %(place)s") % {'team': team_name, 'place': ordinal(n_teams - points)}
+        if n_teams <= 4:
+            cell['icon'] = self.BP_POINT_ICONS[points]
+            cell['iconClass'] = self.BP_POINT_ICONCLASSES[points]
         cell['sort'] = points + 1
         return cell
 
@@ -413,8 +422,9 @@ class TabbycatTableBuilder(BaseTableBuilder):
             return {'text': self.BLANK_TEXT}
 
         other_teams = {dt.side: self._team_short_name(dt.team) for dt in ts.debate_team.debate.debateteam_set.all()}
+        n_teams = max(other_teams.keys())
         other_team_strs = [_("Teams in debate:")]
-        for side in self.tournament.sides:
+        for side in range(n_teams):
             if ts.debate_team.debate.sides_confirmed:
                 line = _("%(team)s (%(side)s)") % {
                     'team': other_teams.get(side, _("??")),
@@ -444,7 +454,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
                 cell['text'] = "–"
                 cell['popover']['title'] = _("No result for debate")
         else:
-            cell = self._result_cell_class_four(ts.points, cell)
+            cell = self._result_cell_class_four(ts.points, cell, n_teams)
             places = [ordinal(n) for n in reversed(range(1, 5))]
             if ts.points is not None:
                 place = places[ts.points] if ts.points < 4 else _("??")
@@ -485,7 +495,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
 
         adj_data = []
         for adj in adjudicators:
-            if adj.anonymous and not self.admin:
+            if adj.anonymous and not (self.admin and has_permission(self.user, Permission.VIEW_ANONYMOUS, self.tournament)):
                 adj_data.append(self.REDACTED_CELL)
             else:
                 cell = {'text': escape(adj.get_public_name(self.tournament))}
@@ -657,7 +667,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
         speaker_data = []
         for speaker in speakers:
             anonymous = getattr(speaker, 'anonymise', False) or speaker.anonymous
-            if anonymous and not self.admin:
+            if anonymous and not (self.admin and has_permission(self.user, Permission.VIEW_ANONYMOUS, self.tournament)):
                 speaker_data.append(self.REDACTED_CELL)
             else:
                 cell = {
@@ -742,10 +752,11 @@ class TabbycatTableBuilder(BaseTableBuilder):
         for debate in debates:
             # conflicts is a list of (level, message) tuples
             conflicts = [("secondary", _draw_flags_dict.get(flag, flag)) for flag in debate.flags]
-            conflicts += [("secondary", "%(team)s: %(flag)s" % {
-                        'team': self._team_short_name(debate.get_team(side)),
-                        'flag': _draw_flags_dict.get(flag, flag),
-                    }) for side in self.tournament.sides for flag in debate.get_dt(side).flags]
+            if not debate.is_bye:
+                conflicts += [("secondary", "%(team)s: %(flag)s" % {
+                            'team': self._team_short_name(dt.team),
+                            'flag': _draw_flags_dict.get(flag, flag),
+                        }) for dt in debate.debateteams for flag in dt.flags]
 
             if self.tournament.pref('avoid_team_history'):
                 history = debate.history
@@ -838,29 +849,33 @@ class TabbycatTableBuilder(BaseTableBuilder):
     def add_debate_ballot_link_column(self, debates, show_ballot=False):
         ballot_links_header = {'key': "ballot", 'icon': 'search',
                                'tooltip': _("The ballot you submitted")}
+        no_ballot = _("No Ballot")
 
         if self.admin:
             ballot_links_data = [{
-                'text': _("View/Edit Ballot"),
-                'link': reverse_tournament('old-results-ballotset-edit', self.tournament, kwargs={'pk': debate.confirmed_ballot.id}),
+                'text': no_ballot if debate.is_bye else _("View/Edit Ballot"),
+                'link': None if debate.is_bye else reverse_tournament('old-results-ballotset-edit', self.tournament, kwargs={'pk': debate.confirmed_ballot.id}),
             } if debate.confirmed_ballot else "" for debate in debates]
             self.add_column(ballot_links_header, ballot_links_data)
 
         elif self.private_url:
-            debates = Debate.objects.filter(pk__in=[d.pk for d in debates]).select_related('round').annotate(
+            debateqs = Debate.objects.filter(pk__in=[d.pk for d in debates]).select_related('round').annotate(
                 has_ballot=Exists(BallotSubmission.objects.filter(debate_id=OuterRef('id')).exclude(discarded=True)),
             ).prefetch_related(
-                Prefetch('ballotsubmission_set', queryset=BallotSubmission.objects.exclude(discarded=True), to_attr='nondiscard_ballots'))
+                Prefetch('ballotsubmission_set', queryset=BallotSubmission.objects.exclude(discarded=True), to_attr='nondiscard_ballots'),
+            ).all()
+            annotated_debates = {d.pk: d for d in debateqs}
             ballot_links_data = []
-            for debate in debates:
+            for o_debate in debates:
+                debate = annotated_debates[o_debate.pk]
                 if not debate.has_ballot:
-                    ballot_links_data.append(_("No ballot"))
+                    ballot_links_data.append(no_ballot)
                 elif not get_result_class(debate.nondiscard_ballots[0], debate.round, self.tournament).uses_speakers:
                     ballot_links_data.append(_("No scores"))
                 else:
                     ballot_links_data.append({
-                        'text': _("View Ballot"),
-                        'link': reverse_round(
+                        'text': no_ballot if debate.is_bye else _("View Ballot"),
+                        'link': None if debate.is_bye else reverse_round(
                             'results-privateurl-scoresheet-view', debate.round, kwargs={'url_key': self.private_url_key}),
                     })
             self.add_column(ballot_links_header, ballot_links_data)
@@ -868,8 +883,10 @@ class TabbycatTableBuilder(BaseTableBuilder):
         elif self.tournament.pref('ballots_released'):
             ballot_links_data = []
             for debate in debates:
-                if self.tournament.pref('teams_in_debate') == 'bp' and debate.round.is_break_round:
+                if self.tournament.pref('teams_in_debate') == 4 and debate.round.is_break_round:
                     ballot_links_data.append("")
+                elif debate.is_bye:
+                    ballot_links_data.append(no_ballot)
                 else:
                     ballot_links_data.append({
                         'text': _("View Ballot"),
@@ -884,9 +901,18 @@ class TabbycatTableBuilder(BaseTableBuilder):
         self.add_column(header, results_data)
 
     def add_debate_side_by_team_column(self, teamscores, tournament=None):
-        sides_data = [ts.debate_team.get_side_name(tournament).title()
-            # Translators: "TBC" stands for "to be confirmed".
-            if ts.debate_team.debate.sides_confirmed else _("TBC") for ts in teamscores]
+        sides_data = []
+        for ts in teamscores:
+            if not ts.debate_team.debate.sides_confirmed:
+                # Translators: "TBC" stands for "to be confirmed".
+                side = _("TBC")
+            side = ts.debate_team.get_side_name(tournament).title()
+
+            if ts.debate_team.side == 'bye':
+                side = {'text': f"<span class='text-info'>{side}</span>"}
+
+            sides_data.append(side)
+
         header = {'key': 'side', 'title': _("Side")}
         self.add_column(header, sides_data)
 
@@ -899,40 +925,54 @@ class TabbycatTableBuilder(BaseTableBuilder):
             header = {'key': 'r%d' % round_seq, 'title': escape(round.abbreviation)}
             self.add_column(header, results)
 
-    def add_debate_results_columns(self, debates, iron=False):
+    def add_debate_results_columns(self, debates, iron=False, n_cols=None):
         all_sides_confirmed = all(debate.sides_confirmed for debate in debates)  # should already be fetched
-        side_abbrs = {side: get_side_name(self.tournament, side, 'abbr')
-            for side in self.tournament.sides}
+        n_cols = n_cols or len(self.tournament.sides)
+        side_abbrs = {side: get_side_name(self.tournament, side, 'abbr') for side in range(n_cols)}
 
         results_data = []
         for debate in debates:
             row = []
-            for side in self.tournament.sides:
+
+            if debate.is_bye:
+                cell = self._team_cell(debate.get_team('bye'), show_emoji=False, subtext=_("Bye"))
+                cell['popover']['content'].append({'text': "<span class='%s'>%s</span>"
+                        % ('text-info', _("Team was given a bye this round"))})
+                row.append(cell)
+                row += [{'text': self.BLANK_TEXT} for i in range(n_cols - 1)]
+                results_data.append(row)
+                continue
+
+            for side in range(n_cols):
+                if side >= len(debate.teams):
+                    row += [{'text': self.BLANK_TEXT} for i in range(n_cols - side)]
+                    break
+
                 debateteam = debate.get_dt(side)
                 team = debate.get_team(side)
 
                 subtext = None if (all_sides_confirmed or not debate.sides_confirmed) else side_abbrs[side]
                 cell = self._team_cell(team, show_emoji=False, subtext=subtext)
 
-                if self.tournament.pref('teams_in_debate') == 'two':
+                if self.tournament.pref('teams_in_debate') == 2:
                     cell = self._result_cell_class_two(debateteam.win, cell)
                 elif debate.round.is_break_round:
                     cell = self._result_cell_class_four_elim(debateteam.win, cell)
                 else:
-                    cell = self._result_cell_class_four(debateteam.points, cell)
+                    cell = self._result_cell_class_four(debateteam.points, cell, len(debate.teams))
 
                 if iron and (debateteam.iron > 0 or debateteam.iron_prev > 0):
                     cell['text'] = "🗣️" + cell['text']
 
                     popover_text = []
                     if debateteam.iron > 0 and debateteam.iron_prev > 0:
-                        popover_text = _("Team iron-manned this round and the last.")
+                        popover_text = _("Team iron-personed this round and the last.")
                         warning_level = "text-info"
                     elif debateteam.iron > 0:
-                        popover_text = _("Team iron-manned this round.")
+                        popover_text = _("Team iron-personed this round.")
                         warning_level = "text-info"
                     else:
-                        popover_text = _("Team iron-manned last round.")
+                        popover_text = _("Team iron-personed last round.")
                         warning_level = "text-warning"
 
                     cell['class'] = "%s strong" % warning_level
@@ -946,7 +986,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
             results_header = [{
                 'title': get_side_name(self.tournament, side, 'abbr'),
                 'key': get_side_name(self.tournament, side, 'abbr'),
-            } for side in self.tournament.sides]
+            } for side in range(n_cols)]
         else:
             results_header = [{
                 'title': _("Team %(num)d") % {'num': i},
