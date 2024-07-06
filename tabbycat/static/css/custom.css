@@ -100,7 +100,6 @@ body.gdansk-novice-2024{
 	  background: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/new_pattern.png");
 	  border-bottom: 0px solid #e9ecef;
 	  border-top: 0px solid #e9ecef;
-	  height: 49px;
 	}
 	.pldgdansk24 .footer {
 		position: relative;
@@ -163,4 +162,16 @@ body.gdansk-novice-2024{
 		margin-bottom: 46px;
 		color: black;
 		border-color: #080808;
+	}
+	@media screen and (min-width: 1024px) {
+		body.pldgdansk24 {
+			background-position: center -67px;
+			background-size: 100%;
+		}
+	}
+	@media screen and (max-width: 1023px) {
+		.pldgdansk24 .footer {
+			padding: 0;
+			background-position: bottom;
+		}
 	}
