@@ -239,9 +239,8 @@ class BasePrintableRandomisedURLs(TournamentMixin, AdministratorMixin, TemplateV
             url = reverse_tournament('privateurls-person-index', self.tournament, kwargs={'url_key': participant['url_key']})
             abs_url = self.request.build_absolute_uri(url)
             qr_code = qrcode.make(abs_url, image_factory=svg.SvgPathImage)
-
             participant['url'] = abs_url
-            participant['qr'] = ' '.join(qr_code._generate_subpaths())
+            participant['qr'] = qr_code.path.get('d')
 
         return participants
 
