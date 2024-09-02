@@ -182,7 +182,7 @@ body.gdansk-novice-2024{
   font-weight: 400;
   font-style: normal;
 }
-h1, .h1, h2, h3{
+.mpdp24 h1,.mpdp24 .h1,.mpdp24 h2,.mpdp24 h3{
 font-family: "Montserrat", sans-serif;
 font-weight: 700 !important;
 font-style: italic !important;
