@@ -175,3 +175,126 @@ body.gdansk-novice-2024{
 			background-position: bottom;
 		}
 	}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+.montserrat-abc {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+h1, .h1, h2, h3{
+font-family: "Montserrat", sans-serif;
+font-weight: 700 !important;
+font-style: italic !important;
+ text-shadow: 4px 2px black;
+}
+body.mpdp24{
+	  background: #D05100;
+	  background-position: 0 49px;
+	  background-repeat: no-repeat;
+	  background-size: 100%;
+	  margin-bottom: 0;
+font-family: "Montserrat", sans-serif;
+	}
+	.mpdp24 nav.navbar-light{
+	  background: #BC4900;
+	  border-bottom: 0px solid #e9ecef;
+	  border-top: 0px solid #e9ecef;
+          text-shadow: 1px 1px black;
+	}
+	.mpdp24 .footer {
+		position: relative;
+		bottom: 0;
+		width: 100%;
+		background: ;
+		color: white;
+		padding: 3% 26%;
+		height: 552px !important;
+		background-color: #BC4900;
+		background-image: ;
+		background-repeat: no-repeat;
+		background-size: cover;
+		margin-top:50px;
+	}
+.mpdp24 a {
+	color: #BC4900;
+	text-decoration: none;
+	background-color: rgba(0,0,0,0);
+}
+	.mpdp24 nav.navbar-light .navbar-nav .nav-link {
+	  color: rgb(255, 255, 255) !important;
+	} 
+	.mpdp24 nav.navbar-light button {
+		color: rgb(255, 255, 255) !important;
+	}
+	.mpdp24 .btn-primary {
+		color: #fff;
+		background-color: #BC4900;;
+		border-color: #fff;
+	}
+	.mpdp24 .footer a {
+		border-bottom: 1px solid #868e96;
+		color: #fff;
+	}
+	.mpdp24 .footer .navbar-light {
+	background: transparent;
+	border-bottom: 0;
+	border-top: 0;
+	}
+.mpdp24 .dropdown-menu a{
+text-shadow: none;
+color: black !important;
+}
+.mpdp24 .text-muted{
+color: white !important;
+}
+.mpdp24 .text-primary, .vue-sortable:hover {
+	color: #000 !important;
+}
+	body.mpdp24:has(.intro) #pageTitle {
+		color: black;
+display:none;
+		margin-top: 92px;
+	}
+	.mpdp24 #pageTitle>div {
+	  background: #D05100;
+color:white;
+ text-shadow: 4px 2px black;
+	  padding: 20px;
+	  border-radius: 20px;
+font-family: "Montserrat", sans-serif;
+font-weight: 700;
+font-style: italic;
+	}
+	.mpdp24 .card:has(.intro){
+		
+		background-repeat: no-repeat;
+		background-position: bottom;
+		background-size: 100%;
+		padding-bottom: 15% !important;
+		background-color: #D05100;
+		color: white;
+border:0;
+		//webkit-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
+		//-moz-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
+		//box-shadow: -2px 3px 27px 0px rgb(0, 40, 83);
+		padding: 40px;
+	}
+	.mpdp24 .card:has(.intro) table{
+		background-color: #ffffffd3;
+		margin-bottom: 46px;
+		color: black;
+		border-color: #080808;
+	}
+	@media screen and (min-width: 1024px) {
+		body.mpdp24 {
+			background-position: center -67px;
+			background-size: 100%;
+		}
+	}
+	@media screen and (max-width: 1023px) {
+		.mpdp24 .footer {
+			padding: 0;
+			background-position: bottom;
+		}
+	}
