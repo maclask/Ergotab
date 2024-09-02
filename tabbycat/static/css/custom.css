@@ -187,6 +187,7 @@ font-family: "Montserrat", sans-serif;
 font-weight: 700 !important;
 font-style: italic !important;
  text-shadow: 4px 2px black;
+ hyphens: auto;
 }
 body.mpdp24{
 	  background: #D05100;
@@ -218,8 +219,6 @@ font-family: "Montserrat", sans-serif;
 	}
 .mpdp24 a {
 	color: #BC4900;
-	text-decoration: none;
-	background-color: rgba(0,0,0,0);
 }
 	.mpdp24 nav.navbar-light .navbar-nav .nav-link {
 	  color: rgb(255, 255, 255) !important;
@@ -245,7 +244,7 @@ font-family: "Montserrat", sans-serif;
 text-shadow: none;
 color: black !important;
 }
-.mpdp24 .text-muted{
+.mpdp24 .footer .text-muted{
 color: white !important;
 }
 .mpdp24 .text-primary, .vue-sortable:hover {
@@ -296,5 +295,8 @@ border:0;
 		.mpdp24 .footer {
 			padding: 0;
 			background-position: bottom;
+		}
+		.mpdp24 .card:has(.intro){
+			padding: 0;
 		}
 	}
