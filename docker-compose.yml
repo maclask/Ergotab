@@ -18,7 +18,11 @@ services:
       - POSTGRES_USER=tabbycat
       - POSTGRES_DB=tabbycat
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      # postgres:18+ images use a pg_ctlcluster-style, version-specific data
+      # directory and refuse to start against a volume mounted directly at
+      # .../data. Mount the parent directory instead so Postgres manages the
+      # versioned subdirectory itself (also required for future pg_upgrade).
+      - pgdata:/var/lib/postgresql
 
   redis:
     image: redis:6
