@@ -1,3 +1,4 @@
+from datetime import datetime
 from urllib import parse
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -5,18 +6,22 @@ from django.db.models import Q
 from django.urls import get_script_prefix, resolve, Resolver404
 from django.utils.encoding import uri_to_iri
 from drf_spectacular.utils import extend_schema_field
-from rest_framework.relations import Hyperlink, HyperlinkedIdentityField, HyperlinkedRelatedField, SlugRelatedField
+from rest_framework.fields import empty
+from rest_framework.relations import Hyperlink, HyperlinkedIdentityField, HyperlinkedRelatedField, PrimaryKeyRelatedField, SlugRelatedField
 from rest_framework.reverse import reverse
-from rest_framework.serializers import CharField, Field, IntegerField
+from rest_framework.serializers import CharField, Field, IntegerField, ListField, Serializer, ValidationError
+from rest_framework.utils import html
 
+from adjfeedback.models import AdjudicatorFeedbackQuestion
 from draw.types import DebateSide
 from participants.models import Adjudicator, Speaker, Team
+from registration.models import Question
 from venues.models import Venue
 
 from .utils import is_staff
 
 
-class TournamentHyperlinkedRelatedField(HyperlinkedRelatedField):
+class TournamentRelatedFieldMixin:
     default_tournament_field = 'tournament'
 
     def __init__(self, *args, **kwargs):
@@ -28,17 +33,6 @@ class TournamentHyperlinkedRelatedField(HyperlinkedRelatedField):
 
     def get_tournament(self, obj):
         return obj.tournament
-
-    def get_url_kwargs(self, obj):
-        lookup_value = getattr(obj, self.lookup_field)
-        kwargs = {
-            'tournament_slug': self.get_tournament(obj).slug,
-            self.lookup_url_kwarg: lookup_value,
-        }
-        return kwargs
-
-    def get_url(self, obj, view_name, request, format):
-        return reverse(view_name, kwargs=self.get_url_kwargs(obj), request=request, format=format)
 
     def get_object(self, view_name, view_args, view_kwargs):
         lookup_value = view_kwargs[self.lookup_url_kwarg]
@@ -52,6 +46,27 @@ class TournamentHyperlinkedRelatedField(HyperlinkedRelatedField):
 
     def get_queryset(self):
         return super().get_queryset().filter(**self.lookup_kwargs()).select_related(self.tournament_field)
+
+
+class TournamentHyperlinkedRelatedField(TournamentRelatedFieldMixin, HyperlinkedRelatedField):
+    def get_url_kwargs(self, obj):
+        lookup_value = getattr(obj, self.lookup_field)
+        kwargs = {
+            'tournament_slug': self.get_tournament(obj).slug,
+            self.lookup_url_kwarg: lookup_value,
+        }
+        return kwargs
+
+    def get_url(self, obj, view_name, request, format):
+        return reverse(view_name, kwargs=self.get_url_kwargs(obj), request=request, format=format)
+
+
+class TournamentSlugRelatedField(TournamentRelatedFieldMixin, SlugRelatedField):
+    pass
+
+
+class TournamentPrimaryKeyRelatedField(TournamentRelatedFieldMixin, PrimaryKeyRelatedField):
+    pass
 
 
 class TournamentHyperlinkedIdentityField(TournamentHyperlinkedRelatedField, HyperlinkedIdentityField):
@@ -271,6 +286,12 @@ class BaseSourceField(TournamentHyperlinkedRelatedField):
         except self.model.DoesNotExist:
             self.fail('does_not_exist')
 
+    def get_url_options(self, value, format):
+        for view_name, (model, field) in self.models.items():
+            obj = getattr(value, model.__name__.lower(), None)
+            if obj is not None:
+                return self.get_url(obj, view_name, self.context['request'], format)
+
 
 class ParticipantSourceField(BaseSourceField):
     field_source_name = 'participant_submitter'
@@ -323,3 +344,77 @@ class SideChoiceField(IntegerField):
             if t.pref('teams_in_debate') == 4:
                 return ['og', 'oo', 'cg', 'co'][value]
         return int(value)
+
+
+class AnswerSerializer(Serializer):
+    question = TournamentHyperlinkedRelatedField(
+        view_name='api-question-detail',
+        queryset=Question.objects.all(),
+    )
+    answer = AnyField()
+
+    def validate(self, data):
+        # Convert answer to correct type
+        typ = Question.ANSWER_TYPE_TYPES[data['question'].answer_type]
+        if typ is datetime:
+            try:
+                data['answer'] = datetime.fromisoformat(data['answer'])
+            except ValueError:
+                raise ValidationError({'answer': 'The answer must be an ISO 8601 timestamp'})
+        if type(data['answer']) != typ:
+            raise ValidationError({'answer': 'The answer must be of type %s' % typ.__name__})
+
+        if typ is not datetime:
+            data['answer'] = typ(data['answer'])
+
+        option_error = ValidationError({'answer': 'Answer must be in set of options'})
+        if len(data['question'].choices) > 0:
+            if typ is list and len(set(data['answer']) - set(data['question'].choices)) > 0:
+                raise option_error
+            if data['answer'] not in data['question'].choices:
+                raise option_error
+        if (data['question'].min_value is not None and data['answer'] < data['question'].min_value) or (data['question'].max_value is not None and data['answer'] > data['question'].max_value):
+            raise option_error
+
+        return super().validate(data)
+
+
+class AdjAnswerSerializer(AnswerSerializer):
+    question = TournamentHyperlinkedRelatedField(
+        view_name='api-feedbackquestion-detail',
+        queryset=AdjudicatorFeedbackQuestion.objects.all(),
+    )
+
+
+class CharacterSeparatedField(ListField):
+    """
+    Character separated ListField.
+    Based on https://gist.github.com/jpadilla/8792723.
+    A field that separates a string with a given separator into
+    a native list and reverts a list into a string separated with a given
+    separator.
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.separator = kwargs.pop("separator", ",")
+        super().__init__(*args, **kwargs)
+
+    def to_internal_value(self, data):
+        data = data.split(self.separator)
+        return super().to_internal_value(data)
+
+    def get_value(self, dictionary):
+        # We override the default field access in order to support
+        # lists in HTML forms.
+        if html.is_html_input(dictionary):
+            # Don't return [] if the update is partial
+            if self.field_name not in dictionary:
+                if getattr(self.root, "partial", False):
+                    return empty
+            return dictionary.get(self.field_name)
+
+        return dictionary.get(self.field_name, empty)
+
+    def to_representation(self, data):
+        data = super().to_representation(data)
+        return self.separator.join(data)

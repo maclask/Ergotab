@@ -210,7 +210,7 @@ class BaseRecordView(SingleObjectFromTournamentMixin, VueTableTemplateView):
             else:
                 qs = qs.filter(debate__round__draw_status=Round.Status.RELEASED).prefetch_related(
                     Prefetch('debate__round__roundmotion_set',
-                        queryset=RoundMotion.objects.filter(round__motions_released=True).select_related('motion')))
+                        queryset=RoundMotion.objects.filter(round__motions_status=Round.MotionsStatus.MOTIONS_RELEASED).select_related('motion')))
             return qs
         except ObjectDoesNotExist:
             return None
@@ -266,9 +266,6 @@ class BaseAdjudicatorRecordView(BaseRecordView):
 
     table_title = _("Previous Rounds")
 
-    def get_page_title(self):
-        return _("Record for %(name)s") % {'name': self.object.get_public_name(self.tournament)}
-
     def _get_adj_adj_conflicts(self):
         adjs = []
         for ac in self.object.adjudicatoradjudicatorconflict_source_set.all():
@@ -295,6 +292,9 @@ class TeamRecordView(AdministratorMixin, BaseTeamRecordView):
             'teaminstitutionconflict_set__institution',
             'adjudicatorteamconflict_set__adjudicator',
             'venue_constraints__category',
+            'answers__question',
+            'break_categories',
+            Prefetch('speaker_set', queryset=Speaker.objects.all().prefetch_related('answers__question', 'categories')),
         )
 
 
@@ -307,6 +307,7 @@ class AdjudicatorRecordView(AdministratorMixin, BaseAdjudicatorRecordView):
             'adjudicatorinstitutionconflict_set__institution',
             'adjudicatorteamconflict_set__team',
             'venue_constraints__category',
+            'answers__question',
         )
 
 

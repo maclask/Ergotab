@@ -21,6 +21,8 @@ User = get_user_model()
 def add_results_to_round(round, **kwargs):
     """Calls add_result() for every debate in the given round."""
     for debate in round.debate_set.all():
+        if debate.is_bye:
+            continue
         add_result(debate, **kwargs)
 
 
@@ -157,13 +159,13 @@ def add_result(debate, submitter_type, user, discarded=False, confirmed=False, r
         if result.uses_declared_winners:
             logger.info("%(debate)s: %(advancing)s on %(motion)s", {
                 'debate': debate.matchup,
-                'advancing': ", ".join(result.get_winner()),
+                'advancing': ", ".join(map(str, result.get_winner())),
                 'motion': bsub.motion and bsub.motion.reference or "<No motion>",
             })
         else:
             logger.info("%(debate)s: %(ranked)s on %(motion)s", {
                 'debate': debate.matchup,
-                'ranked': ", ".join(result.scoresheet.ranked_sides()),
+                'ranked': ", ".join(map(str, result.scoresheet.ranked_sides())),
                 'motion': bsub.motion and bsub.motion.reference or "<No motion>",
             })
 

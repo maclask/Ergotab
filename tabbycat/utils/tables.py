@@ -5,14 +5,17 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.humanize.templatetags.humanize import ordinal
 from django.db.models import Exists, OuterRef, Prefetch
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.encoding import force_str
 from django.utils.html import escape
+from django.utils.safestring import SafeString
 from django.utils.translation import gettext as _
 from django.utils.translation import ngettext
 
 from adjallocation.allocation import AdjudicatorAllocation
 from draw.generator import DRAW_FLAG_DESCRIPTIONS
 from draw.models import Debate
+from draw.types import DebateSide
 from options.utils import use_team_code_names
 from results.models import BallotSubmission
 from results.result import get_result_class
@@ -26,6 +29,10 @@ from .mixins import AdministratorMixin
 
 logger = logging.getLogger(__name__)
 _draw_flags_dict = dict(DRAW_FLAG_DESCRIPTIONS)
+
+
+def escape_if_unsafe(s):
+    return s if type(s) is SafeString else escape(s)
 
 
 class BaseTableBuilder:
@@ -51,6 +58,7 @@ class BaseTableBuilder:
         self.sort_key = kwargs.get('sort_key', '')
         self.sort_order = kwargs.get('sort_order', '')
         self.empty_title = kwargs.get('empty_title', _("No Data Available"))
+        self.highlight_column = None  # Column index to use for row highlighting (None = no highlighting)
 
     @staticmethod
     def _convert_header(header):
@@ -150,6 +158,7 @@ class BaseTableBuilder:
             'class': self.table_class,
             'sort_key': self.sort_key,
             'sort_order': self.sort_order,
+            'highlight_column': self.highlight_column,
         }
 
 
@@ -237,16 +246,17 @@ class TabbycatTableBuilder(BaseTableBuilder):
             return escape(team.long_name)
 
     def _adjudicator_record_link(self, adj, suffix=""):
-        adj_short_name = adj.get_public_name(self.tournament).split(" ")[0]
+        unredact = self.admin and has_permission(self.user, Permission.VIEW_ANONYMOUS, self.tournament)
+        adj_short_name = (adj.name if unredact else adj.get_public_name(self.tournament)).split(" ")[0]
         if self.admin:
             return {
-                'text': _("View %(a)s's %(d)s Record") % {'a': escape(adj_short_name), 'd': suffix},
+                'text': _("View %(a)s's %(d)s Record") % {'a': escape_if_unsafe(adj_short_name), 'd': suffix},
                 'link': reverse_tournament('participants-adjudicator-record',
                     self.tournament, kwargs={'pk': adj.pk}),
             }
         elif self.tournament.pref('public_record'):
             return {
-                'text': _("View %(a)s's %(d)s Record") % {'a': escape(adj_short_name), 'd': suffix},
+                'text': _("View %(a)s's %(d)s Record") % {'a': escape_if_unsafe(adj_short_name), 'd': suffix},
                 'link': reverse_tournament('participants-public-adjudicator-record',
                     self.tournament, kwargs={'pk': adj.pk}),
             }
@@ -400,7 +410,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
 
         if self._show_speakers_in_draw:
             cell['popover']['content'].append({
-                'text': ", ".join([escape(s.get_public_name(self.tournament)) for s in opp.speakers]),
+                'text': ", ".join([escape_if_unsafe(s.get_public_name(self.tournament)) for s in opp.speakers]),
             })
 
         if self._show_record_links:
@@ -494,15 +504,16 @@ class TabbycatTableBuilder(BaseTableBuilder):
             show_metadata=True, subtext=None):
 
         adj_data = []
+        unredact = self.admin and has_permission(self.user, Permission.VIEW_ANONYMOUS, self.tournament)
         for adj in adjudicators:
-            if adj.anonymous and not (self.admin and has_permission(self.user, Permission.VIEW_ANONYMOUS, self.tournament)):
+            if adj.anonymous and not unredact:
                 adj_data.append(self.REDACTED_CELL)
             else:
-                cell = {'text': escape(adj.get_public_name(self.tournament))}
+                cell = {'text': escape_if_unsafe(adj.name if unredact else adj.get_public_name(self.tournament))}
                 if adj.anonymous:
                     cell['class'] = 'admin-redacted'
                 if self._show_record_links:
-                    cell['popover'] = {'title': escape(adj.get_public_name(self.tournament)), 'content': [self._adjudicator_record_link(adj)]}
+                    cell['popover'] = {'title': escape_if_unsafe(adj.get_public_name(self.tournament)), 'content': [self._adjudicator_record_link(adj)]}
                 if subtext == 'institution' and adj.institution is not None:
                     cell['subtext'] = escape(adj.institution.code)
                 adj_data.append(cell)
@@ -545,7 +556,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
         def construct_text(adjs_data):
             adjs_list = []
             for a in adjs_data:
-                adj_str = '<span class="d-inline">' + escape(a['adj'].get_public_name(self.tournament))
+                adj_str = '<span class="d-inline">' + escape_if_unsafe(a['adj'].get_public_name(self.tournament))
                 symbol = self.ADJ_SYMBOLS.get(a['position'])
                 if symbol:
                     adj_str += "<i class='adj-symbol'>%s</i>" % symbol
@@ -569,7 +580,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
                     descriptors.append(escape(a['adj'].institution.code))
                 if a.get('split', False):
                     descriptors.append("<span class='text-danger'>" + _("in minority") + "</span>")
-                text = escape(a['adj'].get_public_name(self.tournament))
+                text = escape_if_unsafe(a['adj'].get_public_name(self.tournament))
 
                 descriptors = " (%s)" % (", ".join(descriptors)) if descriptors else ""
 
@@ -615,7 +626,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
         not, then it's just attached to the round."""
         motions = []
         for debate in debates:
-            released = debate.round.motions_released or debate.round.tournament.pref('all_results_released')
+            released = debate.round.motions_status == debate.round.MotionsStatus.MOTIONS_RELEASED or debate.round.tournament.pref('all_results_released')
             if self.tournament.pref('enable_motions') or released:
                 motions.append(getattr(debate.confirmed_ballot, 'motion', None))
             else:
@@ -665,13 +676,14 @@ class TabbycatTableBuilder(BaseTableBuilder):
 
     def add_speaker_columns(self, speakers, categories=True):
         speaker_data = []
+        unredact = self.admin and has_permission(self.user, Permission.VIEW_ANONYMOUS, self.tournament)
         for speaker in speakers:
             anonymous = getattr(speaker, 'anonymise', False) or speaker.anonymous
-            if anonymous and not (self.admin and has_permission(self.user, Permission.VIEW_ANONYMOUS, self.tournament)):
+            if anonymous and not unredact:
                 speaker_data.append(self.REDACTED_CELL)
             else:
                 cell = {
-                    'text': escape(speaker.get_public_name(self.tournament)),
+                    'text': escape_if_unsafe(speaker.name if unredact else speaker.get_public_name(self.tournament)),
                     'class': 'no-wrap' if len(speaker.get_public_name(self.tournament)) < 20 else '',
                 }
                 if anonymous:
@@ -935,7 +947,7 @@ class TabbycatTableBuilder(BaseTableBuilder):
             row = []
 
             if debate.is_bye:
-                cell = self._team_cell(debate.get_team('bye'), show_emoji=False, subtext=_("Bye"))
+                cell = self._team_cell(debate.get_team(DebateSide.BYE), show_emoji=False, subtext=_("Bye"))
                 cell['popover']['content'].append({'text': "<span class='%s'>%s</span>"
                         % ('text-info', _("Team was given a bye this round"))})
                 row.append(cell)
@@ -1011,3 +1023,23 @@ class TabbycatTableBuilder(BaseTableBuilder):
                 show_ballots=show_ballots,
             ) for s in standings]
             self.add_column(header, results)
+
+    def add_schedule_event_columns(self, schedule_events):
+        self.add_column({'title': _("Event"), 'key': _("Event")}, [ev.title for ev in schedule_events])
+
+        starts = [
+            timezone.localtime(ev.start_time)
+                    .strftime("%A, %b %d,  %H:%M")
+            for ev in schedule_events
+        ]
+        self.add_column({'title': _("Start Time"), 'key': _("Start Time")}, starts)
+
+        ends = [
+            (
+                timezone.localtime(ev.end_time)
+                        .strftime("%A, %b %d, %H:%M")
+                if ev.end_time else ""
+            )
+            for ev in schedule_events
+        ]
+        self.add_column({'title': _("End Time"), 'key': _("End Time")}, ends)

@@ -6,7 +6,7 @@ from unittest import expectedFailure
 from django.contrib.auth import get_user, get_user_model
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.core.cache import cache
-from django.test import Client, tag, TestCase
+from django.test import tag, TestCase
 from django.urls import reverse
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -16,6 +16,8 @@ from participants.models import Adjudicator, Institution, Speaker, Team
 from tournaments.models import Tournament
 from utils.misc import add_query_string_parameter, reverse_tournament
 from venues.models import Venue
+
+V1_ROOT_URL = "http://testserver/api/v1"
 
 logger = logging.getLogger(__name__)
 
@@ -61,7 +63,6 @@ class CompletedTournamentTestMixin:
         self.tournament = self.get_tournament()
         if self.round_seq is not None:
             self.round = self.tournament.round_set.get(seq=self.round_seq)
-        self.client = Client()
 
     def reverse_url(self, view_name, **kwargs):
         """Convenience function for reversing a URL for the demo tournament,

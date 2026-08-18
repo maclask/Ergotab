@@ -2,6 +2,103 @@
 Change Log
 ==========
 
+2.11.1
+------
+*Release date: 2 March 2026*
+
+- Avoid merging ballots based on trainee submissions
+- Avoid sending password reset email on user invitation
+- Remove extraneous HTML when copying into Summernote
+- Fix error on motion/info-slide release
+- Avoid sending push notifications if not configured and fail silently
+- Add validation against setting graph-only pullup option; add error when using draw strength in Australs PP
+- Fix adjudicators disappearing from allocation screen in public speaking tournaments
+- Only show 'Release info-slide' button if round has info-slide
+- Skip teams that are not in standings when calculating draw strength
+- Set sides for bye debates when prefetching; skip adding results for bye debates in commands
+- Avoid crashing when creating tournaments due to blank required FKs
+- Fix duplicate header keys in registration institution table
+- Fix JQuery not being loaded in time; fix checkbox table checks not registering; use form-based submission where possible
+- Fix typo in preferences. Thank you to Polyxeni Damigou for their PR! (#2822)
+
+
+2.11.0 (Tonkinese)
+------------------
+*Release date: 9 November 2025*
+
+- Improved publication control
+  - Created mechanism to release team draw before full draw with adjudicators, and info-slides before motions
+  - Motions and info-slides can be released from presentation interface
+- Improvements to allocation screens
+  - Allocations for concurrent rounds can be made on a single page, ensuring no double-booking
+  - The maximum number of times an adjudicator has met a team or other adjudicator is shown
+  - Room constraints are shown during room allocation
+- Participants can opt-in to receive personalised browser push notifications on draw and motion release
+- On draw deletion, panels can be transferred to preformed
+- Added feedback weight modal in Feedback Overview
+- Added default "access officer" permission group, and increased the scope of CA permissions
+- Show adjudicators' own ballot even when unconfirmed in private URL
+- Improve handling of ``{{ URL }}`` variable in private URL email template
+- Set draw table bracket highlights from frontend to be responsive with sorting.
+- Prevented conflicts when many people simultaneously generate a draw
+- API improvements:
+  - Most (except passwords) tournament preferences are now exposed publicly
+  - Used serializers to validate query parameters
+  - Added registration fields to tournament-institution endpoint
+  - Don't require registration question answers when authenticated
+  - Add user permissions when creating user
+  - Removed ability to disable the API. Thank you to Teymour Aldridge for their PR!
+  - Implemented initial tests for tournament and round APIs. Thank you to Séb for their work!
+- \+ bug fixes and optimizations!
+
+
+2.10.0 (Sphynx)
+---------------
+*Release date: 6 July 2025*
+
+- Created section for participant self-registration
+  - Participants may either register themselves for open tournaments, or have to register through an institution
+  - Team slots for institutions can be easily modified
+  - A new group for the registration team has been added
+  - Custom questions can be added in registration forms, viewable in registration tables and admin participant record pages
+- Added page for specifying a tournament schedule
+- Created page for creating adjudicator feedback questions
+- Adapted the minimum cost matching draw algorithm for WSDC tournaments
+  - Added a draw generator where all teams are in a single graph, rather than by bracket
+  - Implemented pullup priorities by draw strength then times pulled up
+  - Restricted pairings based on the number of times in a position
+- Let tournaments specify a number of teams as a reserve break
+- Updated default permission sets for Equity and CAs
+- Email sending has been refactored to avoid failing totally on individual messages, and logging the failures
+- Added a new "forfeit" selector for 2-team ballots creating a win-loss without speaks
+- Implemented a new option to avoid search engine indexing. Thank you to Teymour Aldridge!
+- New API features:
+  - Participant identification through private URL keys
+  - User identification through API tokens
+  - Generating draws with custom rules
+- \+ bug fixes and optimizations!
+
+
+2.9.3
+-----
+*Release date: 21 April 2025*
+
+- API: Fixed accessing ballots, preformed panels, and saving nested objects
+- Updated the SendGrid webhook handling
+- Made the Heroku deployment script more resilient. Thanks to Oleksii Stroganov for their work!
+- Prevented redacted participant names from being publicly revealed. Thank you to Varun Lodaya for your help!
+- Added extra steps and permissions to avoid accidentally deleting draws + results
+- Corrected colours used in motion statistics. Thanks to Teymour Aldridge for their PR!
+- Restarted automatic documentation generation
+- Fixed merging BP elimination ballots
+- Allowed users to be re-invited, with a success message. Thank you to Teymour and Tim Beyer for the contributions!
+- Used POST requests to log out
+- Added option to disable the Assistant area entirely
+- Added CSRF protection to overlooked page forms. Thanks for Teymour for their coverage!
+- Covered missing pages and actions with permissions
+- Fixed adjudicator feedback questions not allowing "0"
+
+
 2.9.2
 -----
 *Release date: 27 August 2024*

@@ -9,6 +9,7 @@ from django.db import ProgrammingError
 from django.db.models import Count, Max, Q, Window
 from django.db.models.functions import Coalesce, Rank
 from django.http import HttpResponseRedirect
+from django.http.response import Http404
 from django.shortcuts import render
 from django.utils import timezone
 from django.utils.html import escape
@@ -309,7 +310,7 @@ class BaseBallotSetView(LogActionMixin, TournamentMixin, FormView):
             'DebateResultByAdjudicatorWithScores': PerAdjudicatorBallotSetForm,
             'ConsensusDebateResult': SingleEliminationBallotSetForm,
             'ConsensusDebateResultWithScores': SingleBallotSetForm,
-        }[get_class_name(self.ballotsub, self.debate.round, self.tournament)]
+        }[get_class_name(self.ballotsub, self.debate.round, self.tournament, True)]
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -515,6 +516,11 @@ class BaseEditBallotSetView(SingleObjectFromTournamentMixin, BaseBallotSetView):
         for rm in RoundMotion.objects.filter(round_id=self.debate.round_id):
             self.round_motions[rm.motion_id] = rm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['result'] = DebateResult(self.ballotsub, tournament=self.tournament)
+        return kwargs
+
 
 class AdminEditBallotSetView(AdministratorBallotSetMixin, BaseEditBallotSetView):
     pass
@@ -563,7 +569,7 @@ class BasePublicNewBallotSetView(PersonalizablePublicTournamentPageMixin, RoundM
             return self.error_page(_("The draw for this round hasn't been released yet."))
 
         if (self.tournament.pref('enable_motions') or self.tournament.pref('motion_vetoes_enabled')) \
-                and not self.round.motions_released:
+                and self.round.motions_status != Round.MotionsStatus.MOTIONS_RELEASED:
             return self.error_page(_("The motions for this round haven't been released yet."))
 
         try:
@@ -657,7 +663,9 @@ class BasePublicNewBallotSetView(PersonalizablePublicTournamentPageMixin, RoundM
             bses = BallotSubmission.objects.filter(
                 debate=self.debate, participant_submitter__isnull=False, discarded=False, single_adj=True,
             ).select_related('participant_submitter').annotate(ordering=Window(Rank(), partition_by="participant_submitter", order_by="-version")).filter(ordering=1)
-            if len(bses) != DebateAdjudicator.objects.filter(debate=self.debate).exclude(type=DebateAdjudicator.TYPE_TRAINEE).count():
+            missing_adjs = DebateAdjudicator.objects.filter(debate=self.debate).exclude(
+                type=DebateAdjudicator.TYPE_TRAINEE, adjudicator_id__in=[bs.participant_submitter_id for bs in bses]).count()
+            if missing_adjs:
                 return
             populate_results(bses, self.tournament)
 
@@ -815,7 +823,12 @@ class AdjudicatorPrivateUrlBallotScoresheetView(RoundMixin, SingleObjectByRandom
             return 404, _("There is no result yet for debate %s.") % self.matchup_description()
 
     def get_context_data(self, **kwargs):
-        ballot = self.object.ballotsubmission_set.filter(discarded=False).order_by('version').last()
+        ballot = self.object.ballotsubmission_set.filter(
+            Q(participant_submitter__isnull=True) | Q(participant_submitter__url_key=self.kwargs.get('url_key')) | Q(confirmed=True),
+            discarded=False,
+        ).order_by('confirmed', 'version').last()
+        if ballot is None:
+            raise Http404
         kwargs['motion'] = ballot.motion
         kwargs['result'] = ballot.result
         kwargs['use_code_names'] = use_team_code_names(self.tournament, False)
@@ -937,7 +950,10 @@ class BaseMergeLatestBallotsView(BaseNewBallotSetView):
             elif t == 'ghost':
                 field = form._fieldname_ghost(side, pos)
             elif t == 'winners':
-                field = form._fieldname_declared_winner()
+                if isinstance(form, SingleEliminationBallotSetForm):
+                    field = form._fieldname_advancing()
+                else:
+                    field = form._fieldname_declared_winner()
             elif t == 'scores':
                 field = form._fieldname_score(side, pos)
             elif t == 'speaker_ranks':
@@ -950,32 +966,36 @@ class BaseMergeLatestBallotsView(BaseNewBallotSetView):
         super().populate_objects()
         self.round = self.debate.round
 
-        bses = BallotSubmission.objects.filter(
-            debate=self.debate, participant_submitter__isnull=False, discarded=False, single_adj=True,
-        ).annotate(ordering=Window(Rank(), partition_by="participant_submitter", order_by="-version")).filter(ordering=1).select_related('participant_submitter')
-        populate_results(bses, self.tournament)
-        self.merged_ballots = bses
+        if prefill:
+            bses = BallotSubmission.objects.filter(
+                debate=self.debate, participant_submitter__isnull=False, discarded=False, single_adj=True,
+            ).annotate(ordering=Window(Rank(), partition_by="participant_submitter", order_by="-version")).filter(ordering=1).select_related('participant_submitter')
+            populate_results(bses, self.tournament)
+            self.merged_ballots = bses
 
         # Handle result conflicts
         criteria = ScoreCriterion.objects.filter(tournament=self.tournament)
         self.result = DebateResult(self.ballotsub, tournament=self.tournament, criteria=criteria)
-        self.errors = self.result.populate_from_merge(*[b.result for b in bses])
+        self.errors = self.result.populate_from_merge(*[b.result for b in bses]) if prefill else []
+        self.vetos = {}
 
-        # Handle motion conflicts
-        bs_motions = BallotSubmission.objects.filter(
-            id__in=[b.id for b in bses], motion__isnull=False,
-        ).prefetch_related('debateteammotionpreference_set__debate_team')
-        if self.tournament.pref('enable_motions'):
-            try:
-                merge_motions(self.ballotsub, bs_motions)
-            except ValidationError as e:
-                messages.error(self.request, e)
+        if prefill:
+            # Handle motion conflicts
+            bs_motions = BallotSubmission.objects.filter(
+                id__in=[b.id for b in bses], motion__isnull=False,
+            ).prefetch_related('debateteammotionpreference_set__debate_team')
 
-        # Vetos
-        try:
-            self.vetos = merge_motion_vetos(self.ballotsub, bs_motions)
-        except ValidationError as e:
-            messages.error(self.request, e)
+            if self.tournament.pref('enable_motions'):
+                try:
+                    merge_motions(self.ballotsub, bs_motions)
+                except ValidationError as e:
+                    messages.error(self.request, e)
+
+            if self.tournament.pref('motion_vetoes_enabled'):
+                try:
+                    self.vetos = merge_motion_vetos(self.ballotsub, bs_motions)
+                except ValidationError as e:
+                    messages.error(self.request, e)
 
     def get_all_ballotsubs(self):
         q = super().get_all_ballotsubs()

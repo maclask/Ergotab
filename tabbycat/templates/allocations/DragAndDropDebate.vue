@@ -47,23 +47,22 @@
     </slot>
     <slot name="teams">
       <div class="teams-list" :style="{ flex: (maxTeams + maxTeams % 2) * 3, 'flex-direction': 'row !important', 'flex-wrap': 'wrap' }" v-if="debateOrPanel.teams">
-        <div :class="['d-flex flex-fill flex-truncate align-items-center']" v-for="team in debateOrPanel.teams">
+        <div :class="['d-flex flex-fill flex-truncate align-items-center']" v-for="team in debateOrPanel.teams" :key="team ? team.id : 'empty-' + $index">
           <inline-team :debate-id="debateOrPanel.id" :is-elimination="isElimination" :team="team" :key="team.id" v-if="team !== null"/>
         </div>
       </div>
     </slot>
     <slot name="adjudicators">
-      <div class="flex-16 align-self-center p-2 small">
-        <!-- Note that the use of comments below is not extranous, it prevents extra whitespace before the commas -->
-        <span v-for="adj in debateOrPanel.adjudicators.C">{{ adj.name }} Ⓒ<!--
-          --><span v-if="debateOrPanel.adjudicators.P.length + debateOrPanel.adjudicators.T.length > 0">,</span>
-        </span>
-        <span v-for="(adj, index) in debateOrPanel.adjudicators.P"> {{ adj.name }}<!--
-          --><span v-if="index !== debateOrPanel.adjudicators.P.length - 1  || debateOrPanel.adjudicators.T.length > 0">,</span>
-        </span>
-        <span v-for="(adj, index) in debateOrPanel.adjudicators.T"> {{ adj.name }} Ⓣ<!--
-          --><span v-if="debateOrPanel.adjudicators.T.length > 1 && index !== debateOrPanel.adjudicators.T.length - 1">,</span>
-        </span>
+      <div class="flex-16 align-self-center p-2 small d-flex flex-wrap">
+        <inline-adjudicator v-for="adj in debateOrPanel.adjudicators.C"
+                             :key="'C-' + adj.id" :adjudicator="adj"
+                             :debate-id="debateOrPanel.id" role="C" />
+        <inline-adjudicator v-for="adj in debateOrPanel.adjudicators.P"
+                             :key="'P-' + adj.id" :adjudicator="adj"
+                             :debate-id="debateOrPanel.id" role="P" />
+        <inline-adjudicator v-for="adj in debateOrPanel.adjudicators.T"
+                             :key="'T-' + adj.id" :adjudicator="adj"
+                             :debate-id="debateOrPanel.id" role="T" />
       </div>
     </slot>
   </div>
@@ -75,9 +74,10 @@
 // specific type of data they are responsible for
 import { mapState } from 'vuex'
 import InlineTeam from '../../draw/templates/InlineTeam.vue'
+import InlineAdjudicator from '../../adjallocation/templates/InlineAdjudicator.vue'
 
 export default {
-  components: { InlineTeam },
+  components: { InlineTeam, InlineAdjudicator },
   props: ['debateOrPanel', 'maxTeams'],
   computed: {
     sides: function () {

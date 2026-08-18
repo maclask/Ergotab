@@ -20,7 +20,7 @@ PROHIBITED_TOURNAMENT_SLUGS = [
     'jet', 'database', 'admin', 'accounts', 'summernote',  # System
     'start', 'create', 'load-demo', # Setup Wizards
     'tournament', 'notifications', 'archive', 'api', # Cross-Tournament app's view roots
-    'favicon.ico', 'robots.txt',  # Files that must be at top level
+    'favicon.ico', 'robots.txt', 'navigatorPush.service.js' # Files that must be at top level
     '__debug__', 'static', 'style', 'i18n', 'jsi18n']  # Misc
 
 
@@ -207,7 +207,8 @@ class Tournament(models.Model):
 
     @cached_property
     def adj_feedback_questions(self):
-        return self.adjudicatorfeedbackquestion_set.order_by("seq")
+        from adjfeedback.models import AdjudicatorFeedbackQuestion
+        return AdjudicatorFeedbackQuestion.objects.filter(tournament=self).order_by("seq")
 
     def break_categories_nongeneral(self):
         return self.breakcategory_set.exclude(is_general=True)
@@ -265,7 +266,7 @@ class Tournament(models.Model):
     def public_draws_available(self):
         """Returns True if draws are available for public viewing. Used in
         public navigation menus."""
-        return any(r.draw_status == Round.Status.RELEASED for r in self.current_rounds)
+        return any(r.draw_status in [Round.Status.RELEASED, Round.Status.TEAMS_RELEASED] for r in self.current_rounds)
 
 
 class RoundManager(LookupByNameFieldsMixin, models.Manager):
@@ -294,7 +295,13 @@ class Round(models.Model):
         NONE = 'N', _('None')
         DRAFT = 'D', _('Draft')
         CONFIRMED = 'C', _('Confirmed')
+        TEAMS_RELEASED = 'T', _('Teams released')
         RELEASED = 'R', _('Released')
+
+    class MotionsStatus(models.TextChoices):
+        NOT_RELEASED = 'N', _('Not released')
+        INFO_SLIDES_RELEASED = 'I', _('Info-slides released')
+        MOTIONS_RELEASED = 'M', _('Motions released')
 
     objects = RoundManager()
 
@@ -330,9 +337,9 @@ class Round(models.Model):
         # Translators: A silent round is a round for which results are not disclosed once the round is over.
         verbose_name=_("silent"),
         help_text=_("If marked silent, information about this round (such as its results) will not be shown publicly."))
-    motions_released = models.BooleanField(default=False,
-        verbose_name=_("motions released"),
-        help_text=_("Whether motions will appear on the public website, assuming that feature is turned on"))
+    motions_status = models.CharField(max_length=1, choices=MotionsStatus.choices, default=MotionsStatus.NOT_RELEASED,
+        verbose_name=_("motions status"),
+        help_text=_("The release status of motions for this round"))
     starts_at = models.DateTimeField(verbose_name=_("starts at"), blank=True, null=True)
 
     weight = models.IntegerField(default=1,
@@ -578,8 +585,49 @@ class Round(models.Model):
 
     @property
     def motions_good_for_public(self):
-        return self.motions_released or not self.motion_set.exists()
+        return self.motions_status == self.MotionsStatus.MOTIONS_RELEASED or not self.motion_set.exists()
+
+    @property
+    def motions_released(self):
+        return self.motions_status == self.MotionsStatus.MOTIONS_RELEASED
 
     @property
     def ballots_per_debate(self):
         return self.tournament.ballots_per_debate(self.stage)
+
+
+class ScheduleEvent(models.Model):
+
+    class Types(models.TextChoices):
+        CHECK_IN = 'C', _("Check-in")
+        BRIEFING = 'I', _("Briefing")
+        DRAW = 'T', _("Draw/motion announcement")
+        PREP = 'P', _("Preparation time")
+        DEBATE = 'D', _("Debate")
+        ADJUDICATION = 'J', _("Adjudication")
+        REST = 'R', _("Meal/break")
+        BREAK = 'B', _("Break announcement")
+        AWARDS = 'A', _("Award ceremony")
+        OTHER = 'O', _("Other")
+
+    tournament = models.ForeignKey(Tournament, models.CASCADE, verbose_name=_("tournament"),
+                                   help_text=_("The tournament the event takes place in"))
+    title = models.CharField(max_length=100, verbose_name=_("title"), help_text=_("e.g. \"Lunch\""))
+    type = models.CharField(max_length=1, choices=Types.choices, default=Types.OTHER, verbose_name=_("event type"),
+                            help_text=_("What sort of event this is, use \"Other\" if the type is not available"))
+
+    start_time = models.DateTimeField(verbose_name=_("start time"),
+                                      help_text=_("The time the event starts"))
+    end_time = models.DateTimeField(blank=True, null=True, verbose_name=_("end time"),
+                                    help_text=_("The time at which the event ends, may be empty"))
+
+    round = models.ForeignKey(Round, models.PROTECT, blank=True, null=True, verbose_name=_("round"),
+                              help_text=_("If the event belongs to a specific round, which round"))
+
+    class Meta:
+        verbose_name = _('schedule event')
+        verbose_name_plural = _('schedule events')
+        ordering = ['tournament', 'start_time']
+
+    def __str__(self):
+        return "[%s] %s (%s)" % (self.tournament, self.title, self.start_time)

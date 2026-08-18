@@ -1,6 +1,7 @@
 """Standings generator for teams."""
 
 import logging
+from statistics import mean
 
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Avg, Count, F, FloatField, PositiveIntegerField, Q, StdDev, Sum
@@ -199,10 +200,52 @@ class BaseDrawStrengthMetricAnnotator(BaseMetricAnnotator):
         for team in queryset:
             draw_strength = 0
             for opponent_id in opponents_by_team[team.id]:
+                if opponent_id not in opp_metric_queryset_teams:
+                    continue
                 opp_metric = getattr(opp_metric_queryset_teams[opponent_id], self.opponent_annotator.key)
                 if opp_metric is not None: # opp_metric is None when no debates have happened
                     draw_strength += opp_metric
             standings.add_metric(team, self.key, draw_strength)
+
+
+class DrawStrengthByRankMetricAnnotator(BaseMetricAnnotator):
+    key = "draw_strength_rank"
+    name = _("draw strength by rank")
+    abbr = _("DSR")
+
+    ascending = True
+    extra_only = True  # Cannot rank based on ranking
+
+    def annotate(self, queryset, standings, round=None):
+        if not queryset.exists():
+            return
+
+        logger.info("Running opponents query for rank draw strength:")
+
+        team_filter = Q()
+        # Make a copy of teams queryset and annotate with opponents
+        opponents_filter = ~Q(debateteam__debate__debateteam__team_id=F('id'))
+        opponents_filter &= Q(debateteam__debate__round__stage=Round.Stage.PRELIMINARY)
+        if round is not None:
+            opponents_filter &= Q(debateteam__debate__round__seq__lte=round.seq)
+            team_filter &= Q(tournament=round.tournament)
+
+        opponents_annotation = ArrayAgg('debateteam__debate__debateteam__team_id',
+                filter=opponents_filter)
+        logger.info("Opponents annotation: %s", str(opponents_annotation))
+        teams_with_opponents = queryset.model.objects.filter(team_filter).annotate(opponent_ids=opponents_annotation)
+        opponents_by_team = {team.id: team.opponent_ids or [] for team in teams_with_opponents}
+        teams_by_id = {team.id: team for team in teams_with_opponents}
+
+        for team in queryset:
+            ranks = []
+            for opponent_id in opponents_by_team[team.id]:
+                if opponent_id not in teams_by_id:
+                    continue
+                if opponent := standings.infos.get(teams_by_id[opponent_id]):
+                    ranks.append(opponent.rankings['rank'][0])
+            ranks_without_none = [rank for rank in ranks if rank is not None]
+            standings.add_metric(team, self.key, mean(ranks_without_none))
 
 
 class DrawStrengthByWinsMetricAnnotator(BaseDrawStrengthMetricAnnotator):
@@ -407,6 +450,7 @@ class TeamStandingsGenerator(BaseStandingsGenerator):
         "speaks_stddev"       : SpeakerScoreStandardDeviationMetricAnnotator,
         "draw_strength"       : DrawStrengthByWinsMetricAnnotator,
         "draw_strength_speaks": DrawStrengthBySpeakerScoreMetricAnnotator,
+        "draw_strength_rank"  : DrawStrengthByRankMetricAnnotator,
         "margin_sum"          : SumMarginMetricAnnotator,
         "margin_avg"          : AverageMarginMetricAnnotator,
         "npullups"            : TeamPullupsMetricAnnotator,
@@ -424,3 +468,5 @@ class TeamStandingsGenerator(BaseStandingsGenerator):
         "subrank"         : SubrankAnnotator,
         "institution_rank": RankFromInstitutionAnnotator,
     }
+
+    tournament_field = 'tournament'

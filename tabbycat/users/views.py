@@ -79,6 +79,10 @@ class InviteUserView(LogActionMixin, AdministratorMixin, TournamentMixin, Passwo
     def get_success_url(self):
         return reverse_tournament('options-tournament-index', self.tournament)
 
+    def form_valid(self, form):
+        messages.success(self.request, _("Successfully invited user to create an account for the tournament."))
+        return super().form_valid(form)
+
 
 class AcceptInvitationView(TournamentMixin, PasswordResetConfirmView):
     form_class = AcceptInvitationForm

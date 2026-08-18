@@ -28,12 +28,12 @@ Short version
 ::
 
   curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -    # add Node.js source repository
-  sudo apt install python3.9 python3-distutils pipenv postgresql libpq-dev nodejs gcc g++ make
+  sudo apt install python3.11 python3-distutils pipenv postgresql libpq-dev nodejs gcc g++ make
   git clone https://github.com/TabbycatDebate/tabbycat.git
   cd tabbycat
   git checkout master
   sudo -u postgres createuser myusername --createdb --pwprompt       # skip if not first time
-  createdb -O myusername mydatabasename                              # -O designates the owner of the database
+  sudo -u postgres createdb -O myusername mydatabasename             # -O designates the owner of the database
 
 Then create **settings/local.py** as described :ref:`below <local-settings-linux>`, then::
 
@@ -63,16 +63,16 @@ First, you need to install all of the software on which Tabbycat depends, if you
 
 1(a). Python
 ------------
-Tabbycat uses Python 3.9.  You probably already have Python 3, but you'll also need the development package in order to install Psycopg2 later.  You'll also want `Pipenv <https://pipenv.pypa.io/en/latest/>`_, if you don't already have it. Install::
+Tabbycat uses Python 3.11.  You probably already have Python 3, but you'll also need the development package in order to install Psycopg2 later.  You'll also want `Pipenv <https://pipenv.pypa.io/en/latest/>`_, if you don't already have it. Install::
 
-    $ sudo apt install python3.9 python3-distutils pipenv
+    $ sudo apt install python3.11 python3-distutils pipenv
 
 Check the version::
 
     $ python3 --version
-    Python 3.9.12
+    Python 3.11.10
 
-.. warning:: Tabbycat does not support Python 2. You must use Python 3.9.
+.. warning:: Tabbycat does not support Python 2. You must use Python 3.11.
 
 .. admonition:: Advanced users
    :class: tip
@@ -165,7 +165,7 @@ a. Create a new user account with a password, replacing ``myusername`` with what
 
 b. Create a new database, replacing ``mydatabasename`` with whatever name you prefer, probably the name of the tournament you're running, and replace ``myusername`` with the username you used in the previous command::
 
-    $ createdb -O myusername mydatabasename
+    $ sudo -u postgres createdb -O myusername mydatabasename
 
 
 .. _install-linux-tabbycat:
@@ -232,6 +232,51 @@ g. Open your browser and go to http://127.0.0.1:8000/ or http://localhost:8000/.
       :alt: Bare Tabbycat installation
 
 Naturally, your database is currently empty, so proceed to :ref:`importing initial data <importing-initial-data>`.
+
+5. Set up Webpush (Optional)
+=============================
+
+Webpush enables real-time push notifications to participants' browsers, allowing them to receive updates about draws, motions, and other tournament information without needing to refresh the page.
+
+Webpush requires VAPID (Voluntary Application Server Identification) keys for authentication. You'll need to generate these keys and configure them in your settings, such as with the ``py_vapid`` Python package::
+
+    (tabbycat-9BkbSRuB) $ pip install py-vapid
+
+Then generate the keys::
+
+    (tabbycat-9BkbSRuB) $ vapid --gen
+    (tabbycat-9BkbSRuB) $ vapid --applicationServerKey
+
+This will create new files ``private_key.pem`` and ``public_key.pem`` in the current directory that you'll need for the next step, as well as a ``applicationServerKey`` value.
+
+You can set the VAPID keys by setting them as environment variables or by adding them to your **settings/local.py** file.
+
+**Option 1: Using environment variables**
+
+Before starting Tabbycat, export the following environment variables (replace the placeholder values with your actual keys, without the header or footer)::
+
+    $ export WP_PRIVATE_KEY="<YOUR_PRIVATE_KEY>"
+    $ export WP_PUBLIC_KEY="<YOUR_PUBLIC_KEY>"
+    $ export WP_APPLICATION_SERVER_KEY="<YOUR_APPLICATION_SERVER_KEY>"
+
+**Option 2: Adding to local.py**
+
+Alternatively, add the following to your **tabbycat/settings/local.py** file:
+
+.. code:: python
+
+  PUSH_NOTIFICATIONS_SETTINGS = {
+      "WP_PRIVATE_KEY": "<YOUR_PRIVATE_KEY>",
+      "WP_PUBLIC_KEY": "<YOUR_PUBLIC_KEY>",
+      "WP_CLAIMS": {
+          "sub": "mailto:contact@tabbycat-debate.org"
+      },
+      "application_server_key": "<YOUR_APPLICATION_SERVER_KEY>"
+  }
+
+Replace ``<YOUR_PRIVATE_KEY>`` and ``<YOUR_PUBLIC_KEY>`` with the keys you generated, and ``<YOUR_APPLICATION_SERVER_KEY>`` with the value you got from ``vapid --applicationServerKey``.
+
+Participants will now be able to subscribe to push notifications from their browsers when they visit your site.
 
 Starting up an existing Tabbycat instance
 =========================================

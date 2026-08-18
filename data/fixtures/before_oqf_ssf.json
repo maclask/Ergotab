@@ -1874,198 +1874,110 @@
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 1,
     "fields": {
-        "tournament": 1,
-        "seq": 10,
-        "text": "Did you agree with the decision?",
-        "name": "Agree",
+        "question_ptr": 1,
         "reference": "agree",
         "from_adj": false,
-        "from_team": true,
-        "answer_type": "bs",
-        "required": true,
-        "min_value": null,
-        "max_value": null,
-        "choices": "[]"
+        "from_team": true
     }
 },
 {
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 2,
     "fields": {
-        "tournament": 1,
-        "seq": 11,
-        "text": "Did this judge's decision concur with yours?",
-        "name": "Concur",
+        "question_ptr": 2,
         "reference": "concur",
         "from_adj": true,
-        "from_team": false,
-        "answer_type": "bs",
-        "required": true,
-        "min_value": null,
-        "max_value": null,
-        "choices": "[]"
+        "from_team": false
     }
 },
 {
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 3,
     "fields": {
-        "tournament": 1,
-        "seq": 20,
-        "text": "What adjustment should be applied to this judge's speaker scores?",
-        "name": "Adjustment",
+        "question_ptr": 3,
         "reference": "adjustment",
         "from_adj": true,
-        "from_team": false,
-        "answer_type": "f",
-        "required": true,
-        "min_value": -20.0,
-        "max_value": 20.0,
-        "choices": "[]"
+        "from_team": false
     }
 },
 {
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 4,
     "fields": {
-        "tournament": 1,
-        "seq": 30,
-        "text": "Choose one word to describe this adjudicator.",
-        "name": "One word",
+        "question_ptr": 4,
         "reference": "word",
         "from_adj": true,
-        "from_team": true,
-        "answer_type": "t",
-        "required": true,
-        "min_value": null,
-        "max_value": null,
-        "choices": "[]"
+        "from_team": true
     }
 },
 {
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 5,
     "fields": {
-        "tournament": 1,
-        "seq": 40,
-        "text": "Do you think this adjudicator should be promoted?",
-        "name": "Promote",
+        "question_ptr": 5,
         "reference": "promote",
         "from_adj": true,
-        "from_team": true,
-        "answer_type": "bc",
-        "required": false,
-        "min_value": null,
-        "max_value": null,
-        "choices": "[]"
+        "from_team": true
     }
 },
 {
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 6,
     "fields": {
-        "tournament": 1,
-        "seq": 50,
-        "text": "Do you think this adjudicator should be demoted?",
-        "name": "Demote",
+        "question_ptr": 6,
         "reference": "demote",
         "from_adj": true,
-        "from_team": true,
-        "answer_type": "bc",
-        "required": false,
-        "min_value": null,
-        "max_value": null,
-        "choices": "[]"
+        "from_team": true
     }
 },
 {
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 7,
     "fields": {
-        "tournament": 1,
-        "seq": 60,
-        "text": "How well was this adjudicator's reasoning explained?",
-        "name": "Explanation",
+        "question_ptr": 7,
         "reference": "explanation",
         "from_adj": true,
-        "from_team": true,
-        "answer_type": "is",
-        "required": true,
-        "min_value": 0.0,
-        "max_value": 10.0,
-        "choices": "[]"
+        "from_team": true
     }
 },
 {
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 8,
     "fields": {
-        "tournament": 1,
-        "seq": 70,
-        "text": "How impartial did you think this adjudicator was?",
-        "name": "Impartial",
+        "question_ptr": 8,
         "reference": "impartial",
         "from_adj": true,
-        "from_team": true,
-        "answer_type": "is",
-        "required": true,
-        "min_value": 0.0,
-        "max_value": 10.0,
-        "choices": "[]"
+        "from_team": true
     }
 },
 {
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 9,
     "fields": {
-        "tournament": 1,
-        "seq": 80,
-        "text": "Would you like to see this adjudicator again?",
-        "name": "Again",
+        "question_ptr": 9,
         "reference": "again",
         "from_adj": false,
-        "from_team": true,
-        "answer_type": "ss",
-        "required": false,
-        "min_value": null,
-        "max_value": null,
-        "choices": "[\"Absolutely!\", \"Sure, why not\", \"If I have to\", \"Please don't\"]"
+        "from_team": true
     }
 },
 {
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 10,
     "fields": {
-        "tournament": 1,
-        "seq": 90,
-        "text": "How would you describe this adjudicator?",
-        "name": "Adjectives",
+        "question_ptr": 10,
         "reference": "adjectives",
         "from_adj": false,
-        "from_team": true,
-        "answer_type": "ms",
-        "required": false,
-        "min_value": null,
-        "max_value": null,
-        "choices": "[\"biased\", \"clear\", \"concise\", \"rambly\", \"attentive\", \"inattentive\"]"
+        "from_team": true
     }
 },
 {
     "model": "adjfeedback.adjudicatorfeedbackquestion",
     "pk": 11,
     "fields": {
-        "tournament": 1,
-        "seq": 1000,
-        "text": "Other comments:",
-        "name": "Comments",
+        "question_ptr": 11,
         "reference": "comments",
         "from_adj": true,
-        "from_team": true,
-        "answer_type": "tl",
-        "required": false,
-        "min_value": null,
-        "max_value": null,
-        "choices": "[]"
+        "from_team": true
     }
 },
 {
@@ -2077,6 +1989,7 @@
         "slug": "open",
         "seq": 10,
         "break_size": 8,
+        "reserve_size": 0,
         "is_general": true,
         "priority": 10,
         "limit": 0,
@@ -2092,6 +2005,7 @@
         "slug": "esl",
         "seq": 20,
         "break_size": 4,
+        "reserve_size": 0,
         "is_general": false,
         "priority": 20,
         "limit": 0,
@@ -2107,6 +2021,7 @@
         "slug": "novice",
         "seq": 30,
         "break_size": 2,
+        "reserve_size": 0,
         "is_general": false,
         "priority": 30,
         "limit": 0,
@@ -4739,9 +4654,11 @@
     "pk": 1,
     "fields": {
         "name": "Georgia Crawford",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -4752,9 +4669,11 @@
     "pk": 2,
     "fields": {
         "name": "Wanda Griffin",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -4765,9 +4684,11 @@
     "pk": 3,
     "fields": {
         "name": "Helen Keller",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -4778,9 +4699,11 @@
     "pk": 4,
     "fields": {
         "name": "Russell Warren",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -4791,9 +4714,11 @@
     "pk": 5,
     "fields": {
         "name": "Angel Rhodes",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "",
         "pronoun": "they"
@@ -4804,9 +4729,11 @@
     "pk": 6,
     "fields": {
         "name": "Terry Henderson",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -4817,9 +4744,11 @@
     "pk": 7,
     "fields": {
         "name": "Kyle Ruiz",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -4830,9 +4759,11 @@
     "pk": 8,
     "fields": {
         "name": "Randolph Lambert",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": ""
@@ -4843,9 +4774,11 @@
     "pk": 9,
     "fields": {
         "name": "Sergio Pittman",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -4856,9 +4789,11 @@
     "pk": 10,
     "fields": {
         "name": "Earnest Becker",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -4869,9 +4804,11 @@
     "pk": 11,
     "fields": {
         "name": "Ellis Rowe",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -4882,9 +4819,11 @@
     "pk": 12,
     "fields": {
         "name": "Robin Roberson",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -4895,9 +4834,11 @@
     "pk": 13,
     "fields": {
         "name": "Gwen Newman",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -4908,9 +4849,11 @@
     "pk": 14,
     "fields": {
         "name": "Robyn Caldwell",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": ""
@@ -4921,9 +4864,11 @@
     "pk": 15,
     "fields": {
         "name": "Angie Holt",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -4934,9 +4879,11 @@
     "pk": 16,
     "fields": {
         "name": "Melvin Jordan",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -4947,9 +4894,11 @@
     "pk": 17,
     "fields": {
         "name": "Gladys Burke",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": ""
@@ -4960,9 +4909,11 @@
     "pk": 18,
     "fields": {
         "name": "Patty Saunders",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -4973,9 +4924,11 @@
     "pk": 19,
     "fields": {
         "name": "Thomas Pierce",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -4986,9 +4939,11 @@
     "pk": 20,
     "fields": {
         "name": "Stella Lindsey",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -4999,9 +4954,11 @@
     "pk": 21,
     "fields": {
         "name": "Adrian May",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5012,9 +4969,11 @@
     "pk": 22,
     "fields": {
         "name": "Taylor Brown",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": ""
@@ -5025,9 +4984,11 @@
     "pk": 23,
     "fields": {
         "name": "Bethany Chambers",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5038,9 +4999,11 @@
     "pk": 24,
     "fields": {
         "name": "Pamela Bryan",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5051,9 +5014,11 @@
     "pk": 25,
     "fields": {
         "name": "Janet Nunez",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5064,9 +5029,11 @@
     "pk": 26,
     "fields": {
         "name": "Owen Chandler",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": ""
@@ -5077,9 +5044,11 @@
     "pk": 27,
     "fields": {
         "name": "Lillie Rodriquez",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5090,9 +5059,11 @@
     "pk": 28,
     "fields": {
         "name": "Rufus Dennis",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5103,9 +5074,11 @@
     "pk": 29,
     "fields": {
         "name": "Marty Love",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5116,9 +5089,11 @@
     "pk": 30,
     "fields": {
         "name": "Shelia Wright",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5129,9 +5104,11 @@
     "pk": 31,
     "fields": {
         "name": "Clark Mills",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5142,9 +5119,11 @@
     "pk": 32,
     "fields": {
         "name": "Randy Carroll",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5155,9 +5134,11 @@
     "pk": 33,
     "fields": {
         "name": "Casey Sparks",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5168,9 +5149,11 @@
     "pk": 34,
     "fields": {
         "name": "Candace Bowen",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5181,9 +5164,11 @@
     "pk": 35,
     "fields": {
         "name": "Jaime Long",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5194,9 +5179,11 @@
     "pk": 36,
     "fields": {
         "name": "Leon Hall",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5207,9 +5194,11 @@
     "pk": 37,
     "fields": {
         "name": "Morris Nichols",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5220,9 +5209,11 @@
     "pk": 38,
     "fields": {
         "name": "Benjamin Padilla",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5233,9 +5224,11 @@
     "pk": 39,
     "fields": {
         "name": "Phil Lyons",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5246,9 +5239,11 @@
     "pk": 40,
     "fields": {
         "name": "Clay Holland",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5259,9 +5254,11 @@
     "pk": 41,
     "fields": {
         "name": "Elena Cobb",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5272,9 +5269,11 @@
     "pk": 42,
     "fields": {
         "name": "Shawn Torres",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5285,9 +5284,11 @@
     "pk": 43,
     "fields": {
         "name": "Willis Carson",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5298,9 +5299,11 @@
     "pk": 44,
     "fields": {
         "name": "Wendell Nelson",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5311,9 +5314,11 @@
     "pk": 45,
     "fields": {
         "name": "Felicia Welch",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5324,9 +5329,11 @@
     "pk": 46,
     "fields": {
         "name": "Cory Meyer",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5337,9 +5344,11 @@
     "pk": 47,
     "fields": {
         "name": "Stacy Frazier",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5350,9 +5359,11 @@
     "pk": 48,
     "fields": {
         "name": "Claire Dunn",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5363,9 +5374,11 @@
     "pk": 49,
     "fields": {
         "name": "Eloise Munoz",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5376,9 +5389,11 @@
     "pk": 50,
     "fields": {
         "name": "Patricia Palmer",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5389,9 +5404,11 @@
     "pk": 51,
     "fields": {
         "name": "Stewart Day",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5402,9 +5419,11 @@
     "pk": 52,
     "fields": {
         "name": "Timmy Craig",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5415,9 +5434,11 @@
     "pk": 53,
     "fields": {
         "name": "Patrick Kelly",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5428,9 +5449,11 @@
     "pk": 54,
     "fields": {
         "name": "Kristopher Hayes",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5441,9 +5464,11 @@
     "pk": 55,
     "fields": {
         "name": "Andy Lane",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5454,9 +5479,11 @@
     "pk": 56,
     "fields": {
         "name": "Scott Mcdonald",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5467,9 +5494,11 @@
     "pk": 57,
     "fields": {
         "name": "Charlene Cortez",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5480,9 +5509,11 @@
     "pk": 58,
     "fields": {
         "name": "Leigh Holmes",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": ""
@@ -5493,9 +5524,11 @@
     "pk": 59,
     "fields": {
         "name": "Alma Spencer",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5506,9 +5539,11 @@
     "pk": 60,
     "fields": {
         "name": "Winston Castro",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5519,9 +5554,11 @@
     "pk": 61,
     "fields": {
         "name": "Emilio Simmons",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5532,9 +5569,11 @@
     "pk": 62,
     "fields": {
         "name": "Ron Delgado",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "",
         "pronoun": "he"
@@ -5545,9 +5584,11 @@
     "pk": 63,
     "fields": {
         "name": "Nadine Barber",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5558,9 +5599,11 @@
     "pk": 64,
     "fields": {
         "name": "Gail Adkins",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "",
         "pronoun": "he"
@@ -5571,9 +5614,11 @@
     "pk": 65,
     "fields": {
         "name": "Willard Walton",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": ""
@@ -5584,9 +5629,11 @@
     "pk": 66,
     "fields": {
         "name": "Jackie Peterson",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5597,9 +5644,11 @@
     "pk": 67,
     "fields": {
         "name": "Terry Thornton",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "",
         "pronoun": "they"
@@ -5610,9 +5659,11 @@
     "pk": 68,
     "fields": {
         "name": "Norman Rodgers",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5623,9 +5674,11 @@
     "pk": 69,
     "fields": {
         "name": "Mattie Lee",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "",
         "pronoun": "they"
@@ -5636,9 +5689,11 @@
     "pk": 70,
     "fields": {
         "name": "Woodrow Harvey",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5649,9 +5704,11 @@
     "pk": 71,
     "fields": {
         "name": "Javier Chavez",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "",
         "pronoun": ""
@@ -5662,9 +5719,11 @@
     "pk": 72,
     "fields": {
         "name": "Janie Daniels",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5675,9 +5734,11 @@
     "pk": 73,
     "fields": {
         "name": "Levi Flores",
+        "last_name": null,
         "email": "leviflores@gmail.com",
         "phone": "(400) 258-4262",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5688,9 +5749,11 @@
     "pk": 74,
     "fields": {
         "name": "Boyd Pierce",
+        "last_name": null,
         "email": "boydpierce@yahoo.com",
         "phone": "(645) 106-7743",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5701,9 +5764,11 @@
     "pk": 75,
     "fields": {
         "name": "Eunice Mcbride",
+        "last_name": null,
         "email": "eunicemcbride@outlook.com",
         "phone": "(549) 309-9187",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5714,9 +5779,11 @@
     "pk": 76,
     "fields": {
         "name": "Ramona Cobb",
+        "last_name": null,
         "email": "ramonacobb@yahoo.com",
         "phone": "(440) 487-5776",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5727,9 +5794,11 @@
     "pk": 77,
     "fields": {
         "name": "Justin Ford",
+        "last_name": null,
         "email": "justinford@outlook.com",
         "phone": "(618) 921-9188",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5740,9 +5809,11 @@
     "pk": 78,
     "fields": {
         "name": "Luis Bennett",
+        "last_name": null,
         "email": "luisbennett@gmail.com",
         "phone": "(730) 097-8797",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5753,9 +5824,11 @@
     "pk": 79,
     "fields": {
         "name": "Mandy Estrada",
+        "last_name": null,
         "email": "mandyestrada@gmail.com",
         "phone": "(559) 299-0471",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5766,9 +5839,11 @@
     "pk": 80,
     "fields": {
         "name": "Leigh Mcgee",
+        "last_name": null,
         "email": "leighmcgee@gmail.com",
         "phone": "(844) 760-9302",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5779,9 +5854,11 @@
     "pk": 81,
     "fields": {
         "name": "Jacqueline Freeman",
+        "last_name": null,
         "email": "jacquelinefreeman@yahoo.com",
         "phone": "(297) 916-1716",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5792,9 +5869,11 @@
     "pk": 82,
     "fields": {
         "name": "Holly Howard",
+        "last_name": null,
         "email": "hollyhoward@gmail.com",
         "phone": "(958) 783-2610",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5805,9 +5884,11 @@
     "pk": 83,
     "fields": {
         "name": "Pedro Burgess",
+        "last_name": null,
         "email": "pedroburgess@yahoo.com",
         "phone": "(854) 441-0104",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "",
         "pronoun": ""
@@ -5818,9 +5899,11 @@
     "pk": 84,
     "fields": {
         "name": "Kristy Carr",
+        "last_name": null,
         "email": "kristycarr@yahoo.com",
         "phone": "(644) 607-3297",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5831,9 +5914,11 @@
     "pk": 85,
     "fields": {
         "name": "Wilma Vaughn",
+        "last_name": null,
         "email": "wilmavaughn@outlook.com",
         "phone": "(398) 759-9537",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5844,9 +5929,11 @@
     "pk": 86,
     "fields": {
         "name": "Virginia Mccarthy",
+        "last_name": null,
         "email": "virginiamccarthy@gmail.com",
         "phone": "(455) 177-0459",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5857,9 +5944,11 @@
     "pk": 87,
     "fields": {
         "name": "Tasha Jenkins",
+        "last_name": null,
         "email": "tashajenkins@outlook.com",
         "phone": "(875) 519-9891",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "",
         "pronoun": ""
@@ -5870,9 +5959,11 @@
     "pk": 88,
     "fields": {
         "name": "Toby Wong",
+        "last_name": null,
         "email": "tobywong@gmail.com",
         "phone": "(404) 641-5999",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5883,9 +5974,11 @@
     "pk": 89,
     "fields": {
         "name": "Jo Allen",
+        "last_name": null,
         "email": "joallen@yahoo.com",
         "phone": "(761) 993-2983",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5896,9 +5989,11 @@
     "pk": 90,
     "fields": {
         "name": "Billy Griffin",
+        "last_name": null,
         "email": "billygriffin@outlook.com",
         "phone": "(430) 532-2939",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5909,9 +6004,11 @@
     "pk": 91,
     "fields": {
         "name": "Angela Reed",
+        "last_name": null,
         "email": "angelareed@yahoo.com",
         "phone": "(936) 500-1228",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5922,9 +6019,11 @@
     "pk": 92,
     "fields": {
         "name": "Hugo Lewis",
+        "last_name": null,
         "email": "hugolewis@outlook.com",
         "phone": "(422) 585-9609",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "they"
@@ -5935,9 +6034,11 @@
     "pk": 93,
     "fields": {
         "name": "Cassandra Wilson",
+        "last_name": null,
         "email": "cassandrawilson@gmail.com",
         "phone": "(604) 306-2084",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5948,9 +6049,11 @@
     "pk": 94,
     "fields": {
         "name": "George Willis",
+        "last_name": null,
         "email": "georgewillis@yahoo.com",
         "phone": "(222) 204-5944",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "M",
         "pronoun": "he"
@@ -5961,9 +6064,11 @@
     "pk": 95,
     "fields": {
         "name": "Jamie Hodges",
+        "last_name": null,
         "email": "jamiehodges@outlook.com",
         "phone": "(737) 122-6102",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5974,9 +6079,11 @@
     "pk": 96,
     "fields": {
         "name": "Bennie Rodriguez",
+        "last_name": null,
         "email": "bennierodriguez@gmail.com",
         "phone": "(537) 641-2175",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -5987,9 +6094,11 @@
     "pk": 97,
     "fields": {
         "name": "Allison Martin",
+        "last_name": null,
         "email": "allisonmartin@outlook.com",
         "phone": "(525) 384-2715",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -6000,9 +6109,11 @@
     "pk": 98,
     "fields": {
         "name": "Kristi Elliott",
+        "last_name": null,
         "email": "kristielliott@gmail.com",
         "phone": "(790) 289-5430",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -6013,9 +6124,11 @@
     "pk": 99,
     "fields": {
         "name": "Pearl Graves",
+        "last_name": null,
         "email": "pearlgraves@outlook.com",
         "phone": "(317) 721-2439",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "F",
         "pronoun": "she"
@@ -6026,9 +6139,11 @@
     "pk": 159,
     "fields": {
         "name": "New Adjudicator Shared",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "",
         "pronoun": ""
@@ -6039,9 +6154,11 @@
     "pk": 160,
     "fields": {
         "name": "New Adjudicator Shared",
+        "last_name": null,
         "email": null,
         "phone": "",
         "anonymous": false,
+        "code_name": "",
         "url_key": null,
         "gender": "",
         "pronoun": ""
@@ -6059,6 +6176,7 @@
         "institution": 1,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🌩",
         "break_categories": [
@@ -6078,6 +6196,7 @@
         "institution": 1,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🎃",
         "break_categories": [
@@ -6097,6 +6216,7 @@
         "institution": 1,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🆒",
         "break_categories": [
@@ -6116,6 +6236,7 @@
         "institution": 2,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🍌",
         "break_categories": [
@@ -6137,6 +6258,7 @@
         "institution": 3,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🆘",
         "break_categories": [
@@ -6158,6 +6280,7 @@
         "institution": 4,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "💎",
         "break_categories": [
@@ -6179,6 +6302,7 @@
         "institution": 4,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🕯",
         "break_categories": [
@@ -6198,6 +6322,7 @@
         "institution": 5,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🎖",
         "break_categories": [
@@ -6217,6 +6342,7 @@
         "institution": 6,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🖨",
         "break_categories": [
@@ -6237,6 +6363,7 @@
         "institution": 6,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "😴",
         "break_categories": [
@@ -6257,6 +6384,7 @@
         "institution": 7,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🌶",
         "break_categories": [
@@ -6276,6 +6404,7 @@
         "institution": 7,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🙌",
         "break_categories": [
@@ -6295,6 +6424,7 @@
         "institution": 8,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🖖",
         "break_categories": [
@@ -6314,6 +6444,7 @@
         "institution": 8,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🖕",
         "break_categories": [
@@ -6333,6 +6464,7 @@
         "institution": 8,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "⛏",
         "break_categories": [
@@ -6352,6 +6484,7 @@
         "institution": 9,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🐦",
         "break_categories": [
@@ -6371,6 +6504,7 @@
         "institution": 10,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "😮",
         "break_categories": [
@@ -6391,6 +6525,7 @@
         "institution": 10,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🌷",
         "break_categories": [
@@ -6411,6 +6546,7 @@
         "institution": 10,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🕵",
         "break_categories": [
@@ -6432,6 +6568,7 @@
         "institution": 11,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🚬",
         "break_categories": [
@@ -6451,6 +6588,7 @@
         "institution": 11,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "👠",
         "break_categories": [
@@ -6470,6 +6608,7 @@
         "institution": 13,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "👓",
         "break_categories": [
@@ -6489,6 +6628,7 @@
         "institution": 13,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "👊",
         "break_categories": [
@@ -6508,6 +6648,7 @@
         "institution": 13,
         "tournament": 1,
         "use_institution_prefix": true,
+        "seed": null,
         "type": "N",
         "emoji": "🍓",
         "break_categories": [
@@ -7577,6 +7718,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7586,7 +7728,9 @@
         "ip_address": null,
         "debate": 12,
         "motion": 3,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7597,6 +7741,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7606,7 +7751,9 @@
         "ip_address": null,
         "debate": 11,
         "motion": 2,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7617,6 +7764,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7626,7 +7774,9 @@
         "ip_address": null,
         "debate": 10,
         "motion": 2,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7637,6 +7787,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7646,7 +7797,9 @@
         "ip_address": null,
         "debate": 9,
         "motion": 1,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7657,6 +7810,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7666,7 +7820,9 @@
         "ip_address": null,
         "debate": 8,
         "motion": 3,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7677,6 +7833,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7686,7 +7843,9 @@
         "ip_address": null,
         "debate": 7,
         "motion": 2,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7697,6 +7856,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7706,7 +7866,9 @@
         "ip_address": null,
         "debate": 6,
         "motion": 2,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7717,6 +7879,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7726,7 +7889,9 @@
         "ip_address": null,
         "debate": 5,
         "motion": 3,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7737,6 +7902,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7746,7 +7912,9 @@
         "ip_address": null,
         "debate": 4,
         "motion": 1,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7757,6 +7925,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7766,7 +7935,9 @@
         "ip_address": null,
         "debate": 3,
         "motion": 3,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7777,6 +7948,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7786,7 +7958,9 @@
         "ip_address": null,
         "debate": 2,
         "motion": 1,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7797,6 +7971,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7806,7 +7981,9 @@
         "ip_address": null,
         "debate": 1,
         "motion": 2,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7817,6 +7994,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7826,7 +8004,9 @@
         "ip_address": null,
         "debate": 24,
         "motion": 4,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7837,6 +8017,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7846,7 +8027,9 @@
         "ip_address": null,
         "debate": 23,
         "motion": 6,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7857,6 +8040,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7866,7 +8050,9 @@
         "ip_address": null,
         "debate": 22,
         "motion": 5,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7877,6 +8063,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7886,7 +8073,9 @@
         "ip_address": null,
         "debate": 21,
         "motion": 4,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7897,6 +8086,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7906,7 +8096,9 @@
         "ip_address": null,
         "debate": 20,
         "motion": 4,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7917,6 +8109,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7926,7 +8119,9 @@
         "ip_address": null,
         "debate": 19,
         "motion": 6,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7937,6 +8132,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7946,7 +8142,9 @@
         "ip_address": null,
         "debate": 18,
         "motion": 6,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7957,6 +8155,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7966,7 +8165,9 @@
         "ip_address": null,
         "debate": 17,
         "motion": 4,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7977,6 +8178,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -7986,7 +8188,9 @@
         "ip_address": null,
         "debate": 16,
         "motion": 4,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -7997,6 +8201,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8006,7 +8211,9 @@
         "ip_address": null,
         "debate": 15,
         "motion": 4,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8017,6 +8224,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8026,7 +8234,9 @@
         "ip_address": null,
         "debate": 14,
         "motion": 5,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8037,6 +8247,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8046,7 +8257,9 @@
         "ip_address": null,
         "debate": 13,
         "motion": 4,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8057,6 +8270,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8066,7 +8280,9 @@
         "ip_address": null,
         "debate": 25,
         "motion": 9,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8077,6 +8293,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8086,7 +8303,9 @@
         "ip_address": null,
         "debate": 26,
         "motion": 9,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8097,6 +8316,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8106,7 +8326,9 @@
         "ip_address": null,
         "debate": 27,
         "motion": 9,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8117,6 +8339,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8126,7 +8349,9 @@
         "ip_address": null,
         "debate": 28,
         "motion": 9,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8137,6 +8362,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8146,7 +8372,9 @@
         "ip_address": null,
         "debate": 29,
         "motion": 9,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8157,6 +8385,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8166,7 +8395,9 @@
         "ip_address": null,
         "debate": 30,
         "motion": 8,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8177,6 +8408,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8186,7 +8418,9 @@
         "ip_address": null,
         "debate": 31,
         "motion": 7,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8197,6 +8431,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8206,7 +8441,9 @@
         "ip_address": null,
         "debate": 32,
         "motion": 9,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8217,6 +8454,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8226,7 +8464,9 @@
         "ip_address": null,
         "debate": 33,
         "motion": 9,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8237,6 +8477,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8246,7 +8487,9 @@
         "ip_address": null,
         "debate": 34,
         "motion": 9,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8257,6 +8500,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8266,7 +8510,9 @@
         "ip_address": null,
         "debate": 35,
         "motion": 9,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8277,6 +8523,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8286,7 +8533,9 @@
         "ip_address": null,
         "debate": 36,
         "motion": 7,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8297,6 +8546,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8306,7 +8556,9 @@
         "ip_address": null,
         "debate": 37,
         "motion": 12,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8317,6 +8569,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8326,7 +8579,9 @@
         "ip_address": null,
         "debate": 38,
         "motion": 12,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8337,6 +8592,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8346,7 +8602,9 @@
         "ip_address": null,
         "debate": 39,
         "motion": 12,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8357,6 +8615,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8366,7 +8625,9 @@
         "ip_address": null,
         "debate": 40,
         "motion": 10,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8377,6 +8638,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8386,7 +8648,9 @@
         "ip_address": null,
         "debate": 41,
         "motion": 12,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8397,6 +8661,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8406,7 +8671,9 @@
         "ip_address": null,
         "debate": 42,
         "motion": 12,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8417,6 +8684,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8426,7 +8694,9 @@
         "ip_address": null,
         "debate": 43,
         "motion": 12,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8437,6 +8707,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8446,7 +8717,9 @@
         "ip_address": null,
         "debate": 44,
         "motion": 11,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8457,6 +8730,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8466,7 +8740,9 @@
         "ip_address": null,
         "debate": 45,
         "motion": 12,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8477,6 +8753,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8486,7 +8763,9 @@
         "ip_address": null,
         "debate": 46,
         "motion": 11,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8497,6 +8776,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8506,7 +8786,9 @@
         "ip_address": null,
         "debate": 47,
         "motion": 11,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -8517,6 +8799,7 @@
         "version": 1,
         "submitter_type": "T",
         "confirmed": true,
+        "private_url": false,
         "participant_submitter": null,
         "submitter": [
             "admin"
@@ -8526,7 +8809,9 @@
         "ip_address": null,
         "debate": 48,
         "motion": 12,
-        "discarded": false
+        "discarded": false,
+        "single_adj": false,
+        "forfeit": false
     }
 },
 {
@@ -18396,7 +18681,8 @@
         "margin": -2.5,
         "score": 259.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18410,7 +18696,8 @@
         "margin": 2.5,
         "score": 261.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18424,7 +18711,8 @@
         "margin": -0.5,
         "score": 266.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18438,7 +18726,8 @@
         "margin": 0.5,
         "score": 267.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18452,7 +18741,8 @@
         "margin": -3.5,
         "score": 261.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18466,7 +18756,8 @@
         "margin": 3.5,
         "score": 265.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18480,7 +18771,8 @@
         "margin": -4.5,
         "score": 257.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18494,7 +18786,8 @@
         "margin": 4.5,
         "score": 262.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18508,7 +18801,8 @@
         "margin": -0.5,
         "score": 260.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18522,7 +18816,8 @@
         "margin": 0.5,
         "score": 261.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18536,7 +18831,8 @@
         "margin": -7.5,
         "score": 255.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18550,7 +18846,8 @@
         "margin": 7.5,
         "score": 263.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18564,7 +18861,8 @@
         "margin": 2.5,
         "score": 267.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18578,7 +18876,8 @@
         "margin": -2.5,
         "score": 264.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18592,7 +18891,8 @@
         "margin": 4.66666666666669,
         "score": 266.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18606,7 +18906,8 @@
         "margin": -4.66666666666669,
         "score": 261.333333333333,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18620,7 +18921,8 @@
         "margin": 5.0,
         "score": 266.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18634,7 +18936,8 @@
         "margin": -5.0,
         "score": 261.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18648,7 +18951,8 @@
         "margin": 5.33333333333331,
         "score": 266.833333333333,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18662,7 +18966,8 @@
         "margin": -5.33333333333331,
         "score": 261.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18676,7 +18981,8 @@
         "margin": -2.75,
         "score": 261.75,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18690,7 +18996,8 @@
         "margin": 2.75,
         "score": 264.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18704,7 +19011,8 @@
         "margin": 1.25,
         "score": 266.25,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18718,7 +19026,8 @@
         "margin": -1.25,
         "score": 265.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18732,7 +19041,8 @@
         "margin": 1.83333333333331,
         "score": 264.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18746,7 +19056,8 @@
         "margin": -1.83333333333331,
         "score": 262.166666666667,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18760,7 +19071,8 @@
         "margin": 0.5,
         "score": 261.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18774,7 +19086,8 @@
         "margin": -0.5,
         "score": 261.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18788,7 +19101,8 @@
         "margin": -1.75,
         "score": 261.25,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18802,7 +19116,8 @@
         "margin": 1.75,
         "score": 263.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18816,7 +19131,8 @@
         "margin": 2.0,
         "score": 263.666666666667,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18830,7 +19146,8 @@
         "margin": -2.0,
         "score": 261.666666666667,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18844,7 +19161,8 @@
         "margin": -2.0,
         "score": 260.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18858,7 +19176,8 @@
         "margin": 2.0,
         "score": 262.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18872,7 +19191,8 @@
         "margin": 0.5,
         "score": 263.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18886,7 +19206,8 @@
         "margin": -0.5,
         "score": 262.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18900,7 +19221,8 @@
         "margin": 3.0,
         "score": 265.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18914,7 +19236,8 @@
         "margin": -3.0,
         "score": 262.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18928,7 +19251,8 @@
         "margin": 2.0,
         "score": 261.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18942,7 +19266,8 @@
         "margin": -2.0,
         "score": 259.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18956,7 +19281,8 @@
         "margin": -0.5,
         "score": 264.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18970,7 +19296,8 @@
         "margin": 0.5,
         "score": 265.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18984,7 +19311,8 @@
         "margin": -6.0,
         "score": 260.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -18998,7 +19326,8 @@
         "margin": 6.0,
         "score": 266.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19012,7 +19341,8 @@
         "margin": -1.5,
         "score": 261.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19026,7 +19356,8 @@
         "margin": 1.5,
         "score": 262.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19040,7 +19371,8 @@
         "margin": 7.5,
         "score": 262.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19054,7 +19386,8 @@
         "margin": -7.5,
         "score": 254.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19068,7 +19401,8 @@
         "margin": -2.5,
         "score": 261.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19082,7 +19416,8 @@
         "margin": 2.5,
         "score": 264.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19096,7 +19431,8 @@
         "margin": -2.5,
         "score": 259.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19110,7 +19446,8 @@
         "margin": 2.5,
         "score": 262.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19124,7 +19461,8 @@
         "margin": -4.0,
         "score": 259.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19138,7 +19476,8 @@
         "margin": 4.0,
         "score": 263.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19152,7 +19491,8 @@
         "margin": -3.25,
         "score": 260.75,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19166,7 +19506,8 @@
         "margin": 3.25,
         "score": 264.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19180,7 +19521,8 @@
         "margin": -5.25,
         "score": 262.25,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19194,7 +19536,8 @@
         "margin": 5.25,
         "score": 267.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19208,7 +19551,8 @@
         "margin": 7.0,
         "score": 266.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19222,7 +19566,8 @@
         "margin": -7.0,
         "score": 259.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19236,7 +19581,8 @@
         "margin": -5.5,
         "score": 260.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19250,7 +19596,8 @@
         "margin": 5.5,
         "score": 266.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19264,7 +19611,8 @@
         "margin": 5.5,
         "score": 258.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19278,7 +19626,8 @@
         "margin": -5.5,
         "score": 253.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19292,7 +19641,8 @@
         "margin": -6.5,
         "score": 255.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19306,7 +19656,8 @@
         "margin": 6.5,
         "score": 262.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19320,7 +19671,8 @@
         "margin": 7.75,
         "score": 266.75,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19334,7 +19686,8 @@
         "margin": -7.75,
         "score": 259.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19348,7 +19701,8 @@
         "margin": 4.25,
         "score": 261.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19362,7 +19716,8 @@
         "margin": -4.25,
         "score": 257.25,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19376,7 +19731,8 @@
         "margin": -1.5,
         "score": 261.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19390,7 +19746,8 @@
         "margin": 1.5,
         "score": 262.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19404,7 +19761,8 @@
         "margin": -5.5,
         "score": 259.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19418,7 +19776,8 @@
         "margin": 5.5,
         "score": 264.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19432,7 +19791,8 @@
         "margin": -4.0,
         "score": 258.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19446,7 +19806,8 @@
         "margin": 4.0,
         "score": 262.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19460,7 +19821,8 @@
         "margin": -6.0,
         "score": 256.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19474,7 +19836,8 @@
         "margin": 6.0,
         "score": 262.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19488,7 +19851,8 @@
         "margin": -2.33333333333337,
         "score": 261.833333333333,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19502,7 +19866,8 @@
         "margin": 2.33333333333337,
         "score": 264.166666666667,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19516,7 +19881,8 @@
         "margin": -4.25,
         "score": 262.25,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19530,7 +19896,8 @@
         "margin": 4.25,
         "score": 266.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19544,7 +19911,8 @@
         "margin": 3.16666666666669,
         "score": 264.666666666667,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19558,7 +19926,8 @@
         "margin": -3.16666666666669,
         "score": 261.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19572,7 +19941,8 @@
         "margin": -5.83333333333331,
         "score": 260.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19586,7 +19956,8 @@
         "margin": 5.83333333333331,
         "score": 266.333333333333,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19600,7 +19971,8 @@
         "margin": 10.0,
         "score": 267.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19614,7 +19986,8 @@
         "margin": -10.0,
         "score": 257.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19628,7 +20001,8 @@
         "margin": -1.0,
         "score": 262.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19642,7 +20016,8 @@
         "margin": 1.0,
         "score": 263.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19656,7 +20031,8 @@
         "margin": -1.0,
         "score": 268.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19670,7 +20046,8 @@
         "margin": 1.0,
         "score": 269.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19684,7 +20061,8 @@
         "margin": -7.5,
         "score": 258.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19698,7 +20076,8 @@
         "margin": 7.5,
         "score": 266.0,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19712,7 +20091,8 @@
         "margin": 8.0,
         "score": 266.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19726,7 +20106,8 @@
         "margin": -8.0,
         "score": 258.5,
         "votes_given": 0,
-        "votes_possible": 0
+        "votes_possible": 0,
+        "has_ghost": null
     }
 },
 {
@@ -19736,6 +20117,7 @@
         "ballot_submission": 1,
         "debate_team": 23,
         "speaker": 40,
+        "rank": null,
         "score": 73.0,
         "position": 1,
         "ghost": false
@@ -19748,6 +20130,7 @@
         "ballot_submission": 1,
         "debate_team": 23,
         "speaker": 41,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -19760,6 +20143,7 @@
         "ballot_submission": 1,
         "debate_team": 23,
         "speaker": 42,
+        "rank": null,
         "score": 73.0,
         "position": 3,
         "ghost": false
@@ -19772,6 +20156,7 @@
         "ballot_submission": 1,
         "debate_team": 23,
         "speaker": 40,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -19784,6 +20169,7 @@
         "ballot_submission": 1,
         "debate_team": 24,
         "speaker": 54,
+        "rank": null,
         "score": 73.0,
         "position": 1,
         "ghost": false
@@ -19796,6 +20182,7 @@
         "ballot_submission": 1,
         "debate_team": 24,
         "speaker": 53,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -19808,6 +20195,7 @@
         "ballot_submission": 1,
         "debate_team": 24,
         "speaker": 52,
+        "rank": null,
         "score": 78.0,
         "position": 3,
         "ghost": false
@@ -19820,6 +20208,7 @@
         "ballot_submission": 1,
         "debate_team": 24,
         "speaker": 54,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -19832,6 +20221,7 @@
         "ballot_submission": 2,
         "debate_team": 21,
         "speaker": 10,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -19844,6 +20234,7 @@
         "ballot_submission": 2,
         "debate_team": 21,
         "speaker": 11,
+        "rank": null,
         "score": 77.0,
         "position": 2,
         "ghost": false
@@ -19856,6 +20247,7 @@
         "ballot_submission": 2,
         "debate_team": 21,
         "speaker": 12,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -19868,6 +20260,7 @@
         "ballot_submission": 2,
         "debate_team": 21,
         "speaker": 10,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -19880,6 +20273,7 @@
         "ballot_submission": 2,
         "debate_team": 22,
         "speaker": 23,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -19892,6 +20286,7 @@
         "ballot_submission": 2,
         "debate_team": 22,
         "speaker": 24,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -19904,6 +20299,7 @@
         "ballot_submission": 2,
         "debate_team": 22,
         "speaker": 22,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -19916,6 +20312,7 @@
         "ballot_submission": 2,
         "debate_team": 22,
         "speaker": 23,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -19928,6 +20325,7 @@
         "ballot_submission": 3,
         "debate_team": 19,
         "speaker": 69,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -19940,6 +20338,7 @@
         "ballot_submission": 3,
         "debate_team": 19,
         "speaker": 68,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -19952,6 +20351,7 @@
         "ballot_submission": 3,
         "debate_team": 19,
         "speaker": 67,
+        "rank": null,
         "score": 77.0,
         "position": 3,
         "ghost": false
@@ -19964,6 +20364,7 @@
         "ballot_submission": 3,
         "debate_team": 19,
         "speaker": 69,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -19976,6 +20377,7 @@
         "ballot_submission": 3,
         "debate_team": 20,
         "speaker": 33,
+        "rank": null,
         "score": 78.0,
         "position": 1,
         "ghost": false
@@ -19988,6 +20390,7 @@
         "ballot_submission": 3,
         "debate_team": 20,
         "speaker": 31,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -20000,6 +20403,7 @@
         "ballot_submission": 3,
         "debate_team": 20,
         "speaker": 32,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -20012,6 +20416,7 @@
         "ballot_submission": 3,
         "debate_team": 20,
         "speaker": 33,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -20024,6 +20429,7 @@
         "ballot_submission": 4,
         "debate_team": 17,
         "speaker": 49,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -20036,6 +20442,7 @@
         "ballot_submission": 4,
         "debate_team": 17,
         "speaker": 50,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -20048,6 +20455,7 @@
         "ballot_submission": 4,
         "debate_team": 17,
         "speaker": 51,
+        "rank": null,
         "score": 73.0,
         "position": 3,
         "ghost": false
@@ -20060,6 +20468,7 @@
         "ballot_submission": 4,
         "debate_team": 17,
         "speaker": 49,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -20072,6 +20481,7 @@
         "ballot_submission": 4,
         "debate_team": 18,
         "speaker": 1,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -20084,6 +20494,7 @@
         "ballot_submission": 4,
         "debate_team": 18,
         "speaker": 3,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -20096,6 +20507,7 @@
         "ballot_submission": 4,
         "debate_team": 18,
         "speaker": 2,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -20108,6 +20520,7 @@
         "ballot_submission": 4,
         "debate_team": 18,
         "speaker": 1,
+        "rank": null,
         "score": 37.0,
         "position": 4,
         "ghost": false
@@ -20120,6 +20533,7 @@
         "ballot_submission": 5,
         "debate_team": 15,
         "speaker": 55,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -20132,6 +20546,7 @@
         "ballot_submission": 5,
         "debate_team": 15,
         "speaker": 57,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -20144,6 +20559,7 @@
         "ballot_submission": 5,
         "debate_team": 15,
         "speaker": 56,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -20156,6 +20572,7 @@
         "ballot_submission": 5,
         "debate_team": 15,
         "speaker": 55,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -20168,6 +20585,7 @@
         "ballot_submission": 5,
         "debate_team": 16,
         "speaker": 45,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -20180,6 +20598,7 @@
         "ballot_submission": 5,
         "debate_team": 16,
         "speaker": 44,
+        "rank": null,
         "score": 76.0,
         "position": 2,
         "ghost": false
@@ -20192,6 +20611,7 @@
         "ballot_submission": 5,
         "debate_team": 16,
         "speaker": 43,
+        "rank": null,
         "score": 72.0,
         "position": 3,
         "ghost": false
@@ -20204,6 +20624,7 @@
         "ballot_submission": 5,
         "debate_team": 16,
         "speaker": 45,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -20216,6 +20637,7 @@
         "ballot_submission": 6,
         "debate_team": 13,
         "speaker": 34,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -20228,6 +20650,7 @@
         "ballot_submission": 6,
         "debate_team": 13,
         "speaker": 35,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -20240,6 +20663,7 @@
         "ballot_submission": 6,
         "debate_team": 13,
         "speaker": 36,
+        "rank": null,
         "score": 72.0,
         "position": 3,
         "ghost": false
@@ -20252,6 +20676,7 @@
         "ballot_submission": 6,
         "debate_team": 13,
         "speaker": 34,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -20264,6 +20689,7 @@
         "ballot_submission": 6,
         "debate_team": 14,
         "speaker": 48,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -20276,6 +20702,7 @@
         "ballot_submission": 6,
         "debate_team": 14,
         "speaker": 46,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -20288,6 +20715,7 @@
         "ballot_submission": 6,
         "debate_team": 14,
         "speaker": 47,
+        "rank": null,
         "score": 78.0,
         "position": 3,
         "ghost": false
@@ -20300,6 +20728,7 @@
         "ballot_submission": 6,
         "debate_team": 14,
         "speaker": 48,
+        "rank": null,
         "score": 36.0,
         "position": 4,
         "ghost": false
@@ -20312,6 +20741,7 @@
         "ballot_submission": 7,
         "debate_team": 11,
         "speaker": 15,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -20324,6 +20754,7 @@
         "ballot_submission": 7,
         "debate_team": 11,
         "speaker": 13,
+        "rank": null,
         "score": 78.0,
         "position": 2,
         "ghost": false
@@ -20336,6 +20767,7 @@
         "ballot_submission": 7,
         "debate_team": 11,
         "speaker": 14,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -20348,6 +20780,7 @@
         "ballot_submission": 7,
         "debate_team": 11,
         "speaker": 15,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -20360,6 +20793,7 @@
         "ballot_submission": 7,
         "debate_team": 12,
         "speaker": 29,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -20372,6 +20806,7 @@
         "ballot_submission": 7,
         "debate_team": 12,
         "speaker": 28,
+        "rank": null,
         "score": 76.0,
         "position": 2,
         "ghost": false
@@ -20384,6 +20819,7 @@
         "ballot_submission": 7,
         "debate_team": 12,
         "speaker": 30,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -20396,6 +20832,7 @@
         "ballot_submission": 7,
         "debate_team": 12,
         "speaker": 29,
+        "rank": null,
         "score": 38.5,
         "position": 4,
         "ghost": false
@@ -20408,6 +20845,7 @@
         "ballot_submission": 8,
         "debate_team": 9,
         "speaker": 17,
+        "rank": null,
         "score": 76.6666666666667,
         "position": 1,
         "ghost": false
@@ -20420,6 +20858,7 @@
         "ballot_submission": 8,
         "debate_team": 9,
         "speaker": 16,
+        "rank": null,
         "score": 75.6666666666667,
         "position": 2,
         "ghost": false
@@ -20432,6 +20871,7 @@
         "ballot_submission": 8,
         "debate_team": 9,
         "speaker": 18,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -20444,6 +20884,7 @@
         "ballot_submission": 8,
         "debate_team": 9,
         "speaker": 17,
+        "rank": null,
         "score": 37.6666666666667,
         "position": 4,
         "ghost": false
@@ -20456,6 +20897,7 @@
         "ballot_submission": 8,
         "debate_team": 10,
         "speaker": 64,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -20468,6 +20910,7 @@
         "ballot_submission": 8,
         "debate_team": 10,
         "speaker": 66,
+        "rank": null,
         "score": 76.0,
         "position": 2,
         "ghost": false
@@ -20480,6 +20923,7 @@
         "ballot_submission": 8,
         "debate_team": 10,
         "speaker": 65,
+        "rank": null,
         "score": 74.3333333333333,
         "position": 3,
         "ghost": false
@@ -20492,6 +20936,7 @@
         "ballot_submission": 8,
         "debate_team": 10,
         "speaker": 64,
+        "rank": null,
         "score": 37.0,
         "position": 4,
         "ghost": false
@@ -20504,6 +20949,7 @@
         "ballot_submission": 9,
         "debate_team": 7,
         "speaker": 21,
+        "rank": null,
         "score": 77.5,
         "position": 1,
         "ghost": false
@@ -20516,6 +20962,7 @@
         "ballot_submission": 9,
         "debate_team": 7,
         "speaker": 20,
+        "rank": null,
         "score": 74.5,
         "position": 2,
         "ghost": false
@@ -20528,6 +20975,7 @@
         "ballot_submission": 9,
         "debate_team": 7,
         "speaker": 19,
+        "rank": null,
         "score": 76.5,
         "position": 3,
         "ghost": false
@@ -20540,6 +20988,7 @@
         "ballot_submission": 9,
         "debate_team": 7,
         "speaker": 21,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -20552,6 +21001,7 @@
         "ballot_submission": 9,
         "debate_team": 8,
         "speaker": 72,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -20564,6 +21014,7 @@
         "ballot_submission": 9,
         "debate_team": 8,
         "speaker": 71,
+        "rank": null,
         "score": 73.5,
         "position": 2,
         "ghost": false
@@ -20576,6 +21027,7 @@
         "ballot_submission": 9,
         "debate_team": 8,
         "speaker": 70,
+        "rank": null,
         "score": 74.5,
         "position": 3,
         "ghost": false
@@ -20588,6 +21040,7 @@
         "ballot_submission": 9,
         "debate_team": 8,
         "speaker": 72,
+        "rank": null,
         "score": 37.0,
         "position": 4,
         "ghost": false
@@ -20600,6 +21053,7 @@
         "ballot_submission": 10,
         "debate_team": 5,
         "speaker": 5,
+        "rank": null,
         "score": 75.6666666666667,
         "position": 1,
         "ghost": false
@@ -20612,6 +21066,7 @@
         "ballot_submission": 10,
         "debate_team": 5,
         "speaker": 4,
+        "rank": null,
         "score": 77.6666666666667,
         "position": 2,
         "ghost": false
@@ -20624,6 +21079,7 @@
         "ballot_submission": 10,
         "debate_team": 5,
         "speaker": 6,
+        "rank": null,
         "score": 75.6666666666667,
         "position": 3,
         "ghost": false
@@ -20636,6 +21092,7 @@
         "ballot_submission": 10,
         "debate_team": 5,
         "speaker": 5,
+        "rank": null,
         "score": 37.8333333333333,
         "position": 4,
         "ghost": false
@@ -20648,6 +21105,7 @@
         "ballot_submission": 10,
         "debate_team": 6,
         "speaker": 38,
+        "rank": null,
         "score": 75.3333333333333,
         "position": 1,
         "ghost": false
@@ -20660,6 +21118,7 @@
         "ballot_submission": 10,
         "debate_team": 6,
         "speaker": 37,
+        "rank": null,
         "score": 74.3333333333333,
         "position": 2,
         "ghost": false
@@ -20672,6 +21131,7 @@
         "ballot_submission": 10,
         "debate_team": 6,
         "speaker": 39,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -20684,6 +21144,7 @@
         "ballot_submission": 10,
         "debate_team": 6,
         "speaker": 38,
+        "rank": null,
         "score": 36.8333333333333,
         "position": 4,
         "ghost": false
@@ -20696,6 +21157,7 @@
         "ballot_submission": 11,
         "debate_team": 3,
         "speaker": 59,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -20708,6 +21170,7 @@
         "ballot_submission": 11,
         "debate_team": 3,
         "speaker": 58,
+        "rank": null,
         "score": 74.5,
         "position": 2,
         "ghost": false
@@ -20720,6 +21183,7 @@
         "ballot_submission": 11,
         "debate_team": 3,
         "speaker": 60,
+        "rank": null,
         "score": 77.0,
         "position": 3,
         "ghost": false
@@ -20732,6 +21196,7 @@
         "ballot_submission": 11,
         "debate_team": 3,
         "speaker": 59,
+        "rank": null,
         "score": 36.25,
         "position": 4,
         "ghost": false
@@ -20744,6 +21209,7 @@
         "ballot_submission": 11,
         "debate_team": 4,
         "speaker": 25,
+        "rank": null,
         "score": 76.5,
         "position": 1,
         "ghost": false
@@ -20756,6 +21222,7 @@
         "ballot_submission": 11,
         "debate_team": 4,
         "speaker": 27,
+        "rank": null,
         "score": 74.5,
         "position": 2,
         "ghost": false
@@ -20768,6 +21235,7 @@
         "ballot_submission": 11,
         "debate_team": 4,
         "speaker": 26,
+        "rank": null,
         "score": 75.5,
         "position": 3,
         "ghost": false
@@ -20780,6 +21248,7 @@
         "ballot_submission": 11,
         "debate_team": 4,
         "speaker": 25,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -20792,6 +21261,7 @@
         "ballot_submission": 12,
         "debate_team": 1,
         "speaker": 7,
+        "rank": null,
         "score": 77.5,
         "position": 1,
         "ghost": false
@@ -20804,6 +21274,7 @@
         "ballot_submission": 12,
         "debate_team": 1,
         "speaker": 8,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -20816,6 +21287,7 @@
         "ballot_submission": 12,
         "debate_team": 1,
         "speaker": 9,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -20828,6 +21300,7 @@
         "ballot_submission": 12,
         "debate_team": 1,
         "speaker": 7,
+        "rank": null,
         "score": 37.75,
         "position": 4,
         "ghost": false
@@ -20840,6 +21313,7 @@
         "ballot_submission": 12,
         "debate_team": 2,
         "speaker": 61,
+        "rank": null,
         "score": 77.5,
         "position": 1,
         "ghost": false
@@ -20852,6 +21326,7 @@
         "ballot_submission": 12,
         "debate_team": 2,
         "speaker": 63,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -20864,6 +21339,7 @@
         "ballot_submission": 12,
         "debate_team": 2,
         "speaker": 62,
+        "rank": null,
         "score": 75.5,
         "position": 3,
         "ghost": false
@@ -20876,6 +21352,7 @@
         "ballot_submission": 12,
         "debate_team": 2,
         "speaker": 61,
+        "rank": null,
         "score": 37.0,
         "position": 4,
         "ghost": false
@@ -20888,6 +21365,7 @@
         "ballot_submission": 13,
         "debate_team": 47,
         "speaker": 29,
+        "rank": null,
         "score": 74.6666666666667,
         "position": 1,
         "ghost": false
@@ -20900,6 +21378,7 @@
         "ballot_submission": 13,
         "debate_team": 47,
         "speaker": 28,
+        "rank": null,
         "score": 76.3333333333333,
         "position": 2,
         "ghost": false
@@ -20912,6 +21391,7 @@
         "ballot_submission": 13,
         "debate_team": 47,
         "speaker": 30,
+        "rank": null,
         "score": 76.3333333333333,
         "position": 3,
         "ghost": false
@@ -20924,6 +21404,7 @@
         "ballot_submission": 13,
         "debate_team": 47,
         "speaker": 29,
+        "rank": null,
         "score": 36.6666666666667,
         "position": 4,
         "ghost": false
@@ -20936,6 +21417,7 @@
         "ballot_submission": 13,
         "debate_team": 48,
         "speaker": 55,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -20948,6 +21430,7 @@
         "ballot_submission": 13,
         "debate_team": 48,
         "speaker": 57,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -20960,6 +21443,7 @@
         "ballot_submission": 13,
         "debate_team": 48,
         "speaker": 56,
+        "rank": null,
         "score": 76.3333333333333,
         "position": 3,
         "ghost": false
@@ -20972,6 +21456,7 @@
         "ballot_submission": 13,
         "debate_team": 48,
         "speaker": 55,
+        "rank": null,
         "score": 37.8333333333333,
         "position": 4,
         "ghost": false
@@ -20984,6 +21469,7 @@
         "ballot_submission": 14,
         "debate_team": 45,
         "speaker": 25,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -20996,6 +21482,7 @@
         "ballot_submission": 14,
         "debate_team": 45,
         "speaker": 27,
+        "rank": null,
         "score": 78.0,
         "position": 2,
         "ghost": false
@@ -21008,6 +21495,7 @@
         "ballot_submission": 14,
         "debate_team": 45,
         "speaker": 26,
+        "rank": null,
         "score": 73.0,
         "position": 3,
         "ghost": false
@@ -21020,6 +21508,7 @@
         "ballot_submission": 14,
         "debate_team": 45,
         "speaker": 25,
+        "rank": null,
         "score": 38.5,
         "position": 4,
         "ghost": false
@@ -21032,6 +21521,7 @@
         "ballot_submission": 14,
         "debate_team": 46,
         "speaker": 23,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -21044,6 +21534,7 @@
         "ballot_submission": 14,
         "debate_team": 46,
         "speaker": 24,
+        "rank": null,
         "score": 77.0,
         "position": 2,
         "ghost": false
@@ -21056,6 +21547,7 @@
         "ballot_submission": 14,
         "debate_team": 46,
         "speaker": 22,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -21068,6 +21560,7 @@
         "ballot_submission": 14,
         "debate_team": 46,
         "speaker": 23,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -21080,6 +21573,7 @@
         "ballot_submission": 15,
         "debate_team": 43,
         "speaker": 40,
+        "rank": null,
         "score": 73.5,
         "position": 1,
         "ghost": false
@@ -21092,6 +21586,7 @@
         "ballot_submission": 15,
         "debate_team": 43,
         "speaker": 41,
+        "rank": null,
         "score": 72.5,
         "position": 2,
         "ghost": false
@@ -21104,6 +21599,7 @@
         "ballot_submission": 15,
         "debate_team": 43,
         "speaker": 42,
+        "rank": null,
         "score": 77.5,
         "position": 3,
         "ghost": false
@@ -21116,6 +21612,7 @@
         "ballot_submission": 15,
         "debate_team": 43,
         "speaker": 40,
+        "rank": null,
         "score": 37.75,
         "position": 4,
         "ghost": false
@@ -21128,6 +21625,7 @@
         "ballot_submission": 15,
         "debate_team": 44,
         "speaker": 59,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -21140,6 +21638,7 @@
         "ballot_submission": 15,
         "debate_team": 44,
         "speaker": 58,
+        "rank": null,
         "score": 74.5,
         "position": 2,
         "ghost": false
@@ -21152,6 +21651,7 @@
         "ballot_submission": 15,
         "debate_team": 44,
         "speaker": 60,
+        "rank": null,
         "score": 75.5,
         "position": 3,
         "ghost": false
@@ -21164,6 +21664,7 @@
         "ballot_submission": 15,
         "debate_team": 44,
         "speaker": 59,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -21176,6 +21677,7 @@
         "ballot_submission": 16,
         "debate_team": 41,
         "speaker": 49,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -21188,6 +21690,7 @@
         "ballot_submission": 16,
         "debate_team": 41,
         "speaker": 50,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -21200,6 +21703,7 @@
         "ballot_submission": 16,
         "debate_team": 41,
         "speaker": 51,
+        "rank": null,
         "score": 75.6666666666667,
         "position": 3,
         "ghost": false
@@ -21212,6 +21716,7 @@
         "ballot_submission": 16,
         "debate_team": 41,
         "speaker": 49,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -21224,6 +21729,7 @@
         "ballot_submission": 16,
         "debate_team": 42,
         "speaker": 69,
+        "rank": null,
         "score": 75.3333333333333,
         "position": 1,
         "ghost": false
@@ -21236,6 +21742,7 @@
         "ballot_submission": 16,
         "debate_team": 42,
         "speaker": 68,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -21248,6 +21755,7 @@
         "ballot_submission": 16,
         "debate_team": 42,
         "speaker": 67,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -21260,6 +21768,7 @@
         "ballot_submission": 16,
         "debate_team": 42,
         "speaker": 69,
+        "rank": null,
         "score": 37.3333333333333,
         "position": 4,
         "ghost": false
@@ -21272,6 +21781,7 @@
         "ballot_submission": 17,
         "debate_team": 39,
         "speaker": 72,
+        "rank": null,
         "score": 73.0,
         "position": 1,
         "ghost": false
@@ -21284,6 +21794,7 @@
         "ballot_submission": 17,
         "debate_team": 39,
         "speaker": 71,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -21296,6 +21807,7 @@
         "ballot_submission": 17,
         "debate_team": 39,
         "speaker": 70,
+        "rank": null,
         "score": 74.5,
         "position": 3,
         "ghost": false
@@ -21308,6 +21820,7 @@
         "ballot_submission": 17,
         "debate_team": 39,
         "speaker": 72,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -21320,6 +21833,7 @@
         "ballot_submission": 17,
         "debate_team": 40,
         "speaker": 61,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -21332,6 +21846,7 @@
         "ballot_submission": 17,
         "debate_team": 40,
         "speaker": 63,
+        "rank": null,
         "score": 75.5,
         "position": 2,
         "ghost": false
@@ -21344,6 +21859,7 @@
         "ballot_submission": 17,
         "debate_team": 40,
         "speaker": 62,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -21356,6 +21872,7 @@
         "ballot_submission": 17,
         "debate_team": 40,
         "speaker": 61,
+        "rank": null,
         "score": 36.5,
         "position": 4,
         "ghost": false
@@ -21368,6 +21885,7 @@
         "ballot_submission": 18,
         "debate_team": 37,
         "speaker": 33,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -21380,6 +21898,7 @@
         "ballot_submission": 18,
         "debate_team": 37,
         "speaker": 31,
+        "rank": null,
         "score": 77.0,
         "position": 2,
         "ghost": false
@@ -21392,6 +21911,7 @@
         "ballot_submission": 18,
         "debate_team": 37,
         "speaker": 32,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -21404,6 +21924,7 @@
         "ballot_submission": 18,
         "debate_team": 37,
         "speaker": 33,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -21416,6 +21937,7 @@
         "ballot_submission": 18,
         "debate_team": 38,
         "speaker": 15,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -21428,6 +21950,7 @@
         "ballot_submission": 18,
         "debate_team": 38,
         "speaker": 13,
+        "rank": null,
         "score": 72.0,
         "position": 2,
         "ghost": false
@@ -21440,6 +21963,7 @@
         "ballot_submission": 18,
         "debate_team": 38,
         "speaker": 14,
+        "rank": null,
         "score": 78.0,
         "position": 3,
         "ghost": false
@@ -21452,6 +21976,7 @@
         "ballot_submission": 18,
         "debate_team": 38,
         "speaker": 15,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -21464,6 +21989,7 @@
         "ballot_submission": 19,
         "debate_team": 35,
         "speaker": 1,
+        "rank": null,
         "score": 73.0,
         "position": 1,
         "ghost": false
@@ -21476,6 +22002,7 @@
         "ballot_submission": 19,
         "debate_team": 35,
         "speaker": 3,
+        "rank": null,
         "score": 77.0,
         "position": 2,
         "ghost": false
@@ -21488,6 +22015,7 @@
         "ballot_submission": 19,
         "debate_team": 35,
         "speaker": 2,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -21500,6 +22028,7 @@
         "ballot_submission": 19,
         "debate_team": 35,
         "speaker": 1,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -21512,6 +22041,7 @@
         "ballot_submission": 19,
         "debate_team": 36,
         "speaker": 17,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -21524,6 +22054,7 @@
         "ballot_submission": 19,
         "debate_team": 36,
         "speaker": 16,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -21536,6 +22067,7 @@
         "ballot_submission": 19,
         "debate_team": 36,
         "speaker": 18,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -21548,6 +22080,7 @@
         "ballot_submission": 19,
         "debate_team": 36,
         "speaker": 17,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -21560,6 +22093,7 @@
         "ballot_submission": 20,
         "debate_team": 33,
         "speaker": 54,
+        "rank": null,
         "score": 73.0,
         "position": 1,
         "ghost": false
@@ -21572,6 +22106,7 @@
         "ballot_submission": 20,
         "debate_team": 33,
         "speaker": 53,
+        "rank": null,
         "score": 77.0,
         "position": 2,
         "ghost": false
@@ -21584,6 +22119,7 @@
         "ballot_submission": 20,
         "debate_team": 33,
         "speaker": 52,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -21596,6 +22132,7 @@
         "ballot_submission": 20,
         "debate_team": 33,
         "speaker": 54,
+        "rank": null,
         "score": 36.0,
         "position": 4,
         "ghost": false
@@ -21608,6 +22145,7 @@
         "ballot_submission": 20,
         "debate_team": 34,
         "speaker": 7,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -21620,6 +22158,7 @@
         "ballot_submission": 20,
         "debate_team": 34,
         "speaker": 8,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -21632,6 +22171,7 @@
         "ballot_submission": 20,
         "debate_team": 34,
         "speaker": 9,
+        "rank": null,
         "score": 72.0,
         "position": 3,
         "ghost": false
@@ -21644,6 +22184,7 @@
         "ballot_submission": 20,
         "debate_team": 34,
         "speaker": 7,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -21656,6 +22197,7 @@
         "ballot_submission": 21,
         "debate_team": 31,
         "speaker": 64,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -21668,6 +22210,7 @@
         "ballot_submission": 21,
         "debate_team": 31,
         "speaker": 66,
+        "rank": null,
         "score": 76.0,
         "position": 2,
         "ghost": false
@@ -21680,6 +22223,7 @@
         "ballot_submission": 21,
         "debate_team": 31,
         "speaker": 65,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -21692,6 +22236,7 @@
         "ballot_submission": 21,
         "debate_team": 31,
         "speaker": 64,
+        "rank": null,
         "score": 36.5,
         "position": 4,
         "ghost": false
@@ -21704,6 +22249,7 @@
         "ballot_submission": 21,
         "debate_team": 32,
         "speaker": 10,
+        "rank": null,
         "score": 78.0,
         "position": 1,
         "ghost": false
@@ -21716,6 +22262,7 @@
         "ballot_submission": 21,
         "debate_team": 32,
         "speaker": 11,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -21728,6 +22275,7 @@
         "ballot_submission": 21,
         "debate_team": 32,
         "speaker": 12,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -21740,6 +22288,7 @@
         "ballot_submission": 21,
         "debate_team": 32,
         "speaker": 10,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -21752,6 +22301,7 @@
         "ballot_submission": 22,
         "debate_team": 29,
         "speaker": 45,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -21764,6 +22314,7 @@
         "ballot_submission": 22,
         "debate_team": 29,
         "speaker": 44,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -21776,6 +22327,7 @@
         "ballot_submission": 22,
         "debate_team": 29,
         "speaker": 43,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -21788,6 +22340,7 @@
         "ballot_submission": 22,
         "debate_team": 29,
         "speaker": 45,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -21800,6 +22353,7 @@
         "ballot_submission": 22,
         "debate_team": 30,
         "speaker": 21,
+        "rank": null,
         "score": 73.0,
         "position": 1,
         "ghost": false
@@ -21812,6 +22366,7 @@
         "ballot_submission": 22,
         "debate_team": 30,
         "speaker": 20,
+        "rank": null,
         "score": 77.0,
         "position": 2,
         "ghost": false
@@ -21824,6 +22379,7 @@
         "ballot_submission": 22,
         "debate_team": 30,
         "speaker": 19,
+        "rank": null,
         "score": 77.0,
         "position": 3,
         "ghost": false
@@ -21836,6 +22392,7 @@
         "ballot_submission": 22,
         "debate_team": 30,
         "speaker": 21,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -21848,6 +22405,7 @@
         "ballot_submission": 23,
         "debate_team": 27,
         "speaker": 38,
+        "rank": null,
         "score": 74.5,
         "position": 1,
         "ghost": false
@@ -21860,6 +22418,7 @@
         "ballot_submission": 23,
         "debate_team": 27,
         "speaker": 37,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -21872,6 +22431,7 @@
         "ballot_submission": 23,
         "debate_team": 27,
         "speaker": 39,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -21884,6 +22444,7 @@
         "ballot_submission": 23,
         "debate_team": 27,
         "speaker": 38,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -21896,6 +22457,7 @@
         "ballot_submission": 23,
         "debate_team": 28,
         "speaker": 34,
+        "rank": null,
         "score": 76.5,
         "position": 1,
         "ghost": false
@@ -21908,6 +22470,7 @@
         "ballot_submission": 23,
         "debate_team": 28,
         "speaker": 35,
+        "rank": null,
         "score": 74.5,
         "position": 2,
         "ghost": false
@@ -21920,6 +22483,7 @@
         "ballot_submission": 23,
         "debate_team": 28,
         "speaker": 36,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -21932,6 +22496,7 @@
         "ballot_submission": 23,
         "debate_team": 28,
         "speaker": 34,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -21944,6 +22509,7 @@
         "ballot_submission": 24,
         "debate_team": 25,
         "speaker": 48,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -21956,6 +22522,7 @@
         "ballot_submission": 24,
         "debate_team": 25,
         "speaker": 46,
+        "rank": null,
         "score": 76.0,
         "position": 2,
         "ghost": false
@@ -21968,6 +22535,7 @@
         "ballot_submission": 24,
         "debate_team": 25,
         "speaker": 47,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -21980,6 +22548,7 @@
         "ballot_submission": 24,
         "debate_team": 25,
         "speaker": 48,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -21992,6 +22561,7 @@
         "ballot_submission": 24,
         "debate_team": 26,
         "speaker": 5,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -22004,6 +22574,7 @@
         "ballot_submission": 24,
         "debate_team": 26,
         "speaker": 4,
+        "rank": null,
         "score": 72.0,
         "position": 2,
         "ghost": false
@@ -22016,6 +22587,7 @@
         "ballot_submission": 24,
         "debate_team": 26,
         "speaker": 6,
+        "rank": null,
         "score": 72.0,
         "position": 3,
         "ghost": false
@@ -22028,6 +22600,7 @@
         "ballot_submission": 24,
         "debate_team": 26,
         "speaker": 5,
+        "rank": null,
         "score": 36.5,
         "position": 4,
         "ghost": false
@@ -22040,6 +22613,7 @@
         "ballot_submission": 25,
         "debate_team": 49,
         "speaker": 7,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -22052,6 +22626,7 @@
         "ballot_submission": 25,
         "debate_team": 49,
         "speaker": 8,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -22064,6 +22639,7 @@
         "ballot_submission": 25,
         "debate_team": 49,
         "speaker": 9,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -22076,6 +22652,7 @@
         "ballot_submission": 25,
         "debate_team": 49,
         "speaker": 7,
+        "rank": null,
         "score": 38.5,
         "position": 4,
         "ghost": false
@@ -22088,6 +22665,7 @@
         "ballot_submission": 25,
         "debate_team": 50,
         "speaker": 10,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -22100,6 +22678,7 @@
         "ballot_submission": 25,
         "debate_team": 50,
         "speaker": 11,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -22112,6 +22691,7 @@
         "ballot_submission": 25,
         "debate_team": 50,
         "speaker": 12,
+        "rank": null,
         "score": 77.0,
         "position": 3,
         "ghost": false
@@ -22124,6 +22704,7 @@
         "ballot_submission": 25,
         "debate_team": 50,
         "speaker": 10,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -22136,6 +22717,7 @@
         "ballot_submission": 26,
         "debate_team": 51,
         "speaker": 1,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -22148,6 +22730,7 @@
         "ballot_submission": 26,
         "debate_team": 51,
         "speaker": 3,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -22160,6 +22743,7 @@
         "ballot_submission": 26,
         "debate_team": 51,
         "speaker": 2,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -22172,6 +22756,7 @@
         "ballot_submission": 26,
         "debate_team": 51,
         "speaker": 1,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -22184,6 +22769,7 @@
         "ballot_submission": 26,
         "debate_team": 52,
         "speaker": 54,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -22196,6 +22782,7 @@
         "ballot_submission": 26,
         "debate_team": 52,
         "speaker": 53,
+        "rank": null,
         "score": 72.0,
         "position": 2,
         "ghost": false
@@ -22208,6 +22795,7 @@
         "ballot_submission": 26,
         "debate_team": 52,
         "speaker": 52,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -22220,6 +22808,7 @@
         "ballot_submission": 26,
         "debate_team": 52,
         "speaker": 54,
+        "rank": null,
         "score": 37.0,
         "position": 4,
         "ghost": false
@@ -22232,6 +22821,7 @@
         "ballot_submission": 27,
         "debate_team": 53,
         "speaker": 45,
+        "rank": null,
         "score": 74.5,
         "position": 1,
         "ghost": false
@@ -22244,6 +22834,7 @@
         "ballot_submission": 27,
         "debate_team": 53,
         "speaker": 44,
+        "rank": null,
         "score": 73.5,
         "position": 2,
         "ghost": false
@@ -22256,6 +22847,7 @@
         "ballot_submission": 27,
         "debate_team": 53,
         "speaker": 43,
+        "rank": null,
         "score": 72.5,
         "position": 3,
         "ghost": false
@@ -22268,6 +22860,7 @@
         "ballot_submission": 27,
         "debate_team": 53,
         "speaker": 45,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -22280,6 +22873,7 @@
         "ballot_submission": 27,
         "debate_team": 54,
         "speaker": 17,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -22292,6 +22886,7 @@
         "ballot_submission": 27,
         "debate_team": 54,
         "speaker": 16,
+        "rank": null,
         "score": 77.5,
         "position": 2,
         "ghost": false
@@ -22304,6 +22899,7 @@
         "ballot_submission": 27,
         "debate_team": 54,
         "speaker": 18,
+        "rank": null,
         "score": 73.5,
         "position": 3,
         "ghost": false
@@ -22316,6 +22912,7 @@
         "ballot_submission": 27,
         "debate_team": 54,
         "speaker": 17,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -22328,6 +22925,7 @@
         "ballot_submission": 28,
         "debate_team": 55,
         "speaker": 61,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -22340,6 +22938,7 @@
         "ballot_submission": 28,
         "debate_team": 55,
         "speaker": 63,
+        "rank": null,
         "score": 73.5,
         "position": 2,
         "ghost": false
@@ -22352,6 +22951,7 @@
         "ballot_submission": 28,
         "debate_team": 55,
         "speaker": 62,
+        "rank": null,
         "score": 77.0,
         "position": 3,
         "ghost": false
@@ -22364,6 +22964,7 @@
         "ballot_submission": 28,
         "debate_team": 55,
         "speaker": 61,
+        "rank": null,
         "score": 36.25,
         "position": 4,
         "ghost": false
@@ -22376,6 +22977,7 @@
         "ballot_submission": 28,
         "debate_team": 56,
         "speaker": 34,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -22388,6 +22990,7 @@
         "ballot_submission": 28,
         "debate_team": 56,
         "speaker": 35,
+        "rank": null,
         "score": 75.5,
         "position": 2,
         "ghost": false
@@ -22400,6 +23003,7 @@
         "ballot_submission": 28,
         "debate_team": 56,
         "speaker": 36,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -22412,6 +23016,7 @@
         "ballot_submission": 28,
         "debate_team": 56,
         "speaker": 34,
+        "rank": null,
         "score": 36.5,
         "position": 4,
         "ghost": false
@@ -22424,6 +23029,7 @@
         "ballot_submission": 29,
         "debate_team": 57,
         "speaker": 72,
+        "rank": null,
         "score": 75.5,
         "position": 1,
         "ghost": false
@@ -22436,6 +23042,7 @@
         "ballot_submission": 29,
         "debate_team": 57,
         "speaker": 71,
+        "rank": null,
         "score": 72.5,
         "position": 2,
         "ghost": false
@@ -22448,6 +23055,7 @@
         "ballot_submission": 29,
         "debate_team": 57,
         "speaker": 70,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -22460,6 +23068,7 @@
         "ballot_submission": 29,
         "debate_team": 57,
         "speaker": 72,
+        "rank": null,
         "score": 38.25,
         "position": 4,
         "ghost": false
@@ -22472,6 +23081,7 @@
         "ballot_submission": 29,
         "debate_team": 58,
         "speaker": 55,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -22484,6 +23094,7 @@
         "ballot_submission": 29,
         "debate_team": 58,
         "speaker": 57,
+        "rank": null,
         "score": 76.0,
         "position": 2,
         "ghost": false
@@ -22496,6 +23107,7 @@
         "ballot_submission": 29,
         "debate_team": 58,
         "speaker": 56,
+        "rank": null,
         "score": 75.5,
         "position": 3,
         "ghost": false
@@ -22508,6 +23120,7 @@
         "ballot_submission": 29,
         "debate_team": 58,
         "speaker": 55,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -22520,6 +23133,7 @@
         "ballot_submission": 30,
         "debate_team": 59,
         "speaker": 29,
+        "rank": null,
         "score": 73.0,
         "position": 1,
         "ghost": false
@@ -22532,6 +23146,7 @@
         "ballot_submission": 30,
         "debate_team": 59,
         "speaker": 28,
+        "rank": null,
         "score": 76.0,
         "position": 2,
         "ghost": false
@@ -22544,6 +23159,7 @@
         "ballot_submission": 30,
         "debate_team": 59,
         "speaker": 30,
+        "rank": null,
         "score": 78.0,
         "position": 3,
         "ghost": false
@@ -22556,6 +23172,7 @@
         "ballot_submission": 30,
         "debate_team": 59,
         "speaker": 29,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -22568,6 +23185,7 @@
         "ballot_submission": 30,
         "debate_team": 60,
         "speaker": 5,
+        "rank": null,
         "score": 73.0,
         "position": 1,
         "ghost": false
@@ -22580,6 +23198,7 @@
         "ballot_submission": 30,
         "debate_team": 60,
         "speaker": 4,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -22592,6 +23211,7 @@
         "ballot_submission": 30,
         "debate_team": 60,
         "speaker": 6,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -22604,6 +23224,7 @@
         "ballot_submission": 30,
         "debate_team": 60,
         "speaker": 5,
+        "rank": null,
         "score": 37.0,
         "position": 4,
         "ghost": false
@@ -22616,6 +23237,7 @@
         "ballot_submission": 31,
         "debate_team": 61,
         "speaker": 25,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -22628,6 +23250,7 @@
         "ballot_submission": 31,
         "debate_team": 61,
         "speaker": 27,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -22640,6 +23263,7 @@
         "ballot_submission": 31,
         "debate_team": 61,
         "speaker": 26,
+        "rank": null,
         "score": 73.0,
         "position": 3,
         "ghost": false
@@ -22652,6 +23276,7 @@
         "ballot_submission": 31,
         "debate_team": 61,
         "speaker": 25,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -22664,6 +23289,7 @@
         "ballot_submission": 31,
         "debate_team": 62,
         "speaker": 21,
+        "rank": null,
         "score": 78.0,
         "position": 1,
         "ghost": false
@@ -22676,6 +23302,7 @@
         "ballot_submission": 31,
         "debate_team": 62,
         "speaker": 20,
+        "rank": null,
         "score": 77.0,
         "position": 2,
         "ghost": false
@@ -22688,6 +23315,7 @@
         "ballot_submission": 31,
         "debate_team": 62,
         "speaker": 19,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -22700,6 +23328,7 @@
         "ballot_submission": 31,
         "debate_team": 62,
         "speaker": 21,
+        "rank": null,
         "score": 37.0,
         "position": 4,
         "ghost": false
@@ -22712,6 +23341,7 @@
         "ballot_submission": 32,
         "debate_team": 63,
         "speaker": 59,
+        "rank": null,
         "score": 73.0,
         "position": 1,
         "ghost": false
@@ -22724,6 +23354,7 @@
         "ballot_submission": 32,
         "debate_team": 63,
         "speaker": 58,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -22736,6 +23367,7 @@
         "ballot_submission": 32,
         "debate_team": 63,
         "speaker": 60,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -22748,6 +23380,7 @@
         "ballot_submission": 32,
         "debate_team": 63,
         "speaker": 59,
+        "rank": null,
         "score": 36.5,
         "position": 4,
         "ghost": false
@@ -22760,6 +23393,7 @@
         "ballot_submission": 32,
         "debate_team": 64,
         "speaker": 15,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -22772,6 +23406,7 @@
         "ballot_submission": 32,
         "debate_team": 64,
         "speaker": 13,
+        "rank": null,
         "score": 72.0,
         "position": 2,
         "ghost": false
@@ -22784,6 +23419,7 @@
         "ballot_submission": 32,
         "debate_team": 64,
         "speaker": 14,
+        "rank": null,
         "score": 72.0,
         "position": 3,
         "ghost": false
@@ -22796,6 +23432,7 @@
         "ballot_submission": 32,
         "debate_team": 64,
         "speaker": 15,
+        "rank": null,
         "score": 37.0,
         "position": 4,
         "ghost": false
@@ -22808,6 +23445,7 @@
         "ballot_submission": 33,
         "debate_team": 65,
         "speaker": 48,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -22820,6 +23458,7 @@
         "ballot_submission": 33,
         "debate_team": 65,
         "speaker": 46,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -22832,6 +23471,7 @@
         "ballot_submission": 33,
         "debate_team": 65,
         "speaker": 47,
+        "rank": null,
         "score": 72.0,
         "position": 3,
         "ghost": false
@@ -22844,6 +23484,7 @@
         "ballot_submission": 33,
         "debate_team": 65,
         "speaker": 48,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -22856,6 +23497,7 @@
         "ballot_submission": 33,
         "debate_team": 66,
         "speaker": 33,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -22868,6 +23510,7 @@
         "ballot_submission": 33,
         "debate_team": 66,
         "speaker": 31,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -22880,6 +23523,7 @@
         "ballot_submission": 33,
         "debate_team": 66,
         "speaker": 32,
+        "rank": null,
         "score": 78.0,
         "position": 3,
         "ghost": false
@@ -22892,6 +23536,7 @@
         "ballot_submission": 33,
         "debate_team": 66,
         "speaker": 33,
+        "rank": null,
         "score": 37.0,
         "position": 4,
         "ghost": false
@@ -22904,6 +23549,7 @@
         "ballot_submission": 34,
         "debate_team": 67,
         "speaker": 69,
+        "rank": null,
         "score": 75.5,
         "position": 1,
         "ghost": false
@@ -22916,6 +23562,7 @@
         "ballot_submission": 34,
         "debate_team": 67,
         "speaker": 68,
+        "rank": null,
         "score": 76.5,
         "position": 2,
         "ghost": false
@@ -22928,6 +23575,7 @@
         "ballot_submission": 34,
         "debate_team": 67,
         "speaker": 67,
+        "rank": null,
         "score": 76.5,
         "position": 3,
         "ghost": false
@@ -22940,6 +23588,7 @@
         "ballot_submission": 34,
         "debate_team": 67,
         "speaker": 69,
+        "rank": null,
         "score": 38.25,
         "position": 4,
         "ghost": false
@@ -22952,6 +23601,7 @@
         "ballot_submission": 34,
         "debate_team": 68,
         "speaker": 40,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -22964,6 +23614,7 @@
         "ballot_submission": 34,
         "debate_team": 68,
         "speaker": 41,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -22976,6 +23627,7 @@
         "ballot_submission": 34,
         "debate_team": 68,
         "speaker": 42,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -22988,6 +23640,7 @@
         "ballot_submission": 34,
         "debate_team": 68,
         "speaker": 40,
+        "rank": null,
         "score": 36.0,
         "position": 4,
         "ghost": false
@@ -23000,6 +23653,7 @@
         "ballot_submission": 35,
         "debate_team": 69,
         "speaker": 64,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -23012,6 +23666,7 @@
         "ballot_submission": 35,
         "debate_team": 69,
         "speaker": 66,
+        "rank": null,
         "score": 76.5,
         "position": 2,
         "ghost": false
@@ -23024,6 +23679,7 @@
         "ballot_submission": 35,
         "debate_team": 69,
         "speaker": 65,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -23036,6 +23692,7 @@
         "ballot_submission": 35,
         "debate_team": 69,
         "speaker": 64,
+        "rank": null,
         "score": 36.0,
         "position": 4,
         "ghost": false
@@ -23048,6 +23705,7 @@
         "ballot_submission": 35,
         "debate_team": 70,
         "speaker": 38,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -23060,6 +23718,7 @@
         "ballot_submission": 35,
         "debate_team": 70,
         "speaker": 37,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -23072,6 +23731,7 @@
         "ballot_submission": 35,
         "debate_team": 70,
         "speaker": 39,
+        "rank": null,
         "score": 72.5,
         "position": 3,
         "ghost": false
@@ -23084,6 +23744,7 @@
         "ballot_submission": 35,
         "debate_team": 70,
         "speaker": 38,
+        "rank": null,
         "score": 36.75,
         "position": 4,
         "ghost": false
@@ -23096,6 +23757,7 @@
         "ballot_submission": 36,
         "debate_team": 71,
         "speaker": 23,
+        "rank": null,
         "score": 73.0,
         "position": 1,
         "ghost": false
@@ -23108,6 +23770,7 @@
         "ballot_submission": 36,
         "debate_team": 71,
         "speaker": 24,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -23120,6 +23783,7 @@
         "ballot_submission": 36,
         "debate_team": 71,
         "speaker": 22,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -23132,6 +23796,7 @@
         "ballot_submission": 36,
         "debate_team": 71,
         "speaker": 23,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -23144,6 +23809,7 @@
         "ballot_submission": 36,
         "debate_team": 72,
         "speaker": 49,
+        "rank": null,
         "score": 78.0,
         "position": 1,
         "ghost": false
@@ -23156,6 +23822,7 @@
         "ballot_submission": 36,
         "debate_team": 72,
         "speaker": 50,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -23168,6 +23835,7 @@
         "ballot_submission": 36,
         "debate_team": 72,
         "speaker": 51,
+        "rank": null,
         "score": 73.0,
         "position": 3,
         "ghost": false
@@ -23180,6 +23848,7 @@
         "ballot_submission": 36,
         "debate_team": 72,
         "speaker": 49,
+        "rank": null,
         "score": 36.5,
         "position": 4,
         "ghost": false
@@ -23192,6 +23861,7 @@
         "ballot_submission": 37,
         "debate_team": 73,
         "speaker": 55,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -23204,6 +23874,7 @@
         "ballot_submission": 37,
         "debate_team": 73,
         "speaker": 57,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -23216,6 +23887,7 @@
         "ballot_submission": 37,
         "debate_team": 73,
         "speaker": 56,
+        "rank": null,
         "score": 78.0,
         "position": 3,
         "ghost": false
@@ -23228,6 +23900,7 @@
         "ballot_submission": 37,
         "debate_team": 73,
         "speaker": 55,
+        "rank": null,
         "score": 36.0,
         "position": 4,
         "ghost": false
@@ -23240,6 +23913,7 @@
         "ballot_submission": 37,
         "debate_team": 74,
         "speaker": 64,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -23252,6 +23926,7 @@
         "ballot_submission": 37,
         "debate_team": 74,
         "speaker": 66,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -23264,6 +23939,7 @@
         "ballot_submission": 37,
         "debate_team": 74,
         "speaker": 65,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -23276,6 +23952,7 @@
         "ballot_submission": 37,
         "debate_team": 74,
         "speaker": 64,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -23288,6 +23965,7 @@
         "ballot_submission": 38,
         "debate_team": 75,
         "speaker": 33,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -23300,6 +23978,7 @@
         "ballot_submission": 38,
         "debate_team": 75,
         "speaker": 31,
+        "rank": null,
         "score": 72.0,
         "position": 2,
         "ghost": false
@@ -23312,6 +23991,7 @@
         "ballot_submission": 38,
         "debate_team": 75,
         "speaker": 32,
+        "rank": null,
         "score": 73.0,
         "position": 3,
         "ghost": false
@@ -23324,6 +24004,7 @@
         "ballot_submission": 38,
         "debate_team": 75,
         "speaker": 33,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -23336,6 +24017,7 @@
         "ballot_submission": 38,
         "debate_team": 76,
         "speaker": 21,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -23348,6 +24030,7 @@
         "ballot_submission": 38,
         "debate_team": 76,
         "speaker": 20,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -23360,6 +24043,7 @@
         "ballot_submission": 38,
         "debate_team": 76,
         "speaker": 19,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -23372,6 +24056,7 @@
         "ballot_submission": 38,
         "debate_team": 76,
         "speaker": 21,
+        "rank": null,
         "score": 39.0,
         "position": 4,
         "ghost": false
@@ -23384,6 +24069,7 @@
         "ballot_submission": 39,
         "debate_team": 77,
         "speaker": 23,
+        "rank": null,
         "score": 73.6666666666667,
         "position": 1,
         "ghost": false
@@ -23396,6 +24082,7 @@
         "ballot_submission": 39,
         "debate_team": 77,
         "speaker": 24,
+        "rank": null,
         "score": 73.3333333333333,
         "position": 2,
         "ghost": false
@@ -23408,6 +24095,7 @@
         "ballot_submission": 39,
         "debate_team": 77,
         "speaker": 22,
+        "rank": null,
         "score": 73.3333333333333,
         "position": 3,
         "ghost": false
@@ -23420,6 +24108,7 @@
         "ballot_submission": 39,
         "debate_team": 77,
         "speaker": 23,
+        "rank": null,
         "score": 36.1666666666667,
         "position": 4,
         "ghost": false
@@ -23432,6 +24121,7 @@
         "ballot_submission": 39,
         "debate_team": 78,
         "speaker": 15,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -23444,6 +24134,7 @@
         "ballot_submission": 39,
         "debate_team": 78,
         "speaker": 13,
+        "rank": null,
         "score": 76.0,
         "position": 2,
         "ghost": false
@@ -23456,6 +24147,7 @@
         "ballot_submission": 39,
         "debate_team": 78,
         "speaker": 14,
+        "rank": null,
         "score": 73.0,
         "position": 3,
         "ghost": false
@@ -23468,6 +24160,7 @@
         "ballot_submission": 39,
         "debate_team": 78,
         "speaker": 15,
+        "rank": null,
         "score": 36.5,
         "position": 4,
         "ghost": false
@@ -23480,6 +24173,7 @@
         "ballot_submission": 40,
         "debate_team": 79,
         "speaker": 7,
+        "rank": null,
         "score": 75.6666666666667,
         "position": 1,
         "ghost": false
@@ -23492,6 +24186,7 @@
         "ballot_submission": 40,
         "debate_team": 79,
         "speaker": 8,
+        "rank": null,
         "score": 73.3333333333333,
         "position": 2,
         "ghost": false
@@ -23504,6 +24199,7 @@
         "ballot_submission": 40,
         "debate_team": 79,
         "speaker": 9,
+        "rank": null,
         "score": 75.3333333333333,
         "position": 3,
         "ghost": false
@@ -23516,6 +24212,7 @@
         "ballot_submission": 40,
         "debate_team": 79,
         "speaker": 7,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -23528,6 +24225,7 @@
         "ballot_submission": 40,
         "debate_team": 80,
         "speaker": 69,
+        "rank": null,
         "score": 76.6666666666667,
         "position": 1,
         "ghost": false
@@ -23540,6 +24238,7 @@
         "ballot_submission": 40,
         "debate_team": 80,
         "speaker": 68,
+        "rank": null,
         "score": 74.3333333333333,
         "position": 2,
         "ghost": false
@@ -23552,6 +24251,7 @@
         "ballot_submission": 40,
         "debate_team": 80,
         "speaker": 67,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -23564,6 +24264,7 @@
         "ballot_submission": 40,
         "debate_team": 80,
         "speaker": 69,
+        "rank": null,
         "score": 38.1666666666667,
         "position": 4,
         "ghost": false
@@ -23576,6 +24277,7 @@
         "ballot_submission": 41,
         "debate_team": 81,
         "speaker": 61,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -23588,6 +24290,7 @@
         "ballot_submission": 41,
         "debate_team": 81,
         "speaker": 63,
+        "rank": null,
         "score": 73.5,
         "position": 2,
         "ghost": false
@@ -23600,6 +24303,7 @@
         "ballot_submission": 41,
         "debate_team": 81,
         "speaker": 62,
+        "rank": null,
         "score": 77.0,
         "position": 3,
         "ghost": false
@@ -23612,6 +24316,7 @@
         "ballot_submission": 41,
         "debate_team": 81,
         "speaker": 61,
+        "rank": null,
         "score": 37.75,
         "position": 4,
         "ghost": false
@@ -23624,6 +24329,7 @@
         "ballot_submission": 41,
         "debate_team": 82,
         "speaker": 45,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -23636,6 +24342,7 @@
         "ballot_submission": 41,
         "debate_team": 82,
         "speaker": 44,
+        "rank": null,
         "score": 77.0,
         "position": 2,
         "ghost": false
@@ -23648,6 +24355,7 @@
         "ballot_submission": 41,
         "debate_team": 82,
         "speaker": 43,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -23660,6 +24368,7 @@
         "ballot_submission": 41,
         "debate_team": 82,
         "speaker": 45,
+        "rank": null,
         "score": 38.5,
         "position": 4,
         "ghost": false
@@ -23672,6 +24381,7 @@
         "ballot_submission": 42,
         "debate_team": 83,
         "speaker": 38,
+        "rank": null,
         "score": 74.6666666666667,
         "position": 1,
         "ghost": false
@@ -23684,6 +24394,7 @@
         "ballot_submission": 42,
         "debate_team": 83,
         "speaker": 37,
+        "rank": null,
         "score": 77.0,
         "position": 2,
         "ghost": false
@@ -23696,6 +24407,7 @@
         "ballot_submission": 42,
         "debate_team": 83,
         "speaker": 39,
+        "rank": null,
         "score": 75.3333333333333,
         "position": 3,
         "ghost": false
@@ -23708,6 +24420,7 @@
         "ballot_submission": 42,
         "debate_team": 83,
         "speaker": 38,
+        "rank": null,
         "score": 37.6666666666667,
         "position": 4,
         "ghost": false
@@ -23720,6 +24433,7 @@
         "ballot_submission": 42,
         "debate_team": 84,
         "speaker": 40,
+        "rank": null,
         "score": 76.3333333333333,
         "position": 1,
         "ghost": false
@@ -23732,6 +24446,7 @@
         "ballot_submission": 42,
         "debate_team": 84,
         "speaker": 41,
+        "rank": null,
         "score": 74.3333333333333,
         "position": 2,
         "ghost": false
@@ -23744,6 +24459,7 @@
         "ballot_submission": 42,
         "debate_team": 84,
         "speaker": 42,
+        "rank": null,
         "score": 73.6666666666667,
         "position": 3,
         "ghost": false
@@ -23756,6 +24472,7 @@
         "ballot_submission": 42,
         "debate_team": 84,
         "speaker": 40,
+        "rank": null,
         "score": 37.1666666666667,
         "position": 4,
         "ghost": false
@@ -23768,6 +24485,7 @@
         "ballot_submission": 43,
         "debate_team": 85,
         "speaker": 5,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -23780,6 +24498,7 @@
         "ballot_submission": 43,
         "debate_team": 85,
         "speaker": 4,
+        "rank": null,
         "score": 76.3333333333333,
         "position": 2,
         "ghost": false
@@ -23792,6 +24511,7 @@
         "ballot_submission": 43,
         "debate_team": 85,
         "speaker": 6,
+        "rank": null,
         "score": 72.3333333333333,
         "position": 3,
         "ghost": false
@@ -23804,6 +24524,7 @@
         "ballot_submission": 43,
         "debate_team": 85,
         "speaker": 5,
+        "rank": null,
         "score": 36.8333333333333,
         "position": 4,
         "ghost": false
@@ -23816,6 +24537,7 @@
         "ballot_submission": 43,
         "debate_team": 86,
         "speaker": 72,
+        "rank": null,
         "score": 76.6666666666667,
         "position": 1,
         "ghost": false
@@ -23828,6 +24550,7 @@
         "ballot_submission": 43,
         "debate_team": 86,
         "speaker": 71,
+        "rank": null,
         "score": 75.6666666666667,
         "position": 2,
         "ghost": false
@@ -23840,6 +24563,7 @@
         "ballot_submission": 43,
         "debate_team": 86,
         "speaker": 70,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -23852,6 +24576,7 @@
         "ballot_submission": 43,
         "debate_team": 86,
         "speaker": 72,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -23864,6 +24589,7 @@
         "ballot_submission": 44,
         "debate_team": 87,
         "speaker": 34,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -23876,6 +24602,7 @@
         "ballot_submission": 44,
         "debate_team": 87,
         "speaker": 35,
+        "rank": null,
         "score": 77.0,
         "position": 2,
         "ghost": false
@@ -23888,6 +24615,7 @@
         "ballot_submission": 44,
         "debate_team": 87,
         "speaker": 36,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -23900,6 +24628,7 @@
         "ballot_submission": 44,
         "debate_team": 87,
         "speaker": 34,
+        "rank": null,
         "score": 38.5,
         "position": 4,
         "ghost": false
@@ -23912,6 +24641,7 @@
         "ballot_submission": 44,
         "debate_team": 88,
         "speaker": 25,
+        "rank": null,
         "score": 72.0,
         "position": 1,
         "ghost": false
@@ -23924,6 +24654,7 @@
         "ballot_submission": 44,
         "debate_team": 88,
         "speaker": 27,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -23936,6 +24667,7 @@
         "ballot_submission": 44,
         "debate_team": 88,
         "speaker": 26,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -23948,6 +24680,7 @@
         "ballot_submission": 44,
         "debate_team": 88,
         "speaker": 25,
+        "rank": null,
         "score": 36.5,
         "position": 4,
         "ghost": false
@@ -23960,6 +24693,7 @@
         "ballot_submission": 45,
         "debate_team": 89,
         "speaker": 48,
+        "rank": null,
         "score": 75.0,
         "position": 1,
         "ghost": false
@@ -23972,6 +24706,7 @@
         "ballot_submission": 45,
         "debate_team": 89,
         "speaker": 46,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -23984,6 +24719,7 @@
         "ballot_submission": 45,
         "debate_team": 89,
         "speaker": 47,
+        "rank": null,
         "score": 75.0,
         "position": 3,
         "ghost": false
@@ -23996,6 +24732,7 @@
         "ballot_submission": 45,
         "debate_team": 89,
         "speaker": 48,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -24008,6 +24745,7 @@
         "ballot_submission": 45,
         "debate_team": 90,
         "speaker": 1,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -24020,6 +24758,7 @@
         "ballot_submission": 45,
         "debate_team": 90,
         "speaker": 3,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -24032,6 +24771,7 @@
         "ballot_submission": 45,
         "debate_team": 90,
         "speaker": 2,
+        "rank": null,
         "score": 77.0,
         "position": 3,
         "ghost": false
@@ -24044,6 +24784,7 @@
         "ballot_submission": 45,
         "debate_team": 90,
         "speaker": 1,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -24056,6 +24797,7 @@
         "ballot_submission": 46,
         "debate_team": 91,
         "speaker": 10,
+        "rank": null,
         "score": 78.0,
         "position": 1,
         "ghost": false
@@ -24068,6 +24810,7 @@
         "ballot_submission": 46,
         "debate_team": 91,
         "speaker": 11,
+        "rank": null,
         "score": 75.0,
         "position": 2,
         "ghost": false
@@ -24080,6 +24823,7 @@
         "ballot_submission": 46,
         "debate_team": 91,
         "speaker": 12,
+        "rank": null,
         "score": 77.0,
         "position": 3,
         "ghost": false
@@ -24092,6 +24836,7 @@
         "ballot_submission": 46,
         "debate_team": 91,
         "speaker": 10,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -24104,6 +24849,7 @@
         "ballot_submission": 46,
         "debate_team": 92,
         "speaker": 54,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -24116,6 +24862,7 @@
         "ballot_submission": 46,
         "debate_team": 92,
         "speaker": 53,
+        "rank": null,
         "score": 78.0,
         "position": 2,
         "ghost": false
@@ -24128,6 +24875,7 @@
         "ballot_submission": 46,
         "debate_team": 92,
         "speaker": 52,
+        "rank": null,
         "score": 77.0,
         "position": 3,
         "ghost": false
@@ -24140,6 +24888,7 @@
         "ballot_submission": 46,
         "debate_team": 92,
         "speaker": 54,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -24152,6 +24901,7 @@
         "ballot_submission": 47,
         "debate_team": 93,
         "speaker": 17,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -24164,6 +24914,7 @@
         "ballot_submission": 47,
         "debate_team": 93,
         "speaker": 16,
+        "rank": null,
         "score": 73.0,
         "position": 2,
         "ghost": false
@@ -24176,6 +24927,7 @@
         "ballot_submission": 47,
         "debate_team": 93,
         "speaker": 18,
+        "rank": null,
         "score": 72.0,
         "position": 3,
         "ghost": false
@@ -24188,6 +24940,7 @@
         "ballot_submission": 47,
         "debate_team": 93,
         "speaker": 17,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -24200,6 +24953,7 @@
         "ballot_submission": 47,
         "debate_team": 94,
         "speaker": 59,
+        "rank": null,
         "score": 76.0,
         "position": 1,
         "ghost": false
@@ -24212,6 +24966,7 @@
         "ballot_submission": 47,
         "debate_team": 94,
         "speaker": 58,
+        "rank": null,
         "score": 76.0,
         "position": 2,
         "ghost": false
@@ -24224,6 +24979,7 @@
         "ballot_submission": 47,
         "debate_team": 94,
         "speaker": 60,
+        "rank": null,
         "score": 76.0,
         "position": 3,
         "ghost": false
@@ -24236,6 +24992,7 @@
         "ballot_submission": 47,
         "debate_team": 94,
         "speaker": 59,
+        "rank": null,
         "score": 38.0,
         "position": 4,
         "ghost": false
@@ -24248,6 +25005,7 @@
         "ballot_submission": 48,
         "debate_team": 95,
         "speaker": 49,
+        "rank": null,
         "score": 77.0,
         "position": 1,
         "ghost": false
@@ -24260,6 +25018,7 @@
         "ballot_submission": 48,
         "debate_team": 95,
         "speaker": 50,
+        "rank": null,
         "score": 78.0,
         "position": 2,
         "ghost": false
@@ -24272,6 +25031,7 @@
         "ballot_submission": 48,
         "debate_team": 95,
         "speaker": 51,
+        "rank": null,
         "score": 74.0,
         "position": 3,
         "ghost": false
@@ -24284,6 +25044,7 @@
         "ballot_submission": 48,
         "debate_team": 95,
         "speaker": 49,
+        "rank": null,
         "score": 37.5,
         "position": 4,
         "ghost": false
@@ -24296,6 +25057,7 @@
         "ballot_submission": 48,
         "debate_team": 96,
         "speaker": 29,
+        "rank": null,
         "score": 74.0,
         "position": 1,
         "ghost": false
@@ -24308,6 +25070,7 @@
         "ballot_submission": 48,
         "debate_team": 96,
         "speaker": 28,
+        "rank": null,
         "score": 74.0,
         "position": 2,
         "ghost": false
@@ -24320,6 +25083,7 @@
         "ballot_submission": 48,
         "debate_team": 96,
         "speaker": 30,
+        "rank": null,
         "score": 72.0,
         "position": 3,
         "ghost": false
@@ -24332,6 +25096,7 @@
         "ballot_submission": 48,
         "debate_team": 96,
         "speaker": 29,
+        "rank": null,
         "score": 38.5,
         "position": 4,
         "ghost": false
@@ -24363,7 +25128,7 @@
         "draw_status": "R",
         "feedback_weight": 0.7,
         "silent": false,
-        "motions_released": false,
+        "motions_status": "N",
         "starts_at": null,
         "weight": 1
     }
@@ -24383,7 +25148,7 @@
         "draw_status": "R",
         "feedback_weight": 0.7,
         "silent": false,
-        "motions_released": false,
+        "motions_status": "N",
         "starts_at": null,
         "weight": 1
     }
@@ -24403,7 +25168,7 @@
         "draw_status": "C",
         "feedback_weight": 0.7,
         "silent": false,
-        "motions_released": false,
+        "motions_status": "N",
         "starts_at": null,
         "weight": 1
     }
@@ -24423,7 +25188,7 @@
         "draw_status": "C",
         "feedback_weight": 0.7,
         "silent": false,
-        "motions_released": false,
+        "motions_status": "N",
         "starts_at": null,
         "weight": 1
     }
@@ -24443,7 +25208,7 @@
         "draw_status": "C",
         "feedback_weight": 0.7,
         "silent": true,
-        "motions_released": false,
+        "motions_status": "N",
         "starts_at": null,
         "weight": 1
     }
@@ -24463,7 +25228,7 @@
         "draw_status": "C",
         "feedback_weight": 0.7,
         "silent": true,
-        "motions_released": false,
+        "motions_status": "N",
         "starts_at": null,
         "weight": 1
     }
@@ -24483,7 +25248,7 @@
         "draw_status": "N",
         "feedback_weight": 0.7,
         "silent": true,
-        "motions_released": false,
+        "motions_status": "N",
         "starts_at": null,
         "weight": 1
     }
@@ -24503,7 +25268,7 @@
         "draw_status": "N",
         "feedback_weight": 0.7,
         "silent": true,
-        "motions_released": false,
+        "motions_status": "N",
         "starts_at": null,
         "weight": 1
     }
@@ -24523,7 +25288,7 @@
         "draw_status": "N",
         "feedback_weight": 0.7,
         "silent": true,
-        "motions_released": false,
+        "motions_status": "N",
         "starts_at": null,
         "weight": 1
     }
@@ -24543,7 +25308,7 @@
         "draw_status": "N",
         "feedback_weight": 0.7,
         "silent": true,
-        "motions_released": false,
+        "motions_status": "N",
         "starts_at": null,
         "weight": 1
     }
@@ -24946,6 +25711,226 @@
         "venues": [
             22
         ]
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 1,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 10,
+        "text": "Did you agree with the decision?",
+        "help_text": "",
+        "name": "Agree",
+        "answer_type": "bs",
+        "required": true,
+        "min_value": null,
+        "max_value": null,
+        "choices": "[]"
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 2,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 11,
+        "text": "Did this judge's decision concur with yours?",
+        "help_text": "",
+        "name": "Concur",
+        "answer_type": "bs",
+        "required": true,
+        "min_value": null,
+        "max_value": null,
+        "choices": "[]"
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 3,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 20,
+        "text": "What adjustment should be applied to this judge's speaker scores?",
+        "help_text": "",
+        "name": "Adjustment",
+        "answer_type": "f",
+        "required": true,
+        "min_value": -20.0,
+        "max_value": 20.0,
+        "choices": "[]"
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 4,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 30,
+        "text": "Choose one word to describe this adjudicator.",
+        "help_text": "",
+        "name": "One word",
+        "answer_type": "t",
+        "required": true,
+        "min_value": null,
+        "max_value": null,
+        "choices": "[]"
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 5,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 40,
+        "text": "Do you think this adjudicator should be promoted?",
+        "help_text": "",
+        "name": "Promote",
+        "answer_type": "bc",
+        "required": false,
+        "min_value": null,
+        "max_value": null,
+        "choices": "[]"
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 6,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 50,
+        "text": "Do you think this adjudicator should be demoted?",
+        "help_text": "",
+        "name": "Demote",
+        "answer_type": "bc",
+        "required": false,
+        "min_value": null,
+        "max_value": null,
+        "choices": "[]"
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 7,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 60,
+        "text": "How well was this adjudicator's reasoning explained?",
+        "help_text": "",
+        "name": "Explanation",
+        "answer_type": "is",
+        "required": true,
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "choices": "[]"
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 8,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 70,
+        "text": "How impartial did you think this adjudicator was?",
+        "help_text": "",
+        "name": "Impartial",
+        "answer_type": "is",
+        "required": true,
+        "min_value": 0.0,
+        "max_value": 10.0,
+        "choices": "[]"
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 9,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 80,
+        "text": "Would you like to see this adjudicator again?",
+        "help_text": "",
+        "name": "Again",
+        "answer_type": "ss",
+        "required": false,
+        "min_value": null,
+        "max_value": null,
+        "choices": "[\"Absolutely!\", \"Sure, why not\", \"If I have to\", \"Please don't\"]"
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 10,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 90,
+        "text": "How would you describe this adjudicator?",
+        "help_text": "",
+        "name": "Adjectives",
+        "answer_type": "ms",
+        "required": false,
+        "min_value": null,
+        "max_value": null,
+        "choices": "[\"biased\", \"clear\", \"concise\", \"rambly\", \"attentive\", \"inattentive\"]"
+    }
+},
+{
+    "model": "registration.question",
+    "pk": 11,
+    "fields": {
+        "tournament": 1,
+        "for_content_type": [
+            "adjfeedback",
+            "adjudicatorfeedback"
+        ],
+        "seq": 1000,
+        "text": "Other comments:",
+        "help_text": "",
+        "name": "Comments",
+        "answer_type": "tl",
+        "required": false,
+        "min_value": null,
+        "max_value": null,
+        "choices": "[]"
     }
 },
 {

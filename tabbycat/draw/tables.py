@@ -15,6 +15,7 @@ from .generator.bphungarian import BPHungarianDrawGenerator
 
 if TYPE_CHECKING:
     from participants.models import Team
+
     from .models import Debate
 
 
@@ -23,14 +24,6 @@ class BaseDrawTableBuilder(TabbycatTableBuilder):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.side_history_separator = " " if self.tournament.pref('teams_in_debate') == 4 else " / "
-
-    def highlight_rows_by_column_value(self, column):
-        highlighted_rows = [i for i in range(1, len(self.data))
-                if self.data[i][column] != self.data[i-1][column]]
-        for i in highlighted_rows:
-            self.data[i] = [self._convert_cell(cell) for cell in self.data[i]]
-            for cell in self.data[i]:
-                cell['class'] = cell.get('class', '') + ' highlight-row'
 
     def _prepend_side_header(self, side, name, abbr, text_only=False):
         # Translators: e.g. "Affirmative: Rank", "Government: Draw strength",
@@ -170,6 +163,28 @@ class AdminDrawTableBuilder(PublicDrawTableBuilder):
 
         return self._add_debate_standing_columns(debates, standings, 'itermetrics',
                 'metrics_info', metricformat, formatsort, limit)
+
+    def add_debate_seed_columns(self, debates):
+        sides = self.get_sides(debates)
+        headers = []
+        cells = []
+
+        for debate in debates:
+            if debate is None:
+                row = [self.BLANK_TEXT] * sides
+            else:
+                row = []
+                for team in debate.teams:
+                    row.append({'text': team.seed, 'sort': team.seed})
+                for i in range(sides - len(debate.teams)):
+                    row.append({'text': self.BLANK_TEXT})
+            cells.append(row)
+
+        for side in range(sides):
+            header = self._prepend_side_header(side, 'Seed', 'seed')
+            headers.append(header)
+
+        self.add_columns(headers, cells)
 
     def add_debate_ranking_columns(self, debates, standings):
         def formatsort(x):
@@ -364,7 +379,7 @@ class PositionBalanceReportDrawTableBuilder(BasePositionBalanceReportTableBuilde
         for side in self.tournament.sides:
             self.add_all_columns_for_team(side)
 
-        self.highlight_rows_by_column_value(column=0) # highlight first row of a new bracket
+        self.highlight_column = 0  # highlight first row of a new bracket
 
     def add_permitted_points_column(self):
         if len(self.standings.metric_keys) == 0:  # special case: no metrics used

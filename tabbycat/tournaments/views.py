@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
 from django.shortcuts import redirect, resolve_url
 from django.utils.html import format_html_join
+from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView, FormView, UpdateView
@@ -19,17 +20,18 @@ from notifications.models import BulkNotification
 from results.models import BallotSubmission
 from results.prefetch import populate_confirmed_ballots
 from tournaments.models import Round
-from users.permissions import has_permission
+from users.permissions import has_permission, Permission
 from utils.misc import redirect_round, redirect_tournament, reverse_round, reverse_tournament
 from utils.mixins import (AdministratorMixin, AssistantMixin, CacheMixin, TabbycatPageTitlesMixin,
                           WarnAboutDatabaseUseMixin, WarnAboutLegacySendgridConfigVarsMixin)
-from utils.views import PostOnlyRedirectView
+from utils.tables import TabbycatTableBuilder
+from utils.views import ModelFormSetView, PostOnlyRedirectView, VueTableTemplateView
 
-from .forms import (RoundWeightForm, SetCurrentRoundMultipleBreakCategoriesForm,
+from .forms import (RoundWeightForm, ScheduleEventForm, SetCurrentRoundMultipleBreakCategoriesForm,
                     SetCurrentRoundSingleBreakCategoryForm, TournamentConfigureForm,
                     TournamentStartForm)
-from .mixins import RoundMixin, TournamentMixin
-from .models import Tournament
+from .mixins import PublicTournamentPageMixin, RoundMixin, TournamentMixin
+from .models import ScheduleEvent, Tournament
 from .utils import get_side_name
 
 User = get_user_model()
@@ -128,6 +130,7 @@ class TournamentAdminHomeView(AdministratorMixin, BaseTournamentDashboardHomeVie
 
 class CompleteRoundCheckView(AdministratorMixin, RoundMixin, TemplateView):
     template_name = 'round_complete_check.html'
+    view_permission = True
 
     def get_context_data(self, **kwargs):
         prior_rounds_not_completed = self.tournament.round_set.filter(
@@ -152,6 +155,7 @@ class CompleteRoundCheckView(AdministratorMixin, RoundMixin, TemplateView):
 
 class CompleteRoundToggleSilentView(AdministratorMixin, RoundMixin, PostOnlyRedirectView):
     round_redirect_pattern_name = 'tournament-complete-round-check'
+    edit_permission = Permission.SILENCE_ROUND
 
     def post(self, request, *args, **kwargs):
         self.round.silent = request.POST["state"] != "True"
@@ -168,6 +172,7 @@ class CompleteRoundToggleSilentView(AdministratorMixin, RoundMixin, PostOnlyRedi
 class CompleteRoundView(RoundMixin, AdministratorMixin, LogActionMixin, PostOnlyRedirectView):
 
     action_log_type = ActionLogEntry.ActionType.ROUND_COMPLETE
+    edit_permission = Permission.CONFIRM_ROUND
 
     def post(self, request, *args, **kwargs):
         self.round.completed = True
@@ -259,6 +264,9 @@ class SetCurrentRoundView(AdministratorMixin, TournamentMixin, FormView):
     page_title = _('Set Current Round')
     page_emoji = '🙏'
 
+    view_permission = True
+    edit_permission = Permission.CONFIRM_ROUND
+
     def get_form_class(self):
         if self.tournament.breakcategory_set.count() <= 1:
             return SetCurrentRoundSingleBreakCategoryForm
@@ -308,6 +316,8 @@ class SetCurrentRoundView(AdministratorMixin, TournamentMixin, FormView):
 class SetRoundWeightingsView(AdministratorMixin, TournamentMixin, FormView):
     template_name = 'set_round_weights.html'
     form_class = RoundWeightForm
+    view_permission = True
+    edit_permission = Permission.EDIT_ROUND
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -361,3 +371,87 @@ class FixDebateTeamsView(AdministratorMixin, TournamentMixin, TemplateView):
 class StyleGuideView(TemplateView, TabbycatPageTitlesMixin):
     template_name = 'admin/style_guide.html'
     page_subtitle = 'Contextual sub title'
+
+
+class SetTournamentScheduleView(AdministratorMixin, TournamentMixin, ModelFormSetView):
+    template_name = 'tournament_schedule_edit.html'
+    formset_model = ScheduleEvent
+    form_class = ScheduleEventForm
+
+    edit_permission = Permission.EDIT_EVENTS
+    view_permission = Permission.VIEW_EVENTS
+
+    same_view = 'tournament-set-schedule'
+
+    def get_formset_factory_kwargs(self):
+        can_edit = has_permission(self.request.user, self.get_edit_permission(), self.tournament)
+        kwargs = super().get_formset_factory_kwargs()
+        kwargs.update({
+            'form': self.form_class,
+            'extra': 3 * int(can_edit),
+            'can_delete': can_edit,
+        })
+        return kwargs
+
+    def get_formset_kwargs(self):
+        kwargs = super().get_formset_kwargs()
+        kwargs.update({
+            'form_kwargs': {'tournament': self.tournament},
+        })
+        return kwargs
+
+    def get_formset(self):
+        formset = super().get_formset()
+        if not has_permission(self.request.user, self.get_edit_permission(), self.tournament):
+            for form in formset:
+                for field in form.fields.values():
+                    field.disabled = True
+        return formset
+
+    def get_formset_queryset(self):
+        return self.tournament.scheduleevent_set.all()
+
+    def formset_valid(self, formset):
+        instances = formset.save(commit=False)
+        for ev in instances:
+            ev.tournament = self.tournament
+            ev.save()
+
+        deleted = formset.deleted_objects
+        for ev in deleted:
+            ev.delete()
+
+        nsaved = len(instances)
+        ndeleted = len(deleted)
+        messages.success(
+            self.request,
+            f"Saved {nsaved} event(s), deleted {ndeleted}.",
+        )
+
+        if "add_more" in self.request.POST:
+            return redirect_tournament(self.same_view, self.tournament)
+
+        return super().formset_valid(formset)
+
+    def get_success_url(self):
+        return reverse_tournament('tournament-set-schedule', self.tournament)
+
+
+class PublicScheduleView(PublicTournamentPageMixin, VueTableTemplateView):
+    template_name = 'public_tournament_schedule.html'
+    cache_timeout = settings.PUBLIC_SLOW_CACHE_TIMEOUT
+    public_page_preference = 'public_schedule'
+    page_title = _("Tournament Schedule")
+    page_emoji = '⏳'
+    cache_timeout = settings.PUBLIC_SLOW_CACHE_TIMEOUT
+
+    def get_table(self):
+        events = self.tournament.scheduleevent_set.all()
+        table = TabbycatTableBuilder(view=self, sort_key='start_time')
+        table.add_schedule_event_columns(events)
+        return table
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['schedule_timezone_label'] = get_current_timezone_name()
+        return context

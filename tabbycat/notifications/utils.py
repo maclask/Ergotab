@@ -25,9 +25,10 @@ from results.utils import side_and_position_names
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
+
+    from draw.models import Debate
     from participants.models import Person
     from tournaments.models import Round, Tournament
-    from draw.models import Debate
 
 
 adj_position_names = {
@@ -57,6 +58,10 @@ def _check_in_to(pk: int, to_ids: Set[int]) -> bool:
     except KeyError:
         return False
     return True
+
+
+def _create_url(url: str) -> str:
+    return mark_safe('<a href="%s">%s</a>' % (url, url)) if url else ''
 
 
 class NotificationContextGenerator:
@@ -101,7 +106,7 @@ class AdjudicatorAssignmentEmailGenerator(NotificationContextGenerator):
                     continue
 
                 context_user = cls.context_class(**context, POSITION=adj_position_names[pos],
-                    URL=url + adj.url_key + '/' if adj.url_key else '')
+                    URL=_create_url(url + adj.url_key + '/'))
                 emails.append((context_user, adj))
 
         return emails
@@ -119,7 +124,7 @@ class RandomizedUrlEmailGenerator(NotificationContextGenerator):
 
     @classmethod
     def generate(cls, to: 'QuerySet[Person]', url: str, tournament: 'Tournament') -> List[Tuple[EmailContextData, 'Person']]:
-        return [(cls.context_class(URL=url + p.url_key + '/', KEY=p.url_key, TOURN=str(tournament)), p) for p in to]
+        return [(cls.context_class(URL=_create_url(url + p.url_key + '/'), KEY=p.url_key, TOURN=str(tournament)), p) for p in to]
 
 
 class BallotsEmailGenerator(NotificationContextGenerator):
@@ -216,7 +221,7 @@ class StandingsEmailGenerator(NotificationContextGenerator):
         context = {
             'TOURN': str(round.tournament),
             'ROUND': round.name,
-            'URL': url,
+            'URL': _create_url(url),
         }
 
         for team in teams:

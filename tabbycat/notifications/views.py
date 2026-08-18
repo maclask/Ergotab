@@ -1,6 +1,6 @@
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from smtplib import SMTPException, SMTPResponseException
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
@@ -11,8 +11,9 @@ from django.contrib import messages
 from django.db.models import Prefetch, Q
 from django.http import HttpResponse
 from django.urls import reverse_lazy
-from django.utils import formats, timezone
+from django.utils import formats
 from django.utils.html import escape
+from django.utils.timezone import get_default_timezone
 from django.utils.translation import gettext as _, gettext_lazy, ngettext
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
@@ -28,11 +29,13 @@ from .forms import BasicEmailForm, TestEmailForm
 from .models import BulkNotification, EmailStatus, SentMessage
 
 if TYPE_CHECKING:
-    from django.http.response import HttpResponseRedirect
     from django.db.models import QuerySet
     from django.http.request import HttpRequest
+    from django.http.response import HttpResponseRedirect
 
 logger = logging.getLogger(__name__)
+
+site_tz = get_default_timezone()
 
 
 class TestEmailView(WarnAboutLegacySendgridConfigVarsMixin, AdministratorMixin, FormView):
@@ -95,7 +98,7 @@ class EmailStatusView(AdministratorMixin, TournamentMixin, VueTableTemplateView)
         for s in status:
             text = _("%(status)s @ %(time)s") % {
                 'status': s.get_event_display(),
-                'time': formats.time_format(timezone.localtime(s.timestamp), use_l10n=True),
+                'time': formats.time_format(s.timestamp.astimezone(tz=site_tz), use_l10n=True),
             }
             statuses.append({
                 'text': '<span class="%s">%s</span>' % (self._get_event_class(s.event), text),
@@ -108,6 +111,7 @@ class EmailStatusView(AdministratorMixin, TournamentMixin, VueTableTemplateView)
             EmailStatus.EventType.DROPPED: 'text-warning',
             EmailStatus.EventType.SPAM: 'text-warning',
             EmailStatus.EventType.DEFERRED: 'text-warning',
+            EmailStatus.EventType.FAILED: 'text-warning',
             EmailStatus.EventType.PROCESSED: 'text-info',
             EmailStatus.EventType.DELIVERED: 'text-info',
             EmailStatus.EventType.OPENED: 'text-success',
@@ -139,7 +143,7 @@ class EmailStatusView(AdministratorMixin, TournamentMixin, VueTableTemplateView)
             if notification.round is not None:
                 subtitle = notification.round.name
             else:
-                subtitle = _("@ %s") % formats.time_format(timezone.localtime(notification.timestamp), use_l10n=True)
+                subtitle = _("@ %s") % formats.time_format(notification.timestamp.astimezone(tz=site_tz), use_l10n=True)
 
             table = TabbycatTableBuilder(view=self, title=notification.get_event_display().capitalize(), subtitle=subtitle)
 
@@ -163,15 +167,15 @@ class EmailStatusView(AdministratorMixin, TournamentMixin, VueTableTemplateView)
                         },
                     }
                     emails_status.append(status_cell)
-                    emails_time.append(formats.time_format(timezone.localtime(latest_status.timestamp), use_l10n=True))
+                    emails_time.append({'text': formats.time_format(latest_status.timestamp.astimezone(tz=site_tz), use_l10n=True), 'sort': latest_status.timestamp})
                 else:
                     emails_status.append(self.NA_CELL)
                     emails_time.append(self.NA_CELL)
 
             table.add_column({'key': 'name', 'tooltip': _("Participant"), 'icon': 'user'}, emails_recipient)
             table.add_column({'key': 'email', 'tooltip': _("Email address"), 'icon': 'mail'}, emails_addresses)
-            table.add_column({'key': 'name', 'title': _("Status")}, emails_status)
-            table.add_column({'key': 'name', 'title': _("Time")}, emails_time)
+            table.add_column({'key': 'status', 'title': _("Status")}, emails_status)
+            table.add_column({'key': 'time', 'title': _("Time")}, emails_time)
 
             tables.append(table)
 
@@ -196,8 +200,7 @@ class EmailEventWebhookView(TournamentMixin, View):
         statuses = []
 
         for obj in data:
-            dt = datetime.fromtimestamp(obj['timestamp'])
-            timestamp = timezone.make_aware(dt, datetime.timezone.utc)
+            timestamp = datetime.fromtimestamp(obj['timestamp'], tz=timezone.utc)
             email_id = record_lookup.get(obj['hook-id'], None)
             if email_id is None:
                 continue

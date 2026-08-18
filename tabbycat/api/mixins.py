@@ -7,19 +7,23 @@ from actionlog.mixins import LogActionMixin
 from actionlog.models import ActionLogEntry
 from tournaments.models import Round, Tournament
 
-from .permissions import APIEnabledPermission, IsAdminOrReadOnly, PerTournamentPermissionRequired, PublicIfReleasedPermission, PublicPreferencePermission
+from .permissions import IsAdminOrReadOnly, PerTournamentPermissionRequired, PublicIfReleasedPermission, PublicPreferencePermission
 
 
 class APILogActionMixin(LogActionMixin):
+    """
+    """
     action_log_content_object_attr = 'obj'
 
     def perform_create(self, serializer):
         self.obj = serializer.save(**self.lookup_kwargs())
-        self.log_action(type=self.action_log_type_created, agent=ActionLogEntry.Agent.API)
+        if hasattr(self, 'action_log_type_created'):
+            self.log_action(type=self.action_log_type_created, agent=ActionLogEntry.Agent.API)
 
     def perform_update(self, serializer):
         self.obj = serializer.save()
-        self.log_action(type=self.action_log_type_updated, agent=ActionLogEntry.Agent.API)
+        if hasattr(self, 'action_log_type_updated'):
+            self.log_action(type=self.action_log_type_updated, agent=ActionLogEntry.Agent.API)
 
     def lookup_kwargs(self):
         return {}
@@ -32,6 +36,10 @@ class TournamentAPIMixin(APILogActionMixin):
     access_setting = True
 
     @property
+    def model(self):
+        return self.get_serializer_class().Meta.model
+
+    @property
     def tournament(self):
         if not hasattr(self, "_tournament"):
             self._tournament = get_object_or_404(Tournament, slug=self.kwargs['tournament_slug'])
@@ -41,7 +49,7 @@ class TournamentAPIMixin(APILogActionMixin):
         return {self.tournament_field: self.tournament}
 
     def get_queryset(self):
-        return self.get_serializer_class().Meta.model.objects.filter(**self.lookup_kwargs()).select_related(self.tournament_field)
+        return self.model.objects.filter(**self.lookup_kwargs()).select_related(self.tournament_field)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -69,16 +77,16 @@ class RoundAPIMixin(TournamentAPIMixin):
 
 
 class AdministratorAPIMixin:
-    permission_classes = [APIEnabledPermission, IsAdminUser | PerTournamentPermissionRequired]
+    permission_classes = [IsAdminUser | PerTournamentPermissionRequired]
 
 
 class TournamentPublicAPIMixin:
-    permission_classes = [APIEnabledPermission, PublicPreferencePermission | PerTournamentPermissionRequired]
+    permission_classes = [PublicPreferencePermission | PerTournamentPermissionRequired]
 
 
 class OnReleasePublicAPIMixin(TournamentPublicAPIMixin):
-    permission_classes = [APIEnabledPermission, PublicIfReleasedPermission | PerTournamentPermissionRequired]
+    permission_classes = [PublicIfReleasedPermission | PerTournamentPermissionRequired]
 
 
 class PublicAPIMixin:
-    permission_classes = [APIEnabledPermission, IsAdminOrReadOnly | PerTournamentPermissionRequired]
+    permission_classes = [IsAdminOrReadOnly | PerTournamentPermissionRequired]

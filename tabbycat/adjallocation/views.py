@@ -3,15 +3,20 @@ import logging
 
 from django.contrib import messages
 from django.db.models import Prefetch
-from django.forms import ModelChoiceField
+from django.forms import ChoiceField, ModelChoiceField
+from django.forms.models import ModelChoiceIterator
 from django.utils.translation import gettext as _, gettext_lazy, ngettext
 from django.views.generic.base import TemplateView
 
 from actionlog.mixins import LogActionMixin
 from actionlog.models import ActionLogEntry
+from adjallocation.models import DebateAdjudicator
 from availability.utils import annotate_availability
-from participants.models import Adjudicator, Region
-from participants.prefetch import populate_feedback_scores
+from draw.models import Debate, DebateTeam
+from draw.types import DebateSide
+from options.utils import use_team_code_names
+from participants.models import Adjudicator, Institution, Region, Speaker
+from participants.prefetch import populate_feedback_scores, populate_win_counts
 from tournaments.mixins import DebateDragAndDropMixin, TournamentMixin
 from users.permissions import has_permission, Permission
 from utils.misc import ranks_dictionary, redirect_tournament, reverse_tournament
@@ -104,6 +109,49 @@ class EditDebateAdjudicatorsView(BaseEditDebateOrPanelAdjudicatorsView):
                                          'round': self.round})
 
 
+class MultiRoundEditDebateAdjudicatorsView(BaseEditDebateOrPanelAdjudicatorsView):
+    template_name = "edit_debate_adjudicators.html"
+    page_title = gettext_lazy("Edit Allocation (Concurrent Rounds)")
+    prefetch_adjs = True
+
+    view_permission = Permission.VIEW_DEBATEADJUDICATORS
+    edit_permission = Permission.EDIT_DEBATEADJUDICATORS
+
+    def debates_or_panels_factory(self, debates):
+        return EditDebateAdjsDebateSerializer(
+            debates, many=True, context={'sides': self.tournament.sides,
+                                         'round': self.round})
+
+    def get_draw_or_panels_objects(self):
+        """Include debates from all current elimination rounds (one per break category)."""
+        if not self.round.is_break_round:
+            return super().get_draw_or_panels_objects()
+
+        prefetches = ()
+        if self.prefetch_venues:
+            prefetches += ('venue__venuecategory_set',)
+        if self.prefetch_adjs:
+            prefetches += (Prefetch('debateadjudicator_set',
+                queryset=DebateAdjudicator.objects.select_related('adjudicator')),)
+        if self.prefetch_teams:
+            prefetches += (Prefetch('debateteam_set',
+                queryset=DebateTeam.objects.select_related('team').prefetch_related(
+                    Prefetch('team__speaker_set', queryset=Speaker.objects.order_by('name')),
+                    'team__break_categories',
+                )),
+            )
+        else:
+            prefetches += ('debateteam_set__team__break_categories',)
+
+        draw = Debate.objects.filter(round__in=self.tournament.current_rounds).exclude(
+            debateteam__side=DebateSide.BYE,
+        ).select_related('round__tournament', 'venue').prefetch_related(*prefetches)
+
+        if self.prefetch_teams:
+            populate_win_counts([dt.team for debate in draw for dt in debate.debateteam_set.all()])
+        return draw
+
+
 class EditPanelAdjudicatorsView(BaseEditDebateOrPanelAdjudicatorsView):
     template_name = "edit_panel_adjudicators.html"
     page_title = gettext_lazy("Edit Panels")
@@ -140,10 +188,34 @@ class PanelAdjudicatorsIndexView(AdministratorMixin, TournamentMixin, TemplateVi
 # Conflict formset views
 # ==============================================================================
 
-class TeamChoiceField(ModelChoiceField):
+class DedupModelChoiceIterator(ModelChoiceIterator):
+    def __iter__(self):
+        if self.field.empty_label is not None:
+            yield ("", self.field.empty_label)
+        for obj in self.queryset:
+            yield self.choice(obj)
+
+
+class DedupModelChoiceField(ModelChoiceField):
+    iterator = DedupModelChoiceIterator
+
+    def __deepcopy__(self, memo):
+        return super(ChoiceField, self).__deepcopy__(memo)
+
+    def _get_queryset(self):
+        return self._queryset
+
+    def _set_queryset(self, queryset):
+        self._queryset = queryset
+        self.widget.choices = self.choices
+
+    queryset = property(_get_queryset, _set_queryset)
+
+
+class TeamChoiceField(DedupModelChoiceField):
 
     def label_from_instance(self, obj):
-        return obj.short_name
+        return obj.code_name if self.use_code_names else obj.short_name
 
 
 class BaseAdjudicatorConflictsView(LogActionMixin, AdministratorMixin, TournamentMixin, ModelFormSetView):
@@ -199,16 +271,18 @@ class AdjudicatorTeamConflictsView(BaseAdjudicatorConflictsView):
     formset_factory_kwargs = BaseAdjudicatorConflictsView.formset_factory_kwargs.copy()
     formset_factory_kwargs.update({
         'fields': ('adjudicator', 'team'),
-        'field_classes': {'team': TeamChoiceField},
+        'field_classes': {'adjudicator': DedupModelChoiceField, 'team': TeamChoiceField},
     })
 
     def get_formset(self):
         formset = super().get_formset()
         all_adjs = self.tournament.adjudicator_set.order_by('name').all()
-        all_teams = self.tournament.team_set.order_by('short_name').all()
+        use_code_names = use_team_code_names(self.tournament, admin=True, user=self.request.user)
+        all_teams = self.tournament.team_set.order_by('code_name' if use_code_names else 'short_name').all()
         for form in formset:
             form.fields['adjudicator'].queryset = all_adjs  # order alphabetically
             form.fields['team'].queryset = all_teams        # order alphabetically
+            form.fields['team'].use_code_names = use_code_names
         return formset
 
     def get_formset_queryset(self):
@@ -244,7 +318,10 @@ class AdjudicatorAdjudicatorConflictsView(BaseAdjudicatorConflictsView):
     save_text = gettext_lazy("Save Adjudicator-Adjudicator Conflicts")
     same_view = 'adjallocation-conflicts-adj-adj'
     formset_factory_kwargs = BaseAdjudicatorConflictsView.formset_factory_kwargs.copy()
-    formset_factory_kwargs.update({'fields': ('adjudicator1', 'adjudicator2')})
+    formset_factory_kwargs.update({
+        'fields': ('adjudicator1', 'adjudicator2'),
+        'field_classes': {'adjudicator1': DedupModelChoiceField, 'adjudicator2': DedupModelChoiceField},
+    })
 
     def get_formset(self):
         formset = super().get_formset()
@@ -287,13 +364,18 @@ class AdjudicatorInstitutionConflictsView(BaseAdjudicatorConflictsView):
     save_text = gettext_lazy("Save Adjudicator-Institution Conflicts")
     same_view = 'adjallocation-conflicts-adj-inst'
     formset_factory_kwargs = BaseAdjudicatorConflictsView.formset_factory_kwargs.copy()
-    formset_factory_kwargs.update({'fields': ('adjudicator', 'institution')})
+    formset_factory_kwargs.update({
+        'fields': ('adjudicator', 'institution'),
+        'field_classes': {'adjudicator': DedupModelChoiceField, 'institution': DedupModelChoiceField},
+    })
 
     def get_formset(self):
         formset = super().get_formset()
         all_adjs = self.tournament.adjudicator_set.order_by('name').all()
+        insts = Institution.objects.all()
         for form in formset:
             form.fields['adjudicator'].queryset = all_adjs  # order alphabetically
+            form.fields['institution'].queryset = insts
         return formset
 
     def get_formset_queryset(self):
@@ -331,14 +413,19 @@ class TeamInstitutionConflictsView(BaseAdjudicatorConflictsView):
     formset_factory_kwargs = BaseAdjudicatorConflictsView.formset_factory_kwargs.copy()
     formset_factory_kwargs.update({
         'fields': ('team', 'institution'),
-        'field_classes': {'team': TeamChoiceField},
+        'field_classes': {'team': TeamChoiceField, 'institution': DedupModelChoiceField},
     })
 
     def get_formset(self):
         formset = super().get_formset()
+        use_code_names = use_team_code_names(self.tournament, admin=True, user=self.request.user)
+        all_teams = self.tournament.team_set.order_by('code_name' if use_code_names else 'short_name').all()
         all_teams = self.tournament.team_set.order_by('short_name').all()
+        insts = Institution.objects.all()
         for form in formset:
             form.fields['team'].queryset = all_teams  # order alphabetically
+            form.fields['team'].use_code_names = use_code_names
+            form.fields['institution'].queryset = insts
         return formset
 
     def get_formset_queryset(self):
