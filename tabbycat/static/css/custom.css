@@ -1,0 +1,302 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap');
+body.gdansk-novice-2023{
+	font-family: 'Hind', sans-serif !important;
+	background-color: #fff7ff !important;
+}
+.gdansk-novice-2023 h1, .gdansk-novice-2023 h2, .gdansk-novice-2023 h3, .gdansk-novice-2023 h4, .gdansk-novice-2023 h5, .gdansk-novice-2023 h6, .gdansk-novice-2023 .h1, .gdansk-novice-2023 .h2, .gdansk-novice-2023 .h3, .gdansk-novice-2023 .h4, .gdansk-novice-2023 .h5, .gdansk-novice-2023 .h6 {
+	font-family: 'Hind', sans-serif !important;
+	color: #431b6e !important;
+}
+.gdansk-novice-2023 .navbar-light, .gdansk-novice-2023 .card-header{
+	background: rgb(121,95,173) !important;
+	background: linear-gradient(148deg, rgba(182, 146, 255, 0.51) 14%, rgba(205, 109, 209, 0.58) 92%) !important;
+}
+.gdansk-novice-2023 .text-muted {
+	color: #8d5b9c !important;
+}
+.gdansk-novice-2023 .bg-secondary {
+	background-color: #bac8ff !important;
+}
+.gdansk-novice-2023 #tournamentdrop svg{
+	filter: drop-shadow(2px 1px 2px rgba(0, 0, 0, 0.48));
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&display=swap');
+body.pldgdansk23{
+	font-family: 'Hind', sans-serif !important;
+	background-color: #cdd8ff !important;
+}
+.pldgdansk23 h1, .pldgdansk23 h2, .pldgdansk23 h3, .pldgdansk23 h4, .pldgdansk23 h5, .pldgdansk23 h6, .pldgdansk23 .h1, .pldgdansk23 .h2, .pldgdansk23 .h3, .pldgdansk23 .h4, .pldgdansk23 .h5, .pldgdansk23 .h6 {
+	font-family: 'Hind', sans-serif !important;
+	color: #0509cf  !important;
+}
+.pldgdansk23 .navbar-light, .pldgdansk23 .card-header{
+	background: rgb(100, 56, 255) !important;
+	background: linear-gradient(148deg, rgba(100, 56, 255, 0.51) 14%, rgba(0, 64, 255, 0.58) 92%) !important; !important;
+}
+.pldgdansk23 .text-muted {
+	color: #352b7f !important;
+}
+.pldgdansk23 .bg-secondary {
+	background-color: #bac8ff !important;
+}
+.pldgdansk23 #tournamentdrop svg{
+	filter: drop-shadow(2px 1px 2px rgba(0, 0, 0, 0.48));
+}
+.pldgdansk23 .btn-primary {
+	color: #fff;
+	background-color: #0509cf;
+	border-color: #0509cf;
+}
+body.gdansk-novice-2024{
+	background-color: #F9D87D !important;
+}
+.gdansk-novice-2024 h1, .gdansk-novice-2024 h2, .gdansk-novice-2024 h3, .gdansk-novice-2024 h4, .gdansk-novice-2024 h5,  .gdansk-novice-2024 .h1, .gdansk-novice-2024 .h2, .gdansk-novice-2024 .h3, .gdansk-novice-2024 .h4, .gdansk-novice-2024 .h5, {
+	color: #500000 !important;
+}
+.gdansk-novice-2024 .h6, .gdansk-novice-2024 h6 {
+	color: #000 !important;
+}
+.gdansk-novice-2024 .navbar-light, .gdansk-novice-2024 .card-header{
+	background: repeating-linear-gradient( 4deg, #E2464F, #BC121C ) !important;
+}
+.gdansk-novice-2024 .navbar-light a {
+	color: #000 !important;
+}
+.gdansk-novice-2024 .navbar-light .navbar-brand {
+	color: rgba(0, 0, 0, 0.9);
+}
+.gdansk-novice-2024 .text-muted {
+	color: #5f0000 !important;
+}
+.gdansk-novice-2024 .text-primary {
+	color: #63060b !important;
+}
+.gdansk-novice-2024 .bg-secondary {
+	background-color: #ffeaba !important;
+}
+.gdansk-novice-2024 .btn-primary {
+	color: #000;
+	background-color: #fff;
+	border-color: #c9232d;
+}
+.gdansk-novice-2024 .list-group-item-secondary {
+	color: #464a4e !important;
+	background-color: #fff !important;
+}
+.gdansk-novice-2024 #tournamentdrop svg{
+	filter: drop-shadow(2px 1px 2px rgba(0, 0, 0, 0.48));
+}
+
+
+	body.pldgdansk24{
+	  background: url('https://i.imgur.com/fUCxzc1.png');
+	  background-position: 0 49px;
+	  background-repeat: no-repeat;
+	  background-size: 100%;
+	  margin-bottom: 0;
+	}
+	.pldgdansk24 nav.navbar-light{
+	  background: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/new_pattern.png");
+	  border-bottom: 0px solid #e9ecef;
+	  border-top: 0px solid #e9ecef;
+	}
+	.pldgdansk24 .footer {
+		position: relative;
+		bottom: 0;
+		width: 100%;
+		background: ;
+		color: white;
+		padding: 3% 26%;
+		height: 1052px !important;
+		background-color: rgb(20, 60, 219);
+		background-image: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/footer-desktop.png");
+		background-repeat: no-repeat;
+		background-size: cover;
+		margin-top:50px;
+	}
+	.pldgdansk24 nav.navbar-light .navbar-nav .nav-link {
+	  color: rgb(255, 255, 255) !important;
+	} 
+	.pldgdansk24 nav.navbar-light button {
+		color: rgb(255, 255, 255) !important;
+	}
+	.pldgdansk24 .btn-primary {
+		color: #fff;
+		background-color: #143cdb;
+		border-color: #fff;
+	}
+	.pldgdansk24 .footer a {
+		border-bottom: 1px solid #868e96;
+		color: #fff;
+	}
+	.pldgdansk24 .footer .navbar-light {
+	background: transparent;
+	border-bottom: 0;
+	border-top: 0;
+	}
+	.pldgdansk24 #pageTitle {
+		color: black;
+		margin-top: 92px;
+	}
+	.pldgdansk24 #pageTitle>div {
+	  background: #fff;
+	  padding: 20px;
+	  border-radius: 20px;
+	}
+	.pldgdansk24 .card:has(.intro){
+		background: url("https://img.uefa.com/imgml/uefacom/euro2024/rebrand/audio-bg.png");
+		background-repeat: no-repeat;
+		background-position: bottom;
+		background-size: 100%;
+		padding-bottom: 15% !important;
+		background-color: #1b36c5;
+		color: white;
+		-webkit-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
+		-moz-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
+		box-shadow: -2px 3px 27px 0px rgb(0, 40, 83);
+		padding: 40px;
+	}
+	.pldgdansk24 .card:has(.intro) table{
+		background-color: #ffffffd1;
+		margin-bottom: 46px;
+		color: black;
+		border-color: #080808;
+	}
+	@media screen and (min-width: 1024px) {
+		body.pldgdansk24 {
+			background-position: center -67px;
+			background-size: 100%;
+		}
+	}
+	@media screen and (max-width: 1023px) {
+		.pldgdansk24 .footer {
+			padding: 0;
+			background-position: bottom;
+		}
+	}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+.montserrat-abc {
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+.mpdp24 h1,.mpdp24 .h1,.mpdp24 h2,.mpdp24 h3{
+font-family: "Montserrat", sans-serif;
+font-weight: 700 !important;
+font-style: italic !important;
+ text-shadow: 4px 2px black;
+ hyphens: auto;
+}
+body.mpdp24{
+	  background: #D05100;
+	  background-position: 0 49px;
+	  background-repeat: no-repeat;
+	  background-size: 100%;
+	  margin-bottom: 0;
+font-family: "Montserrat", sans-serif;
+	}
+	.mpdp24 nav.navbar-light{
+	  background: #BC4900;
+	  border-bottom: 0px solid #e9ecef;
+	  border-top: 0px solid #e9ecef;
+          text-shadow: 1px 1px black;
+	}
+	.mpdp24 .footer {
+		position: relative;
+		bottom: 0;
+		width: 100%;
+		background: ;
+		color: white;
+		padding: 3% 26%;
+		height: 552px !important;
+		background-color: #BC4900;
+		background-image: ;
+		background-repeat: no-repeat;
+		background-size: cover;
+		margin-top:50px;
+	}
+.mpdp24 a {
+	color: #BC4900;
+}
+	.mpdp24 nav.navbar-light .navbar-nav .nav-link {
+	  color: rgb(255, 255, 255) !important;
+	} 
+	.mpdp24 nav.navbar-light button {
+		color: rgb(255, 255, 255) !important;
+	}
+	.mpdp24 .btn-primary {
+		color: #fff;
+		background-color: #BC4900;;
+		border-color: #fff;
+	}
+	.mpdp24 .footer a {
+		border-bottom: 1px solid #868e96;
+		color: #fff;
+	}
+	.mpdp24 .footer .navbar-light {
+	background: transparent;
+	border-bottom: 0;
+	border-top: 0;
+	}
+.mpdp24 .dropdown-menu a{
+text-shadow: none;
+color: black !important;
+}
+.mpdp24 .footer .text-muted{
+color: white !important;
+}
+.mpdp24 .text-primary, .vue-sortable:hover {
+	color: #000 !important;
+}
+	body.mpdp24:has(.intro) #pageTitle {
+		color: black;
+display:none;
+		margin-top: 92px;
+	}
+	.mpdp24 #pageTitle>div {
+	  background: #D05100;
+color:white;
+ text-shadow: 4px 2px black;
+	  padding: 20px;
+	  border-radius: 20px;
+font-family: "Montserrat", sans-serif;
+font-weight: 700;
+font-style: italic;
+	}
+	.mpdp24 .card:has(.intro){
+		
+		background-repeat: no-repeat;
+		background-position: bottom;
+		background-size: 100%;
+		padding-bottom: 15% !important;
+		background-color: #D05100;
+		color: white;
+border:0;
+		//webkit-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
+		//-moz-box-shadow: -2px 3px 39px -21px rgba(255, 255, 255, 1);
+		//box-shadow: -2px 3px 27px 0px rgb(0, 40, 83);
+		padding: 40px;
+	}
+	.mpdp24 .card:has(.intro) table{
+		background-color: #ffffffd3;
+		margin-bottom: 46px;
+		color: black;
+		border-color: #080808;
+	}
+	@media screen and (min-width: 1024px) {
+		body.mpdp24 {
+			background-position: center -67px;
+			background-size: 100%;
+		}
+	}
+	@media screen and (max-width: 1023px) {
+		.mpdp24 .footer {
+			padding: 0;
+			background-position: bottom;
+		}
+		.mpdp24 .card:has(.intro){
+			padding: 0;
+		}
+	}

@@ -11,13 +11,15 @@
       <div class="col-lg-6 col-md-5">
         <h6 class="d-inline-block">
           {% if tournament and tabbycat_codename %}
-            {% blocktrans trimmed %}{{ tournament }} runs on Tabbycat {{ tabbycat_version }} ({{ tabbycat_codename }}) {% endblocktrans %}
+            {% blocktrans trimmed %}{{ tournament }} runs on Ergotab based on Tabbycat {{ tabbycat_version }} ({{ tabbycat_codename }}) {% endblocktrans %}
           {% else %}
-            {% blocktrans trimmed %}This site runs on Tabbycat {{ tabbycat_version }} ({{ tabbycat_codename }}) {% endblocktrans %}
+            {% blocktrans trimmed %}This site runs on Ergotab based on Tabbycat {{ tabbycat_version }} ({{ tabbycat_codename }}) {% endblocktrans %}
           {% endif %}
         </h6>
         <p class="text-muted">
           {% blocktrans trimmed %}
+			This version has been modified for the purposes of the Fundacja Ergo organization by Maciej Laskowski.
+            Like the original, these modifications are released under the same open-source AGPLv3 license as Tabbycat, and no additional rights are reserved.
             Tabbycat is an open-source project developed by volunteers and is free to use.
           {% endblocktrans %}
           {% if tournament and tournament.billable_teams > 0 %}
@@ -40,14 +42,13 @@
         <p class="text-muted">
           {% blocktrans trimmed %}
             Using an app designed for debate timekeeping makes speaking and adjudicating easier!
-            Check out <a href="https://itunes.apple.com/app/apple-store/id1156065589?pt=814172&ct=Tabbycat%20Installs&mt=8">Timekept</a> (iPhone/iPad)
-            or <a href="https://play.google.com/store/apps/details?id=net.czlee.debatekeeper&referrer=utm_source%3Dtabbycat%26utm_medium%3Dfooter">Debatekeeper</a> (Android).
+            Check out <a href="http://licznik.macieklaskowski.pl" target=”_blank” >Licznik</a> (web)
           {% endblocktrans %}
         </p>
       </div>
 
       <div class="col-lg-2 col-md-3 mt-2 mt-md-0">
-        <h6 class="d-inline-block">{% blocktrans trimmed %}Our Organisation{% endblocktrans %}</h6>
+        <h6 class="d-inline-block">{% blocktrans trimmed %}Tabbycat Organisation{% endblocktrans %}</h6>
         <p class="text-muted">
           {% blocktrans trimmed %}
             Tabbycat is supported by the <a href="https://tabbycat-debate.org/">Tabbycat Debate Association</a>, a non-profit for advancing open debate technology.

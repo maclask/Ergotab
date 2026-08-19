@@ -175,7 +175,8 @@ class ResultPairing(Pairing):
 
 class PolyPairing(BasePairing):
     """Pairing class for British Parliamentary and Public Speaking."""
-
+    sides = [DebateSide.OG, DebateSide.OO, DebateSide.CG, DebateSide.CO]
+	
     def __init__(self, teams, bracket, room_rank, num_sides=4, flags=[], team_flags={}):
         super().__init__(teams, bracket, room_rank, flags, team_flags)
 
